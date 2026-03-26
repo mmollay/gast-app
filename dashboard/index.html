@@ -44,2366 +44,13 @@
     <link rel="stylesheet" href="/ssi-builders.css">
     
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Main Stylesheet (extracted from inline) -->
+    <link rel="stylesheet" href="/styles.css">
+
+    <!-- NOTE: All styles moved to styles.css — inline <style> block removed -->
     <style>
-        :root {
-            --cream: #FAF8F5;
-            --warm-white: #FFFEFB;
-            --sand: #E8E2D9;
-            --sage: #9CAF88;
-            --sage-light: #B8C9A9;
-            --sage-dark: #7A9168;
-            --forest: #2D4A3E;
-            --earth: #8B7355;
-            --earth-light: #A69076;
-            --rose: #D4A5A5;
-            --rose-light: #E8C4C4;
-            --sky: #A7C5D4;
-            --text: #3D3D3D;
-            --text-light: #6B6B6B;
-            --text-muted: #9A9A9A;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            /* Verhindert Overscroll-Bounce auf iOS */
-            overscroll-behavior: none;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--cream);
-            color: var(--text);
-            line-height: 1.7;
-            min-height: 100vh;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            /* Safe Area: left/right nur für body, bottom wird vom fixed Footer gehandelt */
-            padding-top: 0;
-            padding-bottom: 0;
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, rgba(45, 74, 62, 0.7) 0%, rgba(122, 145, 104, 0.6) 100%),
-                        url('header-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 40px 24px 60px;
-            padding-top: calc(env(safe-area-inset-top) + 40px);
-            text-align: center;
-            position: relative;
-            top: 0;
-            z-index: 100;
-            overflow: hidden;
-            transition: padding 0.3s ease;
-            /* GPU Acceleration for smooth scrolling */
-            transform: translate3d(0, 0, 0);
-            will-change: transform, padding;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-
-        /* Kompakter Header beim Scrollen */
-
-
-
-
-
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: transparent;
-            opacity: 0;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 1;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .header-logo {
-            width: 140px;
-            height: 140px;
-            margin-bottom: 20px;
-            border-radius: 50%;
-            object-fit: contain;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-            transition: width 0.3s ease, height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
-            /* GPU Acceleration */
-            transform: translate3d(0, 0, 0);
-            will-change: transform, width, height;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-
-        .header h1 {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 500;
-            transition: font-size 0.3s ease, margin 0.3s ease;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-            /* GPU Acceleration */
-            transform: translate3d(0, 0, 0);
-            will-change: transform, font-size;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-
-        .header .subtitle {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 400;
-            opacity: 0.9;
-            letter-spacing: 2px;
-        }
-
-        .header-actions {
-            position: absolute;
-            top: calc(env(safe-area-inset-top) + 12px);
-            right: 16px;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Kompakter Status-Indicator */
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #22c55e;
-            box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
-            animation: pulse 2s infinite;
-        }
-
-        .status-indicator.offline {
-            background: #ef4444;
-            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-            animation: none;
-        }
-
-        .guest-login-btn,
-        .status-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            cursor: pointer;
-            padding: 8px 16px;
-            border-radius: 24px;
-            transition: all 0.3s;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 500;
-            min-height: 44px; /* Touch Target */
-        }
-
-        .guest-login-btn:hover,
-        .status-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-1px);
-        }
-
-        .guest-login-btn i,
-        .status-btn i {
-            width: 16px;
-            height: 16px;
-        }
-
-        .guest-login-btn.logged-in {
-            background: rgba(156, 175, 136, 0.3);
-            border-color: rgba(156, 175, 136, 0.5);
-        }
-
-        .status-btn {
-            padding: 8px 12px;
-            cursor: default;
-        }
-
-        .status-btn.online {
-            background: rgba(156, 175, 136, 0.3);
-            border-color: rgba(156, 175, 136, 0.5);
-        }
-
-        .status-btn.offline {
-            background: rgba(212, 165, 165, 0.3);
-            border-color: rgba(212, 165, 165, 0.5);
-        }
-
-        /* Main Content */
-        .main {
-            max-width: 900px;
-            margin: -40px auto 40px;
-            padding: 0 20px;
-            position: relative;
-            /* Kein z-index hier, damit welcome-card ihren eigenen stacking context hat */
-        }
-
-        /* Cards */
-        .card {
-            background: var(--warm-white);
-            border-radius: 24px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            border: 1px solid rgba(0,0,0,0.03);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--sage-light) 0%, var(--sage) 100%);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .card-icon svg {
-            width: 22px;
-            height: 22px;
-            stroke-width: 1.5;
-        }
-
-        .card-title {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--forest);
-            letter-spacing: 0.5px;
-        }
-
-        .card-subtitle {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* Welcome Card */
-        .welcome-card {
-            position: relative;
-            z-index: 150; /* Höher als Header (100) damit es davor liegt */
-            margin-top: -40px; /* Mehr Überlappung mit Header */
-            text-align: center;
-            padding: 40px 32px;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-        }
-
-        .welcome-card .greeting {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--forest);
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        /* Farbige Icons für Tageszeiten */
-        .greeting [data-lucide="sunrise"] {
-            color: #f97316; /* Orange für Sonnenaufgang */
-            filter: drop-shadow(0 2px 4px rgba(249, 115, 22, 0.3));
-        }
-
-        .greeting [data-lucide="sun"] {
-            color: #fbbf24; /* Gelb für Sonne */
-            filter: drop-shadow(0 2px 4px rgba(251, 191, 36, 0.3));
-        }
-
-        .greeting [data-lucide="sunset"] {
-            color: #f43f5e; /* Rot-Orange für Sonnenuntergang */
-            filter: drop-shadow(0 2px 4px rgba(244, 63, 94, 0.3));
-        }
-
-        .greeting [data-lucide="moon"] {
-            color: #60a5fa; /* Blau für Mond */
-            filter: drop-shadow(0 2px 4px rgba(96, 165, 250, 0.3));
-        }
-
-        .welcome-card .message {
-            color: var(--text-light);
-            font-size: 1.05rem;
-            max-width: 500px;
-            margin: 0 auto 24px;
-            line-height: 1.7;
-        }
-
-        .time-display {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--sand);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        /* Info Grid */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px;
-        }
-
-        .info-item {
-            background: var(--cream);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .info-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-        }
-
-        .info-item .icon {
-            margin-bottom: 10px;
-            display: block;
-            color: var(--sage-dark);
-        }
-
-        .info-item .icon svg {
-            width: 28px;
-            height: 28px;
-            stroke-width: 1.5;
-            margin: 0 auto; /* Center block-level SVG */
-        }
-
-        .info-item .label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .info-item .value {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        /* Energy Section */
-        .energy-card {
-            background: linear-gradient(135deg, var(--warm-white) 0%, #F5F8F3 100%);
-        }
-
-        .energy-display {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .energy-value {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 600;
-            color: var(--sage-dark);
-            line-height: 1;
-        }
-
-        .energy-value.feeding {
-            color: var(--sage);
-        }
-
-        .energy-unit {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-left: 4px;
-        }
-
-        .energy-status {
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--sage-dark);
-            margin-bottom: 24px;
-            padding: 8px 16px;
-            background: rgba(156, 175, 136, 0.15);
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        .energy-status.feeding {
-            color: var(--sage);
-            background: rgba(156, 175, 136, 0.2);
-        }
-
-        .energy-center {
-            text-align: center;
-        }
-
-        .energy-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-
-        .energy-stat {
-            text-align: center;
-            padding: 16px;
-            background: var(--warm-white);
-            border-radius: 16px;
-        }
-
-        .energy-stat .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
-
-        .energy-stat .stat-value {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--earth);
-        }
-
-        .energy-stat .stat-unit {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .energy-stat .stat-cost {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--sage-dark);
-            margin-top: 4px;
-        }
-
-        /* Amenities */
-        .amenities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
-
-        .amenity {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 16px;
-            background: var(--cream);
-            border-radius: 14px;
-            transition: background 0.2s;
-        }
-
-        .amenity:hover {
-            background: var(--sand);
-        }
-
-        .amenity .amenity-icon {
-            width: 44px;
-            height: 44px;
-            background: var(--warm-white);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: var(--sage-dark);
-        }
-
-        .amenity .amenity-icon svg {
-            width: 22px;
-            height: 22px;
-            stroke-width: 1.5;
-        }
-
-        .amenity .amenity-text h4 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 2px;
-        }
-
-        .amenity .amenity-text p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* Contact Card */
-        .contact-card {
-            background: linear-gradient(135deg, var(--forest) 0%, var(--sage-dark) 100%);
-            color: white;
-        }
-
-        .contact-card .card-icon {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .contact-card .card-title {
-            color: white;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        @media (min-width: 768px) and (max-width: 1024px) {
-            .contact-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .contact-item .contact-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .contact-item .contact-icon svg {
-            width: 20px;
-            height: 20px;
-            stroke-width: 1.5;
-        }
-
-        .contact-item .contact-label {
-            font-size: 0.75rem;
-            opacity: 0.7;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .contact-item .contact-value {
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        /* Bank Details */
-        .bank-details {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .bank-detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            background: var(--warm-white);
-            border-radius: 8px;
-            border: 1px solid var(--sand);
-        }
-
-        .bank-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            min-width: 80px;
-        }
-
-        .bank-value-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            justify-content: flex-end;
-        }
-
-        .bank-value {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .copy-btn-inline {
-            background: transparent;
-            border: none;
-            color: var(--sage-dark);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .copy-btn-inline:hover {
-            background: var(--cream);
-            color: var(--sage);
-        }
-
-        .copy-btn-inline:active {
-            transform: scale(0.95);
-        }
-
-        /* Quick Navigation */
-        .quick-nav {
-            z-index: 10;
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            padding: 20px;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 10;
-        }
-
-        .quick-nav-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            padding: 12px 16px;
-            background: var(--warm-white);
-            border: 2px solid var(--sand);
-            border-radius: 12px;
-            color: var(--forest);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            font-weight: 500;
-            min-width: 80px;
-        }
-
-        .quick-nav-btn:hover {
-            background: var(--cream);
-            border-color: var(--sage);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(113, 140, 128, 0.15);
-        }
-
-        .quick-nav-btn:active {
-            transform: translateY(0);
-        }
-
-        .quick-nav-btn i {
-            width: 24px;
-            height: 24px;
-            color: var(--sage-dark);
-        }
-
-        .quick-nav-btn span {
-            color: var(--text);
-        }
-
-        /* Energie-Info-Bar - dezent, nur Icon + Durchschnitt */
-        .energy-info-bar {
-            background: var(--sand);
-            color: var(--text);
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        
-        .energy-info-bar:hover {
-            background: var(--sage-light);
-        }
-        
-        .energy-info-bar:active {
-            transform: scale(0.99);
-        }
-        
-        .energy-info-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            max-width: 600px;
-            margin: 0 auto;
-            font-size: 0.85rem;
-        }
-        
-        .energy-info-content > i:first-child {
-            width: 16px;
-            height: 16px;
-            color: var(--sage-dark);
-        }
-        
-        .energy-info-text {
-            color: var(--text-light);
-        }
-        
-        .energy-info-text strong {
-            color: var(--forest);
-            font-weight: 600;
-        }
-        
-        .energy-info-arrow {
-            width: 14px;
-            height: 14px;
-            color: var(--text-muted);
-            margin-left: 4px;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 32px 20px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .footer .update-time {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: #22c55e; /* Grün für Online */
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-            box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
-        }
-
-        .status-dot.error {
-            background: #ef4444; /* Rot für Offline */
-            animation: none;
-            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(45, 74, 62, 0.8);
-            backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--warm-white);
-            border-radius: 24px;
-            padding: 40px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-        }
-
-        .modal h2 {
-            font-family: 'DM Sans', sans-serif;
-            color: var(--forest);
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            color: var(--text-light);
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 14px 18px;
-            background: var(--cream);
-            border: 2px solid transparent;
-            border-radius: 12px;
-            color: var(--text);
-            font-size: 1rem;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .form-group input:focus {
-            border-color: var(--sage);
-            background: var(--warm-white);
-        }
-
-        .form-group input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .form-group .input-hint {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 6px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(156, 175, 136, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--sand);
-            color: var(--text-light);
-            margin-top: 12px;
-        }
-
-        .btn-secondary:hover {
-            background: var(--cream);
-        }
-
-        .btn-danger {
-            background: var(--rose-light);
-            color: var(--text);
-            margin-top: 12px;
-        }
-
-        .btn-danger:hover {
-            background: var(--rose);
-        }
-
-        .error-text {
-            color: #c45050;
-            font-size: 0.85rem;
-            text-align: center;
-            margin-top: 12px;
-            display: none;
-        }
-
-        .success-text {
-            color: var(--sage-dark);
-            font-size: 0.85rem;
-            text-align: center;
-            margin-top: 12px;
-            display: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
-            .header {
-                /* Sauberer Mobile Header - zentriert, mit mehr Abstand nach unten */
-                position: relative;
-                margin: 0;
-                padding: 20px 20px 48px;
-                padding-top: calc(env(safe-area-inset-top) + 24px);
-                display: block;
-                text-align: center;
-            }
-
-            /* Logo zentriert */
-            .header-logo {
-                width: 80px;
-                height: 80px;
-                padding: 14px;
-                margin: 0 auto 16px auto;
-                display: block;
-            }
-
-            /* Text zentriert */
-            .header-content {
-                display: block;
-                text-align: center;
-            }
-
-            .header-text {
-                display: block;
-            }
-
-            .header h1 {
-                font-size: 1.5rem;
-                margin-bottom: 6px;
-                letter-spacing: 0.3px;
-                font-weight: 600;
-            }
-
-            .header .subtitle {
-                font-size: 0.9rem;
-                letter-spacing: 0.3px;
-                opacity: 0.9;
-            }
-
-            /* ===== NEUES MOBILE HEADER LAYOUT ===== */
-            
-            /* Header: Logo + Titel zentriert */
-            .header {
-                padding-top: calc(env(safe-area-inset-top) + 52px) !important;
-                padding-bottom: 24px !important;
-            }
-            
-            /* Header-Actions Container */
-            .header-actions {
-                position: absolute !important;
-                top: calc(env(safe-area-inset-top) + 8px) !important;
-                left: 12px !important;
-                right: 12px !important;
-                display: flex !important;
-                justify-content: space-between;
-                align-items: center;
-                z-index: 200;
-            }
-            
-            /* Links: Admin-Tools */
-            .header-left {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-            
-            /* Rechts: User-Tools */
-            .header-right {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-            
-            /* Icon-Buttons im Header (Admin, Edit) */
-            .header-icon-btn {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                background: rgba(255,255,255,0.2);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                border: none;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                cursor: pointer;
-                transition: all 0.2s;
-                text-decoration: none;
-            }
-            
-            .header-icon-btn:hover,
-            .header-icon-btn:active {
-                background: rgba(255,255,255,0.35);
-                transform: scale(0.95);
-            }
-            
-            .header-icon-btn i {
-                width: 20px;
-                height: 20px;
-            }
-            
-            .header-icon-btn.active {
-                background: var(--forest);
-            }
-
-            /* Sprach-Switcher kompakt */
-            .header-actions .language-switcher {
-                display: flex !important;
-                background: rgba(255,255,255,0.2);
-                border-radius: 20px;
-                padding: 3px;
-            }
-            
-            .header-actions .language-switcher .lang-btn {
-                padding: 6px 10px;
-                font-size: 0.8rem;
-                color: white;
-                border-radius: 16px;
-            }
-            
-            .header-actions .language-switcher .lang-btn.active {
-                background: rgba(255,255,255,0.3);
-            }
-            
-            /* Status verstecken */
-            .header-actions .status-indicator {
-                display: none !important;
-            }
-
-            /* Login Button - Icon-Only auf Mobile */
-            .guest-login-btn {
-                width: 40px;
-                height: 40px;
-                padding: 0;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgba(255,255,255,0.25);
-                backdrop-filter: blur(10px);
-                -webkit-backdrop-filter: blur(10px);
-                border: none;
-                color: white;
-            }
-
-            .guest-login-btn:active {
-                transform: scale(0.95);
-                background: rgba(255,255,255,0.35);
-            }
-
-            .guest-login-btn span {
-                display: none !important;
-            }
-
-            .guest-login-btn i {
-                width: 20px;
-                height: 20px;
-                color: white;
-            }
-            
-            .guest-login-btn.logged-in {
-                background: rgba(156, 175, 136, 0.4);
-            }
-
-            /* Main Container */
-            .main {
-                z-index: 1;
-                margin-top: 0;
-                padding: 16px 12px 0;
-            }
-
-            /* Welcome Card */
-            .welcome-card {
-                padding: 24px 20px !important;
-                margin-top: 0 !important;
-                margin-bottom: 16px !important;
-            }
-
-            .welcome-card .greeting {
-                font-size: 1.6rem !important;
-                margin-bottom: 12px;
-            }
-
-            /* Card Borders für Mobile entfernen */
-            .card {
-                padding: 20px 16px;
-                border-radius: 16px;
-                border: none;
-                box-shadow: none;
-                margin-bottom: 12px;
-                background: var(--warm-white);
-            }
-
-            /* Subtile Trennung durch Background-Wechsel */
-            .card:nth-child(even) {
-                background: var(--cream);
-            }
-
-            /* Kontakt-Card behält eigene Farben */
-            .contact-card,
-            .contact-card.card:nth-child(even) {
-                background: linear-gradient(135deg, var(--forest) 0%, var(--sage-dark) 100%) !important;
-                color: white !important;
-            }
-
-            .contact-card .contact-label,
-            .contact-card .contact-value {
-                color: white !important;
-            }
-
-            .energy-value {
-                font-size: 2.8rem;
-            }
-
-            .energy-stats {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .info-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .amenities-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            /* ENTFERNT: Duplizierte header-actions wurden konsolidiert (siehe oben) */
-
-            /* Language Switcher kompakter */
-            .language-switcher {
-                background: rgba(255,255,255,0.15);
-                border-radius: 16px;
-                padding: 2px;
-            }
-
-            .lang-btn {
-                padding: 4px 8px;
-                font-size: 14px;
-            }
-
-            /* Quick Nav auf Mobile verstecken - Footer übernimmt Navigation */
-            .quick-nav {
-                display: none !important;
-            }
-
-            /* Footer für Mobile Bottom Nav Platz */
-            .footer {
-                padding-bottom: calc(80px + env(safe-area-inset-bottom));
-            }
-        }
-
-        /* Weather Card */
-        .weather-display {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .weather-main {
-            text-align: center;
-        }
-
-        .weather-temp-display {
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 4px;
-            margin-bottom: 8px;
-        }
-
-        .weather-temp-value {
-            font-size: 3.5rem;
-            font-weight: 600;
-            color: var(--sage-dark);
-            line-height: 1;
-        }
-
-        .weather-temp-unit {
-            font-size: 1.8rem;
-            color: var(--text-light);
-        }
-
-        .weather-condition {
-            font-size: 1.1rem;
-            color: var(--text-light);
-        }
-
-        .weather-details {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            padding-top: 16px;
-            border-top: 1px solid var(--sand);
-        }
-
-        .weather-detail {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-light);
-        }
-
-        .weather-detail i {
-            width: 20px;
-            height: 20px;
-            color: var(--sage);
-        }
-
-        /* 5-Tage Wettervorhersage */
-        .weather-forecast {
-            display: flex;
-            gap: 12px;
-            padding-top: 20px;
-            border-top: 1px solid var(--sand);
-            margin-top: 20px;
-            overflow-x: auto;
-        }
-
-        .forecast-day {
-            flex: 1;
-            min-width: 80px;
-            text-align: center;
-            padding: 12px;
-            background: var(--cream);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .forecast-day-name {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .forecast-temp {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--sage-dark);
-        }
-
-        /* WiFi Card */
-        .wifi-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .wifi-qr {
-            display: flex;
-            justify-content: center;
-        }
-
-        .wifi-details {
-            text-align: center;
-            width: 100%;
-        }
-
-        .wifi-info-row {
-            padding: 12px;
-            background: var(--cream);
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-
-        /* Recommendations Card - Compact Layout */
-        .recommendations-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .recommendation-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 10px 12px;
-            background: var(--cream);
-            border-radius: 10px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .recommendation-item:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-        }
-
-        .recommendation-icon {
-            flex-shrink: 0;
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--sage-light) 0%, var(--sage) 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .recommendation-icon i {
-            width: 16px;
-            height: 16px;
-        }
-
-        .recommendation-item h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--forest);
-            margin-bottom: 2px;
-            line-height: 1.2;
-        }
-
-        .recommendation-item p {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            margin: 0;
-        }
-
-        .recommendation-item .distance {
-            font-size: 0.8rem;
-            color: var(--sage-dark);
-            font-weight: 500;
-            margin-top: 2px;
-        }
-
-        .recommendation-item .rating {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            font-size: 0.8rem;
-            color: var(--earth);
-        }
-
-        .recommendation-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 0;
-        }
-
-        .recommendation-address {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .recommendation-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .recommendation-distance {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.8rem;
-            color: var(--sage-dark);
-            font-weight: 500;
-        }
-
-        .open-status {
-            font-size: 0.7rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 500;
-        }
-
-        .open-status.open {
-            background: rgba(156, 175, 136, 0.15);
-            color: var(--sage-dark);
-        }
-
-        .open-status.closed {
-            background: rgba(212, 165, 165, 0.15);
-            color: var(--rose);
-        }
-
-        .recommendation-actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-top: 2px;
-        }
-
-        .btn-maps, .btn-phone {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-maps {
-            background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%);
-            color: white;
-        }
-
-        .btn-maps:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 6px rgba(156, 175, 136, 0.3);
-        }
-
-        .btn-phone {
-            background: var(--cream);
-            color: var(--forest);
-            border: 1px solid var(--sand);
-        }
-
-        .btn-phone:hover {
-            background: var(--sand);
-        }
-
-        /* Recommendations Controls */
-        .recommendations-controls {
-            padding: 0 16px 16px;
-            border-bottom: 1px solid var(--sand);
-            margin-bottom: 12px;
-        }
-
-        .radius-control {
-            margin-bottom: 12px;
-        }
-
-        .radius-control label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 6px;
-        }
-
-        .radius-control strong {
-            color: var(--forest);
-        }
-
-        #radiusSlider {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--sand);
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        #radiusSlider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--sage);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        #radiusSlider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--sage);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .category-filter {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .category-btn {
-            padding: 6px 12px;
-            border: 1.5px solid var(--sand);
-            background: white;
-            border-radius: 16px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .category-btn:hover {
-            border-color: var(--sage-light);
-            background: var(--cream);
-        }
-
-        .category-btn.active {
-            background: var(--sage);
-            border-color: var(--sage);
-            color: white;
-        }
-
-        .loading-state {
-            text-align: center;
-            padding: 24px 16px;
-            color: var(--text-light);
-        }
-
-        .loading-state i {
-            width: 24px;
-            height: 24px;
-            color: var(--sage);
-            margin-bottom: 8px;
-        }
-
-        .loading-state p {
-            font-size: 0.85rem;
-            margin: 0;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Skeleton Loading Animation */
-        @keyframes skeleton-pulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.8; }
-        }
-
-        .skeleton {
-            background: linear-gradient(90deg, var(--sand) 25%, var(--cream) 50%, var(--sand) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-pulse 1.5s ease-in-out infinite;
-            border-radius: 6px;
-        }
-
-        .skeleton-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 10px 12px;
-            background: var(--cream);
-            border-radius: 10px;
-        }
-
-        .skeleton-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-        }
-
-        .skeleton-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .skeleton-title {
-            height: 14px;
-            width: 70%;
-        }
-
-        .skeleton-meta {
-            height: 12px;
-            width: 50%;
-        }
-
-        .skeleton-actions {
-            height: 24px;
-            width: 40%;
-            margin-top: 4px;
-        }
-
-        /* Button Styles */
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--sage);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--sage-dark);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: var(--sand);
-            color: var(--text);
-        }
-
-        .btn-secondary:hover {
-            background: var(--earth-light);
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--sand);
-            border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--sage);
-        }
-
-        .error-text {
-            color: var(--rose);
-            font-size: 0.9rem;
-            margin-top: 12px;
-            text-align: center;
-            display: none;
-        }
-
-        /* ============================================
-           STAY ENERGY CARD STYLES (Gast-Aufenthalt)
-           ============================================ */
-        .stay-energy-overview {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .stay-energy-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        @media (max-width: 500px) {
-            .stay-energy-stats {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .stay-stat {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 20px;
-            background: var(--warm-white);
-            border-radius: 16px;
-            border: 1px solid var(--sand);
-        }
-
-        .stay-stat.primary {
-            background: linear-gradient(135deg, rgba(156, 175, 136, 0.1) 0%, rgba(156, 175, 136, 0.05) 100%);
-            border-color: var(--sage-light);
-        }
-
-        .stay-stat-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .stay-stat-icon i {
-            width: 22px;
-            height: 22px;
-        }
-
-        .stay-stat-content {
-            flex: 1;
-        }
-
-        .stay-stat-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .stay-stat-value {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--forest);
-            line-height: 1.2;
-        }
-
-        .stay-stat-unit {
-            font-size: 1rem;
-            font-weight: 400;
-            color: var(--text-light);
-            margin-left: 4px;
-        }
-
-        .stay-info-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            padding: 16px 20px;
-            background: var(--cream);
-            border-radius: 12px;
-        }
-
-        .stay-info-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        .stay-info-item i {
-            width: 18px;
-            height: 18px;
-            color: var(--sage-dark);
-        }
-
-        .stay-info-item strong {
-            color: var(--forest);
-        }
-
-        .stay-details-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 14px;
-            background: transparent;
-            border: 2px dashed var(--sand);
-            border-radius: 12px;
-            color: var(--sage-dark);
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .stay-details-toggle:hover {
-            background: var(--cream);
-            border-color: var(--sage-light);
-        }
-
-        .stay-details-toggle i {
-            width: 18px;
-            height: 18px;
-            transition: transform 0.3s;
-        }
-
-        .stay-details-toggle.open i {
-            transform: rotate(180deg);
-        }
-
-        /* Detail-Ansicht */
-        .stay-energy-details {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--sand);
-        }
-
-        .stay-details-header {
-            margin-bottom: 16px;
-        }
-
-        .stay-details-header h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--forest);
-            margin: 0;
-        }
-
-        .stay-days-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .stay-day-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--cream);
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-
-        .stay-day-item:nth-child(odd) {
-            background: var(--warm-white);
-        }
-
-        .stay-day-date {
-            font-weight: 500;
-            color: var(--text);
-            min-width: 100px;
-        }
-
-        .stay-day-energy {
-            color: var(--sage-dark);
-            font-weight: 600;
-        }
-
-        .stay-day-cost {
-            color: var(--earth);
-            font-weight: 500;
-            min-width: 60px;
-            text-align: right;
-        }
-
-        .stay-day-no-data {
-            color: var(--text-muted);
-            font-style: italic;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .stay-day-item.today {
-            background: linear-gradient(135deg, rgba(156, 175, 136, 0.15) 0%, rgba(156, 175, 136, 0.08) 100%);
-            border: 1px solid var(--sage-light);
-        }
-
-        .stay-day-item.today .stay-day-date {
-            color: var(--sage-dark);
-        }
-
-        /* Live-Anzeige (klein unten) */
-        .stay-live-info {
-            margin-top: 20px;
-            padding-top: 16px;
-            border-top: 1px solid var(--sand);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .stay-live-power {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        .stay-live-power i {
-            width: 16px;
-            height: 16px;
-            color: var(--sage);
-        }
-
-        .stay-live-power strong {
-            font-size: 1.1rem;
-            color: var(--sage-dark);
-        }
-
-        .stay-live-status {
-            font-size: 0.8rem;
-            padding: 4px 12px;
-            background: rgba(156, 175, 136, 0.15);
-            border-radius: 16px;
-            color: var(--sage-dark);
-        }
-
-        .stay-live-status.feeding {
-            background: rgba(156, 175, 136, 0.25);
-            color: var(--sage);
-        }
-
-        /* Info-Hinweis für Heizkosten */
-        .energy-info-notice {
-            margin-top: 16px;
-            padding: 12px 16px;
-            background: rgba(255, 193, 94, 0.12);
-            border-left: 3px solid var(--sun);
-            border-radius: 0 8px 8px 0;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            line-height: 1.5;
-        }
-
-        .energy-info-notice p {
-            margin: 0;
-        }
-
-        /* ============================================
-           INLINE EDITOR STYLES
-           ============================================ */
-
-        /* Editable Elements */
-        .editable-element {
-            position: relative;
-            transition: outline 0.2s ease;
-        }
-
-        .editable-element:hover::after {
-            content: '✏️';
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: var(--sage);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        /* Edit Toolbar */
-        .edit-toolbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--forest);
-            color: white;
-            padding: 12px 20px;
-            z-index: 10000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .edit-toolbar-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .edit-mode-badge {
-            font-size: 14px;
-            font-weight: 500;
-            flex: 1;
-        }
-
-        .btn-exit-edit {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .btn-exit-edit:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        /* Editor Modal */
-        .editor-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 10001;
-        }
-
-        .editor-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-        }
-
-        .editor-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 12px;
-            padding: 32px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        }
-
-        .editor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .editor-header h2 {
-            color: var(--forest);
-            font-size: 1.3rem;
-            margin: 0;
-        }
-
-        .editor-close {
-            background: none;
-            border: none;
-            font-size: 32px;
-            cursor: pointer;
-            color: #999;
-            line-height: 1;
-            padding: 0;
-            width: 32px;
-            height: 32px;
-        }
-
-        .editor-close:hover {
-            color: var(--forest);
-        }
-
-        .editor-form .form-group {
-            margin-bottom: 20px;
-        }
-
-        .editor-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--forest);
-            font-size: 0.9rem;
-        }
-
-        .editor-form input,
-        .editor-form textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 14px;
-        }
-
-        .editor-form input:focus,
-        .editor-form textarea:focus {
-            outline: none;
-            border-color: var(--sage);
-        }
-
-        .editor-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 24px;
-        }
-
-        .editor-actions .btn-primary,
-        .editor-actions .btn-secondary {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .editor-actions .btn-primary {
-            background: var(--sage);
-            color: white;
-        }
-
-        .editor-actions .btn-primary:hover {
-            background: var(--sage-dark);
-        }
-
-        .editor-actions .btn-secondary {
-            background: #f5f5f5;
-            color: #333;
-        }
-
-        .editor-actions .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
-        /* SSI Protection */
-        [data-ssi-protected] {
-            cursor: default !important;
-            outline: none !important;
-        }
-
-        [data-ssi-protected]::after {
-            display: none !important;
-        }
-
-        /* Language Switcher */
-        .language-switcher {
-            display: flex;
-            gap: 4px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 20px;
-            padding: 4px;
-        }
-
-        .lang-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 16px;
-            font-size: 1.1rem;
-            transition: all 0.2s;
-            opacity: 0.7;
-        }
-
-        .lang-btn:hover {
-            opacity: 1;
-            background: rgba(255,255,255,0.1);
-        }
-
-        .lang-btn.active {
-            opacity: 1;
-            background: rgba(255,255,255,0.25);
-        }
-
-        /* ============================================
-           MOBILE BOTTOM NAVIGATION
-           Professionelle Footer-Navigation (orientiert am SSI Dashboard)
-           ============================================ */
-        .mobile-bottom-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            /* Solide Hintergrund-Konstruktion */
-            background: var(--warm-white);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid var(--sand);
-            /* Professionelle Abstände - 12px innen + Safe Area unten */
-            padding: 6px 8px;
-            padding-bottom: calc(6px + env(safe-area-inset-bottom));
-            z-index: 9999;
-            box-shadow: 0 -2px 16px rgba(0,0,0,0.06);
-            /* GPU Acceleration - verhindert Scroll-Verschiebung */
-            transform: translate3d(0, 0, 0);
-            -webkit-transform: translate3d(0, 0, 0);
-            will-change: transform;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-
-        .mobile-bottom-nav-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 100%;
-            margin: 0;
-            padding: 0 8px;
-        }
-
-        .mobile-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            /* Gleichmäßig verteilt */
-            flex: 1;
-            padding: 8px 4px;
-            min-height: 52px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border: none;
-            background: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-radius: 10px;
-            font-family: inherit;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .mobile-nav-item:hover,
-        .mobile-nav-item:active {
-            color: var(--sage-dark);
-            background: rgba(156, 175, 136, 0.1);
-        }
-
-        .mobile-nav-item.active {
-            color: var(--sage-dark);
-            background: rgba(156, 175, 136, 0.1);
-        }
-
-        .mobile-nav-item i {
-            width: 24px;
-            height: 24px;
-        }
-
-        .mobile-nav-item span {
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 0.01em;
-        }
-
-        /* Admin Button in Bottom Nav - gleiches Layout wie andere */
-        .mobile-nav-item.admin-btn {
-            background: linear-gradient(135deg, var(--forest) 0%, var(--sage-dark) 100%);
-            color: white;
-            flex: 1;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(45, 74, 62, 0.25);
-        }
-
-        .mobile-nav-item.admin-btn i {
-            width: 22px;
-            height: 22px;
-        }
-
-        .mobile-nav-item.admin-btn span {
-            font-size: 0.68rem;
-            font-weight: 500;
-        }
-
-        .mobile-nav-item.admin-btn:hover,
-        .mobile-nav-item.admin-btn:active {
-            background: linear-gradient(135deg, var(--sage-dark) 0%, var(--forest) 100%);
-            color: white;
-        }
-
-        /* Mobile: Bottom Nav IMMER sichtbar auf Mobile */
-        @media (max-width: 640px) {
-            .mobile-bottom-nav {
-                display: flex !important;
-                position: fixed !important;
-                bottom: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-            }
-            
-            /* Screen System für Tab-Navigation */
-            .mobile-screen {
-                display: none;
-            }
-            
-            .mobile-screen.active {
-                display: block;
-                animation: fadeIn 0.2s ease;
-            }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(8px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            
-            /* Active Tab Styling */
-            .mobile-nav-item.active:not(.admin-btn) {
-                color: var(--forest) !important;
-                background: rgba(156, 175, 136, 0.2) !important;
-            }
-            
-            .mobile-nav-item.active i {
-                stroke-width: 2.5;
-            }
-            
-            /* Footer auf Mobile verstecken (Content ist in Contact-Tab) */
-            .footer {
-                display: none !important;
-            }
-            
-            /* Mehr Platz unten für Bottom Nav */
-            .main {
-                padding-bottom: calc(90px + env(safe-area-inset-bottom)) !important;
-            }
-        }
-        
-        /* Desktop: Footer IMMER versteckt */
-        @media (min-width: 641px) {
-            .mobile-bottom-nav {
-                display: none !important;
-            }
-            
-            /* Desktop zeigt alle Screens */
-            .mobile-screen {
-                display: block !important;
-            }
-            
-            /* Mobile Quick Links auf Desktop verstecken */
-            .mobile-quick-links {
-                display: none !important;
-            }
-        }
-
-        /* Desktop: Admin Button im Footer sichtbarer */
-        @media (min-width: 641px) {
-            .footer .admin-link {
-                opacity: 1 !important;
-                background: var(--forest);
-                color: white !important;
-                padding: 8px 16px;
-                border-radius: 8px;
-                display: inline-block;
-                margin-top: 8px;
-            }
-
-            .footer .admin-link:hover {
-                background: var(--sage-dark) !important;
-            }
-        }
+        /* Minimal overrides only — all base styles in styles.css */
     </style>
     <link rel="stylesheet" href="inline-editor.css">
     <link rel="stylesheet" href="admin-ui.css">
@@ -2411,31 +58,48 @@
 <body>
     <!-- Header -->
     <header class="header">
+        <!-- MINIMALISTISCHER HEADER: Nur User-Icon sichtbar -->
         <div class="header-actions">
-            <!-- LINKS: Admin-Tools (nur für eingeloggte Admins sichtbar) -->
-            <div class="header-left" id="headerAdminTools" style="display: none;">
-                <a href="/admin" class="header-icon-btn" title="Admin-Bereich">
-                    <i data-lucide="layout-dashboard"></i>
-                </a>
-                <button class="header-icon-btn edit-mode-toggle" id="editModeToggle" title="Bearbeiten">
-                    <i data-lucide="pencil"></i>
-                </button>
-            </div>
+            <!-- User Menu Button (immer sichtbar) -->
+            <button class="header-user-btn" id="headerUserBtn" title="Menü öffnen">
+                <i data-lucide="user"></i>
+                <span class="user-name" id="headerUserName" data-i18n="header.login">Anmelden</span>
+                <i data-lucide="chevron-down" class="dropdown-icon"></i>
+            </button>
             
-            <!-- RECHTS: User-Tools -->
-            <div class="header-right">
-                <div class="language-switcher" id="language-switcher">
-                    <button class="lang-btn active" data-lang="de" title="Deutsch">DE</button>
-                    <button class="lang-btn" data-lang="en" title="English">EN</button>
+            <!-- User Dropdown Menu (versteckt, öffnet bei Klick) -->
+            <div class="header-user-dropdown" id="headerUserDropdown" style="display: none;">
+                <!-- Admin-Section (nur wenn eingeloggt als Admin) -->
+                <div class="dropdown-section admin-section" id="dropdownAdminSection" style="display: none;">
+                    <a href="/admin" class="dropdown-item">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Admin</span>
+                    </a>
+                    <button class="dropdown-item" id="dropdownEditToggle">
+                        <i data-lucide="pencil"></i>
+                        <span>Bearbeiten</span>
+                    </button>
+                    <div class="dropdown-divider"></div>
                 </div>
-                <button class="guest-login-btn" id="guestLoginBtn">
-                    <i data-lucide="user"></i>
-                    <span data-i18n="header.login">Anmelden</span>
-                </button>
+                
+                <!-- Sprache -->
+                <div class="dropdown-section">
+                    <div class="dropdown-label">Sprache</div>
+                    <div class="dropdown-lang-buttons">
+                        <button class="dropdown-lang-btn active" data-lang="de">🇩🇪 Deutsch</button>
+                        <button class="dropdown-lang-btn" data-lang="en">🇬🇧 English</button>
+                    </div>
+                </div>
+                
+                <!-- Logout (nur wenn eingeloggt) -->
+                <div class="dropdown-section" id="dropdownLogoutSection" style="display: none;">
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item logout-item" id="dropdownLogoutBtn">
+                        <i data-lucide="log-out"></i>
+                        <span>Abmelden</span>
+                    </button>
+                </div>
             </div>
-            
-            <!-- Status Indicator (versteckt auf Mobile) -->
-            <span class="status-indicator offline" id="statusIndicatorHeader" title="Verbindungsstatus" style="display: none;"></span>
         </div>
         <div class="header-content">
             <img src="/logo-neu.png" alt="Logo" class="header-logo" loading="lazy" decoding="async">
@@ -2491,7 +155,7 @@
                     Ruhe zu finden und bei dir anzukommen. Nimm dir Zeit zum Sein.
                 </p>
                 <div class="time-display">
-                    <i data-lucide="clock" style="width: 16px; height: 16px;"></i>
+                    <i data-lucide="clock"></i>
                     <span id="currentTime">--:--</span>
                     <span>•</span>
                     <span id="currentDate">--. --- ----</span>
@@ -2499,29 +163,29 @@
             </div>
 
             <!-- Über diesen Ort -->
-            <div class="card" style="background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 100%);">
+            <div class="card card--nature">
                 <div class="card-header">
-                    <div class="card-icon" style="background: linear-gradient(135deg, var(--forest) 0%, var(--sage) 100%);"><i data-lucide="trees"></i></div>
+                    <div class="card-icon card-icon--forest"><i data-lucide="trees"></i></div>
                     <div>
                         <h3 class="card-title" data-i18n="about.title">Über diesen Ort</h3>
                         <p class="card-subtitle" data-i18n="about.subtitle" data-editable="about-subtitle">Wo Magie und Natur sich vereinen</p>
                     </div>
                 </div>
-                <div class="about-content" data-editable="about-content" style="color: var(--text-light); font-size: 1rem; line-height: 1.8; margin-top: 16px;">
-                    <p style="margin-bottom: 16px;" data-i18n="about.intro">
+                <div class="about-content" data-editable="about-content">
+                    <p data-i18n="about.intro">
                         Hier, am Rand des Waldes, hat sich ein besonderer Platz entfaltet – ein Ort zum Innehalten,
                         zum Auftanken und zum Wiederfinden. Die alten Bäume flüstern ihre Geschichten,
                         die Feuerstelle lädt zu stillen Momenten unter dem Sternenhimmel ein.
                     </p>
-                    <p style="margin-bottom: 16px;">
-                        <strong style="color: var(--forest);" data-i18n="about.fireplace">🔥 Die Feuerstelle</strong> – <span data-i18n="about.fireplaceText">Hier kannst du zur Ruhe kommen,
+                    <p>
+                        <strong data-i18n="about.fireplace">🔥 Die Feuerstelle</strong> – <span data-i18n="about.fireplaceText">Hier kannst du zur Ruhe kommen,
                         die Flammen beobachten und einfach sein. Ein Ort der Wärme und Geborgenheit.</span>
                     </p>
-                    <p style="margin-bottom: 16px;">
-                        <strong style="color: var(--forest);" data-i18n="about.forest">🌲 Der Wald</strong> – <span data-i18n="about.forestText">Direkt neben uns erstreckt sich die Natur
+                    <p>
+                        <strong data-i18n="about.forest">🌲 Der Wald</strong> – <span data-i18n="about.forestText">Direkt neben uns erstreckt sich die Natur
                         in ihrer ganzen Kraft. Lass dich einladen zu Spaziergängen, die den Geist klären und das Herz öffnen.</span>
                     </p>
-                    <p style="margin-bottom: 0;">
+                    <p>
                         <span data-i18n="about.outro">Dieser Platz ist mehr als ein Ort zum Übernachten – er ist eine Einladung,
                         wieder mit dir selbst und der Natur in Verbindung zu treten.</span> <em data-i18n="about.welcome">Willkommen, Gast auf Erden.</em>
                     </p>
@@ -2595,68 +259,44 @@
                         <p class="card-subtitle" data-i18n="costs.subtitle">Transparente Kostenübersicht</p>
                     </div>
                 </div>
-                <div style="padding: 0 20px 20px;">
+                <div class="costs-content">
                     <!-- Inklusive -->
-                    <div style="margin-bottom: 20px;">
-                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--forest); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                            <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                    <div class="costs-section">
+                        <div class="costs-section-header">
+                            <i data-lucide="check-circle"></i>
                             <span data-i18n="costs.includedTitle">Im Preis inklusive</span>
                         </div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
-                            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(156, 175, 136, 0.1); border-radius: 8px;">
-                                <i data-lucide="flame" style="width: 16px; height: 16px; color: var(--forest);"></i>
-                                <span style="font-size: 0.85rem;" data-i18n="costs.pellets">Pellets</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(156, 175, 136, 0.1); border-radius: 8px;">
-                                <i data-lucide="tree-pine" style="width: 16px; height: 16px; color: var(--forest);"></i>
-                                <span style="font-size: 0.85rem;" data-i18n="costs.wood">Holz</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(156, 175, 136, 0.1); border-radius: 8px;">
-                                <i data-lucide="plug" style="width: 16px; height: 16px; color: var(--forest);"></i>
-                                <span style="font-size: 0.85rem;" data-i18n="costs.electricity">Haushaltsstrom</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(156, 175, 136, 0.1); border-radius: 8px;">
-                                <i data-lucide="washing-machine" style="width: 16px; height: 16px; color: var(--forest);"></i>
-                                <span style="font-size: 0.85rem;" data-i18n="costs.laundry">Waschmaschine</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(156, 175, 136, 0.1); border-radius: 8px;">
-                                <i data-lucide="flame" style="width: 16px; height: 16px; color: var(--forest);"></i>
-                                <span style="font-size: 0.85rem;" data-i18n="costs.gas">Gas</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(156, 175, 136, 0.1); border-radius: 8px;">
-                                <i data-lucide="droplets" style="width: 16px; height: 16px; color: var(--forest);"></i>
-                                <span style="font-size: 0.85rem;" data-i18n="costs.water">Wasser</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(156, 175, 136, 0.1); border-radius: 8px;">
-                                <i data-lucide="thermometer" style="width: 16px; height: 16px; color: var(--forest);"></i>
-                                <span style="font-size: 0.85rem;" data-i18n="costs.hotWater">Warmwasser</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(156, 175, 136, 0.1); border-radius: 8px;">
-                                <i data-lucide="building-2" style="width: 16px; height: 16px; color: var(--forest);"></i>
-                                <span style="font-size: 0.85rem;" data-i18n="costs.utilities">Betriebskosten</span>
-                            </div>
+                        <div class="costs-grid">
+                            <div class="cost-item"><i data-lucide="flame"></i><span data-i18n="costs.pellets">Pellets</span></div>
+                            <div class="cost-item"><i data-lucide="tree-pine"></i><span data-i18n="costs.wood">Holz</span></div>
+                            <div class="cost-item"><i data-lucide="plug"></i><span data-i18n="costs.electricity">Haushaltsstrom</span></div>
+                            <div class="cost-item"><i data-lucide="washing-machine"></i><span data-i18n="costs.laundry">Waschmaschine</span></div>
+                            <div class="cost-item"><i data-lucide="flame"></i><span data-i18n="costs.gas">Gas</span></div>
+                            <div class="cost-item"><i data-lucide="droplets"></i><span data-i18n="costs.water">Wasser</span></div>
+                            <div class="cost-item"><i data-lucide="thermometer"></i><span data-i18n="costs.hotWater">Warmwasser</span></div>
+                            <div class="cost-item"><i data-lucide="building-2"></i><span data-i18n="costs.utilities">Betriebskosten</span></div>
                         </div>
                     </div>
-                    
+
                     <!-- Nicht inklusive -->
-                    <div style="margin-bottom: 16px;">
-                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                            <i data-lucide="info" style="width: 16px; height: 16px;"></i>
+                    <div class="costs-section">
+                        <div class="costs-additional-header">
+                            <i data-lucide="info"></i>
                             <span data-i18n="costs.notIncludedTitle">Zusatzkosten</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 8px; padding: 12px; background: rgba(196, 164, 132, 0.1); border-radius: 8px; border-left: 3px solid var(--accent);">
-                            <i data-lucide="heater" style="width: 18px; height: 18px; color: var(--accent);"></i>
+                        <div class="costs-additional-item">
+                            <i data-lucide="heater"></i>
                             <div>
-                                <span style="font-size: 0.85rem; font-weight: 500;" data-i18n="costs.heatingTitle">Elektro-Wandheizung</span>
-                                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;" data-i18n="costs.heatingDesc">Wird nach Verbrauch berechnet (siehe Energie-Anzeige)</p>
+                                <span data-i18n="costs.heatingTitle">Elektro-Wandheizung</span>
+                                <p data-i18n="costs.heatingDesc">Wird nach Verbrauch berechnet (siehe Energie-Anzeige)</p>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Airbnb Hinweis -->
-                    <div style="padding: 12px; background: rgba(0,0,0,0.02); border-radius: 8px; display: flex; align-items: flex-start; gap: 8px;">
-                        <i data-lucide="home" style="width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; margin-top: 2px;"></i>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin: 0;" data-i18n="costs.airbnbNote">
+                    <div class="costs-note">
+                        <i data-lucide="home"></i>
+                        <p data-i18n="costs.airbnbNote">
                             Diese Informationen sind auch in unserer Airbnb-Beschreibung aufgeführt – keine Überraschungen!
                         </p>
                     </div>
@@ -2678,68 +318,68 @@
             </div>
 
             <!-- Coming Soon / In Entstehung (AUSGEBLENDET bis fertig) -->
-            <div class="card" style="display: none; background: linear-gradient(135deg, var(--warm-white) 0%, var(--sand) 100%); border: 2px dashed var(--sage);" data-editable="projects-coming-soon">
+            <div class="card" style="display: none;" data-editable="projects-coming-soon">
                 <div class="card-header">
-                    <div class="card-icon" style="background: linear-gradient(135deg, var(--forest) 0%, var(--sage-dark) 100%);"><i data-lucide="construction"></i></div>
+                    <div class="card-icon card-icon--forest"><i data-lucide="construction"></i></div>
                     <div>
                         <h3 class="card-title">In Entstehung</h3>
                         <p class="card-subtitle">Zauberhafte Projekte erwachen zum Leben</p>
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div class="coming-soon-grid">
                     <!-- Tiny Haus mit Höhle -->
-                    <div style="background: white; padding: 24px; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--earth) 0%, var(--earth-light) 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
-                                <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                    <div class="coming-soon-item">
+                        <div class="coming-soon-header">
+                            <div class="coming-soon-icon coming-soon-icon--earth">
+                                <i data-lucide="home"></i>
                             </div>
-                            <h4 style="color: var(--forest); font-size: 1.1rem; margin: 0;">Tiny Haus mit Höhle</h4>
+                            <h4>Tiny Haus mit Höhle</h4>
                         </div>
-                        <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6; margin: 0;">Ein magischer Rückzugsort in der Natur – derzeit im Bau. Hier verbinden sich Geborgenheit und Erdverbundenheit.</p>
-                        <div style="margin-top: 12px; padding: 8px 12px; background: var(--sage-light); border-radius: 8px; display: inline-block;">
-                            <span style="color: white; font-size: 0.85rem; font-weight: 500;">🔨 Im Bau</span>
+                        <p>Ein magischer Rückzugsort in der Natur – derzeit im Bau. Hier verbinden sich Geborgenheit und Erdverbundenheit.</p>
+                        <div class="coming-soon-badge coming-soon-badge--building">
+                            <span>🔨 Im Bau</span>
                         </div>
                     </div>
 
                     <!-- Sauna -->
-                    <div style="background: white; padding: 24px; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--rose) 0%, var(--rose-light) 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
-                                <i data-lucide="flame" style="width: 20px; height: 20px;"></i>
+                    <div class="coming-soon-item">
+                        <div class="coming-soon-header">
+                            <div class="coming-soon-icon coming-soon-icon--rose">
+                                <i data-lucide="flame"></i>
                             </div>
-                            <h4 style="color: var(--forest); font-size: 1.1rem; margin: 0;">Sauna</h4>
+                            <h4>Sauna</h4>
                         </div>
-                        <p id="saunaComingSoonText" style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6; margin: 0;">Tiefe Entspannung und Reinigung für Körper und Seele. Bald können Sie hier zur Ruhe kommen.</p>
-                        <div style="margin-top: 12px; padding: 8px 12px; background: var(--sage-light); border-radius: 8px; display: inline-block;">
-                            <span style="color: white; font-size: 0.85rem; font-weight: 500;">✨ Coming Soon</span>
+                        <p id="saunaComingSoonText">Tiefe Entspannung und Reinigung für Körper und Seele. Bald können Sie hier zur Ruhe kommen.</p>
+                        <div class="coming-soon-badge coming-soon-badge--building">
+                            <span>✨ Coming Soon</span>
                         </div>
                     </div>
 
                     <!-- Hot Tub -->
-                    <div style="background: white; padding: 24px; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--sky) 0%, #90B5C9 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
-                                <i data-lucide="droplets" style="width: 20px; height: 20px;"></i>
+                    <div class="coming-soon-item">
+                        <div class="coming-soon-header">
+                            <div class="coming-soon-icon coming-soon-icon--sky">
+                                <i data-lucide="droplets"></i>
                             </div>
-                            <h4 style="color: var(--forest); font-size: 1.1rem; margin: 0;">Hot Tub</h4>
+                            <h4>Hot Tub</h4>
                         </div>
-                        <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6; margin: 0;">Unter freiem Himmel im warmen Wasser verweilen und die Sterne beobachten – pure Magie.</p>
-                        <div style="margin-top: 12px; padding: 8px 12px; background: var(--sage-light); border-radius: 8px; display: inline-block;">
-                            <span style="color: white; font-size: 0.85rem; font-weight: 500;">✨ Coming Soon</span>
+                        <p>Unter freiem Himmel im warmen Wasser verweilen und die Sterne beobachten – pure Magie.</p>
+                        <div class="coming-soon-badge coming-soon-badge--building">
+                            <span>✨ Coming Soon</span>
                         </div>
                     </div>
 
                     <!-- Lebenstraining -->
-                    <div style="background: white; padding: 24px; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--sage) 0%, var(--sage-light) 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;">
-                                <i data-lucide="heart" style="width: 20px; height: 20px;"></i>
+                    <div class="coming-soon-item">
+                        <div class="coming-soon-header">
+                            <div class="coming-soon-icon coming-soon-icon--sage">
+                                <i data-lucide="heart"></i>
                             </div>
-                            <h4 style="color: var(--forest); font-size: 1.1rem; margin: 0;">Lebenstraining</h4>
+                            <h4>Lebenstraining</h4>
                         </div>
-                        <p style="color: var(--text-light); font-size: 0.95rem; line-height: 1.6; margin: 0;">Persönliche Begleitung auf deinem Weg. Finde zu dir selbst, gewinne Klarheit und innere Stärke.</p>
-                        <div style="margin-top: 12px; padding: 8px 12px; background: var(--forest); border-radius: 8px; display: inline-block;">
-                            <span style="color: white; font-size: 0.85rem; font-weight: 500;">🌟 Verfügbar</span>
+                        <p>Persönliche Begleitung auf deinem Weg. Finde zu dir selbst, gewinne Klarheit und innere Stärke.</p>
+                        <div class="coming-soon-badge coming-soon-badge--available">
+                            <span>🌟 Verfügbar</span>
                         </div>
                     </div>
                 </div>
@@ -2791,71 +431,66 @@
                     <div class="card-icon"><i data-lucide="wifi"></i></div>
                     <div>
                         <h3 class="card-title" data-i18n="wifi.cardTitle">WLAN-Zugang</h3>
-                        <p class="card-subtitle" style="font-size: 0.9rem; color: var(--text-muted);">Tippe für QR-Code zum Verbinden</p>
+                        <p class="card-subtitle">Tippe für QR-Code zum Verbinden</p>
                     </div>
                 </div>
-                <div class="wifi-content" style="padding: 0;">
-                    <!-- Großzügige WLAN Buttons -->
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <!-- WLAN 1: Hostel Power (Empfohlen) -->
-                        <div class="wifi-button" onclick="toggleWifiQR('wifi1')" style="padding: 20px; background: linear-gradient(135deg, rgba(156, 175, 136, 0.15), rgba(156, 175, 136, 0.05)); border: 2px solid rgba(156, 175, 136, 0.3); border-radius: 16px; cursor: pointer; transition: all 0.3s;">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <div style="display: flex; align-items: center; gap: 16px;">
-                                    <div style="width: 48px; height: 48px; background: var(--forest); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                                        <i data-lucide="wifi" style="width: 24px; height: 24px; color: white;"></i>
-                                    </div>
-                                    <div>
-                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                            <span style="font-size: 1.1rem; font-weight: 600; color: var(--forest);">Hostel Power</span>
-                                            <span style="font-size: 0.7rem; padding: 3px 10px; background: var(--forest); color: white; border-radius: 12px; font-weight: 500;">Empfohlen</span>
-                                        </div>
-                                        <div style="font-size: 0.95rem; color: var(--text-muted);">
-                                            Passwort: <strong style="color: var(--text-main); letter-spacing: 0.5px;">hostel21</strong>
-                                        </div>
-                                    </div>
+                <div class="wifi-content">
+                    <!-- WLAN 1: Hostel Power (Empfohlen) -->
+                    <div class="wifi-network wifi-network--primary" onclick="toggleWifiQR('wifi1')">
+                        <div class="wifi-network-inner">
+                            <div class="wifi-network-info">
+                                <div class="wifi-network-icon wifi-network-icon--primary">
+                                    <i data-lucide="wifi"></i>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 8px; color: var(--forest);">
-                                    <i data-lucide="qr-code" style="width: 22px; height: 22px;"></i>
-                                    <i data-lucide="chevron-down" id="wifi1-chevron" style="width: 20px; height: 20px; transition: transform 0.3s;"></i>
+                                <div>
+                                    <div>
+                                        <span class="wifi-network-name wifi-network-name--primary">Hostel Power</span>
+                                        <span class="wifi-badge">Empfohlen</span>
+                                    </div>
+                                    <div class="wifi-password">
+                                        Passwort: <strong>hostel21</strong>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="wifi-network-actions">
+                                <i data-lucide="qr-code"></i>
+                                <i data-lucide="chevron-down" id="wifi1-chevron"></i>
+                            </div>
                         </div>
-                        <div id="wifi1-qr" style="display: none; text-align: center; padding: 24px; background: white; border-radius: 16px; margin-top: -8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=WIFI:S:Hostel%20Power;T:WPA;P:hostel21;;"
-                                 alt="WiFi QR Code - Hostel Power"
-                                 style="width: 180px; height: 180px; border-radius: 12px; margin: 0 auto;">
-                            <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">📱 Mit Kamera scannen zum automatischen Verbinden</p>
-                        </div>
+                    </div>
+                    <div id="wifi1-qr" class="wifi-qr-panel" style="display: none;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=WIFI:S:Hostel%20Power;T:WPA;P:hostel21;;"
+                             alt="WiFi QR Code - Hostel Power">
+                        <p>📱 Mit Kamera scannen zum automatischen Verbinden</p>
+                    </div>
 
-                        <!-- WLAN 2: Hostel (Alternativ) -->
-                        <div class="wifi-button" onclick="toggleWifiQR('wifi2')" style="padding: 20px; background: rgba(196, 164, 132, 0.08); border: 2px solid rgba(196, 164, 132, 0.2); border-radius: 16px; cursor: pointer; transition: all 0.3s;">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <div style="display: flex; align-items: center; gap: 16px;">
-                                    <div style="width: 48px; height: 48px; background: var(--sage-dark); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                                        <i data-lucide="wifi" style="width: 24px; height: 24px; color: white;"></i>
-                                    </div>
-                                    <div>
-                                        <div style="margin-bottom: 4px;">
-                                            <span style="font-size: 1.1rem; font-weight: 600; color: var(--sage-dark);">Hostel</span>
-                                            <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 8px;">Alternativ</span>
-                                        </div>
-                                        <div style="font-size: 0.95rem; color: var(--text-muted);">
-                                            Passwort: <strong style="color: var(--text-main); letter-spacing: 0.5px;">hostel21</strong>
-                                        </div>
-                                    </div>
+                    <!-- WLAN 2: Hostel (Alternativ) -->
+                    <div class="wifi-network wifi-network--secondary" onclick="toggleWifiQR('wifi2')">
+                        <div class="wifi-network-inner">
+                            <div class="wifi-network-info">
+                                <div class="wifi-network-icon wifi-network-icon--secondary">
+                                    <i data-lucide="wifi"></i>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 8px; color: var(--sage-dark);">
-                                    <i data-lucide="qr-code" style="width: 22px; height: 22px;"></i>
-                                    <i data-lucide="chevron-down" id="wifi2-chevron" style="width: 20px; height: 20px; transition: transform 0.3s;"></i>
+                                <div>
+                                    <div>
+                                        <span class="wifi-network-name wifi-network-name--secondary">Hostel</span>
+                                        <span class="wifi-badge">Alternativ</span>
+                                    </div>
+                                    <div class="wifi-password">
+                                        Passwort: <strong>hostel21</strong>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="wifi-network-actions">
+                                <i data-lucide="qr-code"></i>
+                                <i data-lucide="chevron-down" id="wifi2-chevron"></i>
+                            </div>
                         </div>
-                        <div id="wifi2-qr" style="display: none; text-align: center; padding: 24px; background: white; border-radius: 16px; margin-top: -8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=WIFI:S:Hostel;T:WPA;P:hostel21;;"
-                                 alt="WiFi QR Code - Hostel"
-                                 style="width: 180px; height: 180px; border-radius: 12px; margin: 0 auto;">
-                            <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">📱 Mit Kamera scannen zum automatischen Verbinden</p>
-                        </div>
+                    </div>
+                    <div id="wifi2-qr" class="wifi-qr-panel" style="display: none;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=WIFI:S:Hostel;T:WPA;P:hostel21;;"
+                             alt="WiFi QR Code - Hostel">
+                        <p>📱 Mit Kamera scannen zum automatischen Verbinden</p>
                     </div>
                 </div>
             </div>
@@ -2890,7 +525,7 @@
                 <!-- Dynamische Empfehlungs-Liste -->
                 <div class="recommendations-list" id="recommendationsList">
                     <div class="loading-state">
-                        <i data-lucide="loader" style="animation: spin 1s linear infinite;"></i>
+                        <i data-lucide="loader" class="spinner"></i>
                         <p data-i18n="recommendations.loading">Lade Empfehlungen...</p>
                     </div>
                 </div>
@@ -2907,7 +542,7 @@
                     <div class="card-icon"><i data-lucide="message-circle"></i></div>
                     <div>
                         <h3 class="card-title" data-i18n="contact.title">Kontakt & Hilfe</h3>
-                        <p id="contactSubtitle" class="card-subtitle" style="color: rgba(255,255,255,0.7);" data-i18n="contact.subtitle">Wir sind für Sie da</p>
+                        <p id="contactSubtitle" class="card-subtitle" data-i18n="contact.subtitle">Wir sind für Sie da</p>
                     </div>
                 </div>
                 <div class="contact-grid">
@@ -2950,14 +585,14 @@
             </div>
             
             <!-- Mobile-Only: Quick Links (da Footer versteckt) -->
-            <div class="card mobile-quick-links" style="background: var(--cream); text-align: center; padding: 20px;">
-                <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
-                    <a href="/impressum.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">Impressum</a>
-                    <a href="/datenschutz.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">Datenschutz</a>
-                    <a href="/kontakt.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">Kontakt</a>
+            <div class="card mobile-quick-links">
+                <div class="quick-links-row">
+                    <a href="/impressum.html">Impressum</a>
+                    <a href="/datenschutz.html">Datenschutz</a>
+                    <a href="/kontakt.html">Kontakt</a>
                 </div>
-                <div style="font-size: 0.8rem; color: var(--text-muted);">
-                    Powered by <a href="https://ssi.at" target="_blank" style="color: var(--sage-dark); text-decoration: none; font-weight: 500;">SSI</a>
+                <div class="powered-by">
+                    Powered by <a href="https://ssi.at" target="_blank">SSI</a>
                 </div>
             </div>
 
@@ -3040,44 +675,44 @@
                 <!-- Info-Hinweis -->
                 <div class="energy-info-notice">
                     <p data-i18n="energy.heatingInfo">ℹ️ Diese Anzeige zeigt nur die Heizkosten – nicht die normalen Betriebskosten (Licht, Wasserkocher, etc.). Da das Heizen mit den Wandheizstrahlern viel Strom verbraucht, bitten wir um einen fairen Beitrag zu diesen Zusatzkosten.</p>
-                    <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.85rem; color: var(--text-muted);">
+                    <div class="energy-info-meta">
                         <span>
-                            <i data-lucide="zap" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                            <i data-lucide="zap"></i>
                             <span data-i18n="energy.priceInfo">Strompreis:</span>
-                            <strong id="energyPriceDisplay" style="color: var(--forest);">0,29 €/kWh</strong>
+                            <strong id="energyPriceDisplay">0,29 €/kWh</strong>
                         </span>
                         <span>
-                            <i data-lucide="bar-chart-3" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                            <i data-lucide="bar-chart-3"></i>
                             <span data-i18n="energy.avgInfo">Ø Tagesverbrauch:</span>
-                            <strong id="energyAvgDisplay" style="color: var(--forest);">-- kWh</strong>
+                            <strong id="energyAvgDisplay">-- kWh</strong>
                         </span>
                     </div>
                 </div>
             </div>
 
             <!-- Kurtaxe Info Card - immer sichtbar, dezent -->
-            <div class="card" id="kurtaxeCard" style="background: linear-gradient(135deg, var(--warm-white) 0%, rgba(156, 175, 136, 0.05) 100%);">
-                <div style="padding: 20px;">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                        <i data-lucide="receipt" style="width: 18px; height: 18px; color: var(--sage-dark); opacity: 0.8;"></i>
-                        <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-light);" data-i18n="kurtaxe.title">Ortstaxe</span>
+            <div class="card kurtaxe-card" id="kurtaxeCard">
+                <div class="kurtaxe-content">
+                    <div class="kurtaxe-header">
+                        <i data-lucide="receipt"></i>
+                        <span data-i18n="kurtaxe.title">Ortstaxe</span>
                     </div>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;" data-i18n="kurtaxe.description">
+                    <p class="kurtaxe-description" data-i18n="kurtaxe.description">
                         Die Ortstaxe (Kurtaxe) ist eine gesetzliche Abgabe und wird direkt an die Gemeinde abgeführt.
                     </p>
-                    <div style="display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px;">
-                        <span style="font-size: 1.2rem; font-weight: 600; color: var(--forest);" id="kurtaxeAmount">€2,50</span>
-                        <span style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="kurtaxe.perPersonNight">pro Person / Nacht</span>
+                    <div class="kurtaxe-price">
+                        <span class="kurtaxe-amount" id="kurtaxeAmount">€2,50</span>
+                        <span class="kurtaxe-unit" data-i18n="kurtaxe.perPersonNight">pro Person / Nacht</span>
                     </div>
                     <!-- Gast-spezifische Berechnung (nur wenn eingeloggt) -->
-                    <div id="kurtaxeCalculation" style="display: none; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.06);">
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;" data-i18n="kurtaxe.yourStay">Für Ihren Aufenthalt:</div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-size: 0.85rem; color: var(--text-light);" id="kurtaxeDetails">-- Nächte × -- Personen</span>
+                    <div class="kurtaxe-calculation" id="kurtaxeCalculation" style="display: none;">
+                        <div class="kurtaxe-calc-label" data-i18n="kurtaxe.yourStay">Für Ihren Aufenthalt:</div>
+                        <div class="kurtaxe-calc-row">
+                            <span class="kurtaxe-calc-details" id="kurtaxeDetails">-- Nächte × -- Personen</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                            <span style="font-size: 0.9rem; font-weight: 500; color: var(--text);" data-i18n="kurtaxe.total">Gesamt:</span>
-                            <span style="font-size: 1.4rem; font-weight: 700; color: var(--forest);" id="kurtaxeTotal">€--,--</span>
+                        <div class="kurtaxe-calc-total-row">
+                            <span class="kurtaxe-calc-total-label" data-i18n="kurtaxe.total">Gesamt:</span>
+                            <span class="kurtaxe-calc-total" id="kurtaxeTotal">€--,--</span>
                         </div>
                     </div>
                 </div>
@@ -3092,8 +727,8 @@
                         <p id="transparencySubtitle" class="card-subtitle" data-i18n="transparency.subtitle">Für Ihre Unterlagen</p>
                     </div>
                 </div>
-                <div style="padding: 0 20px 20px;">
-                    <p id="transparencyText" style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.6;" data-i18n="transparency.text">
+                <div class="payment-content">
+                    <p class="payment-intro" id="transparencyText" data-i18n="transparency.text">
                         Für Ihre Unterlagen und vollständige Transparenz finden Sie hier die Kontodaten:
                     </p>
 
@@ -3103,7 +738,7 @@
                             <div class="bank-value-group">
                                 <span class="bank-value" id="displayIban">AT53 3293 7000 0060 8745</span>
                                 <button class="copy-btn-inline" onclick="copyBankDetail('displayIban')" data-i18n-title="transparency.copy" title="Kopieren">
-                                    <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                                    <i data-lucide="copy"></i>
                                 </button>
                             </div>
                         </div>
@@ -3112,7 +747,7 @@
                             <div class="bank-value-group">
                                 <span class="bank-value" id="displayBic">RLNWATWWWRN</span>
                                 <button class="copy-btn-inline" onclick="copyBankDetail('displayBic')" data-i18n-title="transparency.copy" title="Kopieren">
-                                    <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                                    <i data-lucide="copy"></i>
                                 </button>
                             </div>
                         </div>
@@ -3121,19 +756,19 @@
                             <div class="bank-value-group">
                                 <span class="bank-value" id="displayAccountHolder">KAD</span>
                                 <button class="copy-btn-inline" onclick="copyBankDetail('displayAccountHolder')" data-i18n-title="transparency.copy" title="Kopieren">
-                                    <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                                    <i data-lucide="copy"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <div style="margin-top: 16px; padding: 12px; background: var(--cream); border-radius: 8px; font-size: 0.85rem; color: var(--text-light);">
-                        <i data-lucide="info" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
+                    <div class="info-notice">
+                        <i data-lucide="info"></i>
                         <span data-i18n="transparency.info">Die genauen Beträge für Kurtaxe und Energiekosten werden separat kommuniziert.</span>
                     </div>
 
-                    <div style="margin-top: 12px; padding: 12px; background: rgba(156, 175, 136, 0.1); border-radius: 8px; font-size: 0.85rem; color: var(--forest); border-left: 3px solid var(--forest);">
-                        <i data-lucide="wallet" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
+                    <div class="partial-payment-notice">
+                        <i data-lucide="wallet"></i>
                         <strong data-i18n="transparency.partialPaymentTitle">Längerer Aufenthalt?</strong>
                         <span data-i18n="transparency.partialPaymentText"> Bei längeren Aufenthalten sind Teilzahlungen möglich, um die laufenden Kosten überschaubar zu halten. Sprich uns einfach an!</span>
                     </div>
@@ -3152,24 +787,24 @@
             <span><span data-i18n="footer.updated">Aktualisiert</span>: <span id="lastUpdate">--:--</span></span>
         </div>
 
-        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1); text-align: center;">
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-bottom: 16px; font-size: 0.85rem;">
-                <a href="/impressum.html" style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--forest)'" onmouseout="this.style.color='var(--text-muted)'" data-i18n="footer.imprint">Impressum</a>
-                <span style="color: var(--text-muted);">•</span>
-                <a href="/datenschutz.html" style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--forest)'" onmouseout="this.style.color='var(--text-muted)'" data-i18n="footer.privacy">Datenschutz</a>
-                <span style="color: var(--text-muted);">•</span>
-                <a href="/kontakt.html" style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--forest)'" onmouseout="this.style.color='var(--text-muted)'" data-i18n="footer.contact">Kontakt</a>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/impressum.html" data-i18n="footer.imprint">Impressum</a>
+                <span class="separator">•</span>
+                <a href="/datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
+                <span class="separator">•</span>
+                <a href="/kontakt.html" data-i18n="footer.contact">Kontakt</a>
             </div>
             <!-- Admin Button - größer für Desktop -->
-            <div style="margin-bottom: 16px;">
-                <a href="/admin" class="admin-link" style="color: var(--text-muted); text-decoration: none; transition: all 0.2s;" title="Admin-Bereich">
-                    <i data-lucide="layout-dashboard" style="width: 14px; height: 14px; vertical-align: middle; margin-right: 4px;"></i>
+            <div class="footer-admin">
+                <a href="/admin" class="admin-link" title="Admin-Bereich">
+                    <i data-lucide="layout-dashboard"></i>
                     Admin
                 </a>
             </div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">
-                Powered by <a href="https://ssi.at" target="_blank" style="color: var(--sage-dark); text-decoration: none; font-weight: 500;" onmouseover="this.style.color='var(--forest)'" onmouseout="this.style.color='var(--sage-dark)'">SSI</a>
-                <span style="margin: 0 8px;">•</span>
+            <div class="footer-meta">
+                Powered by <a href="https://ssi.at" target="_blank">SSI</a>
+                <span class="separator">•</span>
                 <span id="appVersion">v0.9.0</span>
             </div>
         </div>
@@ -3201,7 +836,7 @@
     <div class="modal-overlay" id="guestLoginModal">
         <div class="modal">
             <h2 data-i18n="login.title">Gast-Anmeldung</h2>
-            <p id="loginInstruction" style="color: #6B6B6B; margin-bottom: 20px; text-align: center;" data-i18n="login.instruction">
+            <p id="loginInstruction" class="login-instruction" data-i18n="login.instruction">
                 Geben Sie Ihre Zugangsdaten ein, die Sie bei der Buchung erhalten haben.
             </p>
             <div class="form-group">
@@ -3212,9 +847,9 @@
                 <label>Passwort</label>
                 <input type="password" id="guestPassword" placeholder="Ihr Passwort">
             </div>
-            <div class="form-group checkbox-group" style="margin: 16px 0;">
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                    <input type="checkbox" id="guestRememberMe" checked style="width: 18px; height: 18px;">
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" id="guestRememberMe" checked>
                     <span data-i18n="login.rememberMe">Angemeldet bleiben</span>
                 </label>
             </div>
@@ -3228,12 +863,12 @@
     <div class="modal-overlay" id="guestMenu">
         <div class="modal">
             <h2 data-i18n="guestMenu.title">Gast-Menü</h2>
-            <div style="margin: 24px 0;">
-                <button class="btn btn-secondary" id="nightModeToggle" style="width: 100%; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <div>
+                <button class="btn btn-secondary" id="nightModeToggle">
                     <i data-lucide="moon"></i>
                     <span data-i18n="guestMenu.nightMode">Nachtmodus umschalten</span>
                 </button>
-                <button class="btn btn-primary" id="guestLogoutBtn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <button class="btn btn-primary" id="guestLogoutBtn">
                     <i data-lucide="log-out"></i>
                     <span data-i18n="guestMenu.logout">Abmelden</span>
                 </button>
