@@ -24,7 +24,7 @@ Guest Portal für Hostel/Airbnb mit integriertem Energiemonitoring.
 
 | Umgebung | URL | Beschreibung |
 |----------|-----|-------------|
-| **Dev-Preview** | https://develop.gastauferden.at | Entwicklung begutachten |
+| **Dev-Preview** | https://dev.gastauferden.at | Entwicklung begutachten |
 | **Produktion** | https://gastauferden.at | Live für Gäste |
 | API Worker | https://hostel-app-api.office-509.workers.dev | Shelly Proxy |
 

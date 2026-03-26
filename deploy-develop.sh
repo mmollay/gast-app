@@ -1,10 +1,10 @@
 #!/bin/bash
-# Deploy to develop environment (hostel-app)
+# Deploy to dev environment (hostel-app)
 set -e
 
-echo "🚀 Deploying GastApp to DEVELOP..."
+echo "🚀 Deploying GastApp to DEV..."
 echo "Branch: develop"
-echo "Target: develop.gastauferden.at"
+echo "Target: dev.gastauferden.at"
 echo ""
 
 # Ensure we're on develop branch
@@ -18,4 +18,4 @@ npx wrangler pages deploy dashboard --project-name=hostel-app --branch=develop
 
 echo ""
 echo "✅ Deploy complete!"
-echo "🔗 https://develop.gastauferden.at"
+echo "🔗 https://dev.gastauferden.at"
