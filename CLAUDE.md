@@ -22,10 +22,28 @@ Guest Portal für Hostel/Airbnb mit integriertem Energiemonitoring.
 
 ## URLs
 
-| Service | URL |
-|---------|-----|
-| Dashboard | https://gastauferden.at |
-| API Worker | https://hostel-app-api.office-509.workers.dev |
+| Umgebung | URL | Beschreibung |
+|----------|-----|-------------|
+| **Dev-Preview** | https://develop.gastauferden.at | Entwicklung begutachten |
+| **Produktion** | https://gastauferden.at | Live für Gäste |
+| API Worker | https://hostel-app-api.office-509.workers.dev | Shelly Proxy |
+
+## Workflow (SSI Standard)
+
+```
+Änderung beauftragen → Agent arbeitet (develop) → Dev-Preview → Publish → Fertig
+```
+
+1. Änderungen IMMER auf `develop` Branch committen
+2. Dev-Preview: `develop.gastauferden.at` begutachten
+3. Publish: `./deploy-production.sh` (merged develop → main, tagged, deployed)
+4. Rollback: `git checkout vX.Y.Z` jederzeit möglich
+
+### Deploy
+```bash
+./deploy-develop.sh      # → develop.gastauferden.at
+./deploy-production.sh   # → gastauferden.at (mit Auto-Tag)
+```
 
 ## Environment Variables (.env)
 
