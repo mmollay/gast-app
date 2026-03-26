@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.1] - 2026-03-26
+
+### Changed
+- **CSS-Extraktion**: ~2450 Zeilen inline `<style>` aus index.html in eigenständige `styles.css` ausgelagert
+- **HTML-Cleanup**: 174 inline `style="..."` Attribute durch semantische CSS-Klassen ersetzt
+- **Design System**: Konsistente Design Tokens (Farben, Spacing, Radii, Shadows) als CSS Custom Properties
+- **Komponenten-Architektur**: Einheitliches Card-System, Info-Grid, Costs-Grid, Coming-Soon-Grid, WiFi-Networks
+- **index.html von 3541 auf ~1046 Zeilen reduziert** (−70%)
+
+### Added
+- `dashboard/styles.css` — Single Source of Truth für alle visuellen Styles (3094 Zeilen)
+- `docs/STYLEGUIDE.md` — Design-System-Dokumentation mit Tokens, Komponenten und Konventionen
+- Neue semantische CSS-Klassen: `.costs-content`, `.coming-soon-grid`, `.wifi-network--*`, `.kurtaxe-card`, `.payment-content`, `.footer-content` u.v.m.
+
+### Fixed
+- Fehlende CSS-Klassen ergänzt (`.login-instruction`, `.checkbox-group`, `.guest-menu-actions`, `.spinner`)
+- Saubere Trennung von HTML (Struktur), CSS (Design) und JS (Logik)
+
 ## [0.12.0] - 2025-02-01
 
 ### Added
