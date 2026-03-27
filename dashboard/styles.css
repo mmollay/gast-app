@@ -612,7 +612,6 @@ body {
 .welcome-card {
     position: relative;
     z-index: 150;
-    margin-top: -40px;
     text-align: center;
     padding: var(--space-10) var(--space-8);
     background: white;
