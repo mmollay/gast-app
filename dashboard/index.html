@@ -111,19 +111,19 @@
 
         <!-- Quick Navigation (nur für eingeloggte Gäste, auf Mobile versteckt via CSS) -->
         <div class="quick-nav" id="quickNav">
-            <button class="quick-nav-btn" onclick="switchTab('explore')" title="Zum Wetter">
+            <button class="quick-nav-btn" onclick="navigateTo('explore', 'weatherCard')" title="Zum Wetter">
                 <i data-lucide="cloud-sun"></i>
                 <span data-i18n="header.weather">Wetter</span>
             </button>
-            <button class="quick-nav-btn" onclick="switchTab('explore')" title="Zu Empfehlungen">
+            <button class="quick-nav-btn" onclick="navigateTo('explore', 'recommendationsCard')" title="Zu Empfehlungen">
                 <i data-lucide="map-pin"></i>
                 <span data-i18n="header.recommendations">Empfehlungen</span>
             </button>
-            <button class="quick-nav-btn" onclick="switchTab('explore')" title="Zum WiFi">
+            <button class="quick-nav-btn" onclick="navigateTo('explore', 'wifiCard')" title="Zum WiFi">
                 <i data-lucide="wifi"></i>
                 <span data-i18n="header.wifi">WiFi</span>
             </button>
-            <button class="quick-nav-btn" onclick="switchTab('contact')" title="Zu Kosten">
+            <button class="quick-nav-btn" onclick="navigateTo('info', 'costsOverviewCard')" title="Zu Kosten">
                 <i data-lucide="receipt"></i>
                 <span data-i18n="header.costs">Kosten</span>
             </button>
@@ -1034,6 +1034,14 @@
             }
         }
         
+        function navigateTo(tab, sectionId) {
+            switchTab(tab);
+            setTimeout(function() {
+                const el = document.getElementById(sectionId);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+        }
+
         // Beim Laden: Home-Tab aktivieren (falls auf Mobile)
         document.addEventListener('DOMContentLoaded', function() {
             if (window.innerWidth <= 640) {
