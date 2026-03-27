@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.13] - 2026-03-27
+
+### Fixed
+- **Kurtaxe-Rate dynamisch**: `/hostel/info` API gibt jetzt `kurtaxePerPersonDay` zurück — bisher war €2,50 hardcoded im HTML, der Admin-Wert (z.B. €2,70) wurde nie angezeigt
+- **WiFi-Card Icons**: Dreifaches WLAN-Symbol reduziert — Überschrift behält WiFi-Icon, Netzwerke nutzen Zap (Power) und Signal (Alternativ)
+
 ## [0.12.12] - 2026-03-27
 
 ### Fixed
