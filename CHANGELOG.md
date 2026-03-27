@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.2] - 2026-03-27
+
+### Fixed
+- **Logo zentriert**: `display: block; margin: 0 auto` — Logo ist jetzt zuverlässig mittig ausgerichtet
+- **Dropdown-Abstand**: Sprachauswahl nicht mehr so knapp am Login-Button (Gap von 8px auf 14px erhöht, Section-Padding erhöht)
+- **Sprachauswahl**: Emoji-Flaggen (🇩🇪🇬🇧) durch stilvolle DE/EN-Badges ersetzt (kleine gerundete Sprachcode-Badges)
+
+---
+
 ## [0.12.1] - 2026-03-26
 
 ### Changed
