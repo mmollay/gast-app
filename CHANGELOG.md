@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.14] - 2026-03-27
+
+### Fixed
+- **Empfehlungen — falscher Startpunkt**: Default-Koordinaten korrigiert (47.59/16.26 = Hollenthon statt 47.58/16.17 = Edlitz/Wieden) — Distanzberechnung startete vom völlig falschen Ort
+- **Geocoding Fallback**: Worker nutzt jetzt Places API (Find Place) wenn Geocoding API nicht aktiviert ist — Adresse "Auerstraße 33, 2812 Hollenthon" wird korrekt zu 47.5894/16.2588 aufgelöst
+
 ## [0.12.13] - 2026-03-27
 
 ### Fixed
