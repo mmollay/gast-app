@@ -3152,17 +3152,13 @@ body {
     }
 
     .footer .admin-link {
-        opacity: 1 !important;
-        background: var(--forest);
-        color: white !important;
-        padding: var(--space-2) var(--space-4);
-        border-radius: var(--radius-sm);
-        display: inline-block;
-        margin-top: var(--space-2);
+        font-size: 0.7rem;
+        opacity: 0.4;
+        color: var(--text-muted) !important;
     }
 
     .footer .admin-link:hover {
-        background: var(--sage-dark) !important;
+        opacity: 0.8;
     }
 }
 
