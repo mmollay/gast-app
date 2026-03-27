@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.4] - 2026-03-27
+
+### Fixed
+- **config.js**: VERSION-String war nach v0.12.3-Commit versehentlich auf v0.12.2 geblieben — jetzt korrekt auf v0.12.3 gesetzt (und direkt auf v0.12.4 gehoben)
+
 ## [0.12.3] - 2026-03-27
 
 ### Fixed
