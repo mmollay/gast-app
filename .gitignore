@@ -1,6 +1,12 @@
 # Dependencies
 node_modules/
 
+# Playwright screenshots / test artifacts
+.playwright-mcp/
+
+# Wrangler cache
+.wrangler/
+
 # Debug logs
 *.log
 firebase-debug.log

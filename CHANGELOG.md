@@ -7,12 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.12.2] - 2026-03-27
 
-### Fixed
-- **Logo zentriert**: `display: block; margin: 0 auto` — Logo ist jetzt zuverlässig mittig ausgerichtet
-- **Dropdown-Abstand**: Sprachauswahl nicht mehr so knapp am Login-Button (Gap von 8px auf 14px erhöht, Section-Padding erhöht)
-- **Sprachauswahl**: Emoji-Flaggen (🇩🇪🇬🇧) durch stilvolle DE/EN-Badges ersetzt (kleine gerundete Sprachcode-Badges)
-
----
+### Changed
+- **Language-Pill**: Flaggen-Emojis + Text-Labels (🇩🇪 DE / 🇬🇧 EN) statt nur Emojis
+- **Language-Pill Active-State**: Deutlicher hervorgehoben (45% white bg, font-weight 600, shadow)
+- **Language-Pill Layout**: Flexbox mit Gap für sauberes Flag+Text Alignment
+- **Header Spacing**: Abstand zwischen Language-Pill und Login-Button auf 10px erhöht
+- Mobile responsive für Language-Pill angepasst
 
 ## [0.12.1] - 2026-03-26
 

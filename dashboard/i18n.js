@@ -181,7 +181,7 @@ const I18N = {
   createLanguageSwitcher() {
     // Find or create the switcher container
     let switcher = document.getElementById('language-switcher');
-    
+
     if (!switcher) {
       // Create switcher and add to header-actions
       const headerActions = document.querySelector('.header-actions');
@@ -190,17 +190,13 @@ const I18N = {
         switcher.id = 'language-switcher';
         switcher.className = 'language-switcher';
         switcher.innerHTML = `
-          <button class="lang-btn ${this.currentLang === 'de' ? 'active' : ''}" data-lang="de" title="Deutsch">
-            🇩🇪
-          </button>
-          <button class="lang-btn ${this.currentLang === 'en' ? 'active' : ''}" data-lang="en" title="English">
-            🇬🇧
-          </button>
+          <button class="lang-btn ${this.currentLang === 'de' ? 'active' : ''}" data-lang="de" title="Deutsch"><span class="lang-flag">🇩🇪</span> DE</button>
+          <button class="lang-btn ${this.currentLang === 'en' ? 'active' : ''}" data-lang="en" title="English"><span class="lang-flag">🇬🇧</span> EN</button>
         `;
-        
+
         // Insert at the beginning of header-actions
         headerActions.insertBefore(switcher, headerActions.firstChild);
-        
+
         // Add click handlers
         switcher.querySelectorAll('.lang-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
@@ -232,8 +228,8 @@ const I18N = {
     this.applyTranslations();
     this.updateHtmlLang();
     
-    // Update switcher buttons
-    document.querySelectorAll('.lang-btn').forEach(btn => {
+    // Update switcher buttons (header pill + dropdown)
+    document.querySelectorAll('.lang-btn, .dropdown-lang-btn').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
     });
     

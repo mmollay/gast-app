@@ -164,6 +164,59 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ---- Language Switcher Pill ---- */
+.language-switcher {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-xl);
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    min-height: 44px;
+    gap: 2px;
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border: none;
+    border-radius: calc(var(--radius-xl) - 3px);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.65);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    min-height: 36px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.lang-btn .lang-flag {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.lang-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.lang-btn.active {
+    background: rgba(255, 255, 255, 0.45);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 
 .header-user-btn {
@@ -3019,14 +3072,19 @@ body {
     }
 
     .language-switcher {
-        background: rgba(255,255,255,0.15);
-        border-radius: var(--radius-lg);
-        padding: 2px;
+        padding: 3px;
+        min-height: 38px;
     }
 
     .lang-btn {
-        padding: var(--space-1) var(--space-2);
-        font-size: 14px;
+        padding: 4px 10px;
+        font-size: 0.75rem;
+        min-height: 30px;
+        gap: 4px;
+    }
+
+    .lang-btn .lang-flag {
+        font-size: 0.9rem;
     }
 
     .quick-nav {
