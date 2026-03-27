@@ -2873,7 +2873,6 @@ body {
 
 @media (min-width: 768px) {
     .quick-nav {
-        display: flex !important;
         padding: var(--space-3) var(--space-4) 0;
     }
 
