@@ -152,7 +152,8 @@
     "dailyBreakdown": "Tägliche Aufschlüsselung",
     "noData": "Noch keine Verbrauchsdaten",
     "priceInfo": "Aktueller Strompreis:",
-    "avgInfo": "Ø Tagesverbrauch:"
+    "avgInfo": "Ø Tagesverbrauch:",
+    "avgCostPerDay": "Ø Kosten"
   },
   "weather": {
     "title": "Wetter in Hollenthon",
@@ -243,6 +244,11 @@
     "info": {
       "du": "Die genauen Beträge für Kurtaxe und Energiekosten werden separat kommuniziert.",
       "sie": "Die genauen Beträge für Kurtaxe und Energiekosten werden separat kommuniziert."
+    },
+    "partialPaymentTitle": "Längerer Aufenthalt?",
+    "partialPaymentText": {
+      "du": " Bei längeren Aufenthalten sind Teilzahlungen möglich, um die laufenden Kosten überschaubar zu halten. Sprich uns einfach an!",
+      "sie": " Bei längeren Aufenthalten sind Teilzahlungen möglich, um die laufenden Kosten überschaubar zu halten. Sprechen Sie uns einfach an!"
     }
   },
   "login": {

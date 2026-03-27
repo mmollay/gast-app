@@ -152,7 +152,8 @@
     "dailyBreakdown": "Daily Breakdown",
     "noData": "No consumption data yet",
     "priceInfo": "Current electricity price:",
-    "avgInfo": "Ø Daily usage:"
+    "avgInfo": "Ø Daily usage:",
+    "avgCostPerDay": "Avg. cost"
   },
   "weather": {
     "title": "Weather in Hollenthon",
@@ -243,7 +244,9 @@
     "info": {
       "du": "The exact amounts for tourist tax and energy costs will be communicated separately.",
       "sie": "The exact amounts for tourist tax and energy costs will be communicated separately."
-    }
+    },
+    "partialPaymentTitle": "Longer stay?",
+    "partialPaymentText": " For longer stays, partial payments are possible to keep running costs manageable. Just talk to us!"
   },
   "login": {
     "title": "Guest Login",
