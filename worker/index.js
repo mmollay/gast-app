@@ -1797,11 +1797,37 @@ async function geocodeAddress(url, env, corsHeaders) {
   }
 
   try {
+    // Versuch 1: Google Geocoding API
     const googleUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
-
     const response = await fetch(googleUrl);
     const data = await response.json();
 
+    if (data.status === "OK") {
+      return new Response(JSON.stringify(data), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Fallback: Places API (Find Place from Text) - bereits aktiviert
+    const placesUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(address)}&inputtype=textquery&fields=geometry&key=${apiKey}`;
+    const placesResponse = await fetch(placesUrl);
+    const placesData = await placesResponse.json();
+
+    if (placesData.status === "OK" && placesData.candidates && placesData.candidates[0]) {
+      const loc = placesData.candidates[0].geometry.location;
+      // Format als Geocoding-API-kompatible Antwort
+      return new Response(JSON.stringify({
+        status: "OK",
+        results: [{
+          geometry: { location: { lat: loc.lat, lng: loc.lng } },
+          formatted_address: address
+        }]
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Beide APIs fehlgeschlagen
     return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

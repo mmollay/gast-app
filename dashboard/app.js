@@ -103,8 +103,8 @@ let allRecommendations = [];
 
 // Location wird dynamisch aus Adresse geocoded (Default: Hollenthon)
 let LOCATION = {
-  lat: 47.5833,
-  lon: 16.1667,
+  lat: 47.5900,
+  lon: 16.2595,
   name: "Hollenthon",
 };
 
