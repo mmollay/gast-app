@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.11] - 2026-03-27
+
+### Fixed
+- **Deployment**: Cache bust erzwungen um Cloudflare CDN zu aktualisieren — Live-Site zeigte noch alte Version (v0.12.8)
+
 ## [0.12.10] - 2026-03-27
 
 ### Fixed
