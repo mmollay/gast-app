@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.3] - 2026-03-27
+
+### Fixed
+- **Language-Switcher**: `I18N.setLanguage()` → `I18N.switchLanguage()` — Sprache wechselte nie (falsche Methode aufgerufen)
+- **Quick-Nav Buttons**: `scrollToSection()` → `switchTab()` — Wetter/Empfehlungen/WiFi navigieren jetzt zu screen-explore, Kosten zu screen-contact
+- **Sprach-Flags**: 🇩🇪 / 🇬🇧 Emojis zu den Dropdown-Buttons hinzugefügt (fehlten trotz vorherigem Commit)
+
 ## [0.12.2] - 2026-03-27
 
 ### Changed
