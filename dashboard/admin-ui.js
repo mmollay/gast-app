@@ -286,12 +286,17 @@ const AdminUI = {
     // if (indicator) indicator.style.display = 'block';
     
     document.body.classList.add('admin-logged-in');
-    
+
+    // Cards & QuickNav auch für Admin sichtbar machen
+    if (typeof updateUI === 'function') {
+      updateUI();
+    }
+
     // Initialize InlineEditor for admin
     if (typeof InlineEditor !== 'undefined') {
       InlineEditor.init();
     }
-    
+
     if (typeof lucide !== 'undefined') {
       lucide.createIcons();
     }

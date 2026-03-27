@@ -1422,7 +1422,10 @@ function updateGuestUI() {
     }
   }
 
-  // === Cards & Features (nur für eingeloggte Gäste) ===
+  // === Cards & Features (für eingeloggte Gäste ODER Admin) ===
+  const isAdmin = typeof AdminUI !== 'undefined' && AdminUI.isAdmin;
+  const showFeatures = guestToken || isAdmin;
+
   const energyCard = document.getElementById("energyCard");
   const weatherCard = document.getElementById("weatherCard");
   const recommendationsCard = document.getElementById("recommendationsCard");
@@ -1432,27 +1435,27 @@ function updateGuestUI() {
   const wifiInfoName = document.getElementById("wifiInfoName");
   const wifiInfoPassword = document.getElementById("wifiInfoPassword");
 
-  if (energyCard) energyCard.style.display = guestToken ? "block" : "none";
-  if (weatherCard) weatherCard.style.display = guestToken ? "block" : "none";
+  if (energyCard) energyCard.style.display = showFeatures ? "block" : "none";
+  if (weatherCard) weatherCard.style.display = showFeatures ? "block" : "none";
   if (recommendationsCard)
-    recommendationsCard.style.display = guestToken ? "block" : "none";
-  if (wifiCard) wifiCard.style.display = guestToken ? "block" : "none";
-  
+    recommendationsCard.style.display = showFeatures ? "block" : "none";
+  if (wifiCard) wifiCard.style.display = showFeatures ? "block" : "none";
+
   // Energie-Info-Bar unter Header
   const energyInfoBar = document.getElementById("energyInfoBar");
-  if (energyInfoBar) energyInfoBar.style.display = guestToken ? "block" : "none";
+  if (energyInfoBar) energyInfoBar.style.display = showFeatures ? "block" : "none";
 
-  // WiFi-Infos in "Wichtige Infos" nur für eingeloggte Gäste anzeigen
-  if (wifiInfoName) wifiInfoName.style.display = guestToken ? "block" : "none";
+  // WiFi-Infos in "Wichtige Infos" nur für eingeloggte Gäste/Admin anzeigen
+  if (wifiInfoName) wifiInfoName.style.display = showFeatures ? "block" : "none";
   if (wifiInfoPassword)
-    wifiInfoPassword.style.display = guestToken ? "block" : "none";
+    wifiInfoPassword.style.display = showFeatures ? "block" : "none";
 
-  // Quick Navigation nur für eingeloggte Gäste anzeigen
-  if (quickNav) quickNav.style.display = guestToken ? "flex" : "none";
-  
-  // Mobile Bottom Navigation nur für eingeloggte Gäste anzeigen
+  // Quick Navigation für eingeloggte Gäste oder Admin anzeigen
+  if (quickNav) quickNav.style.display = showFeatures ? "flex" : "none";
+
+  // Mobile Bottom Navigation für eingeloggte Gäste/Admin anzeigen
   if (mobileBottomNav) {
-    if (guestToken) {
+    if (showFeatures) {
       mobileBottomNav.classList.add('logged-in');
     } else {
       mobileBottomNav.classList.remove('logged-in');
