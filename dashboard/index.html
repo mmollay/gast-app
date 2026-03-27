@@ -86,8 +86,8 @@
                 <div class="dropdown-section">
                     <div class="dropdown-label">Sprache</div>
                     <div class="dropdown-lang-buttons">
-                        <button class="dropdown-lang-btn active" data-lang="de"><span class="lang-code">DE</span> Deutsch</button>
-                        <button class="dropdown-lang-btn" data-lang="en"><span class="lang-code">EN</span> English</button>
+                        <button class="dropdown-lang-btn active" data-lang="de">🇩🇪 <span class="lang-code">DE</span> Deutsch</button>
+                        <button class="dropdown-lang-btn" data-lang="en">🇬🇧 <span class="lang-code">EN</span> English</button>
                     </div>
                 </div>
                 
@@ -111,19 +111,19 @@
 
         <!-- Quick Navigation (nur für eingeloggte Gäste, auf Mobile versteckt via CSS) -->
         <div class="quick-nav" id="quickNav">
-            <button class="quick-nav-btn" onclick="scrollToSection('weatherCard')" title="Zum Wetter">
+            <button class="quick-nav-btn" onclick="switchTab('explore')" title="Zum Wetter">
                 <i data-lucide="cloud-sun"></i>
                 <span data-i18n="header.weather">Wetter</span>
             </button>
-            <button class="quick-nav-btn" onclick="scrollToSection('recommendationsCard')" title="Zu Empfehlungen">
+            <button class="quick-nav-btn" onclick="switchTab('explore')" title="Zu Empfehlungen">
                 <i data-lucide="map-pin"></i>
                 <span data-i18n="header.recommendations">Empfehlungen</span>
             </button>
-            <button class="quick-nav-btn" onclick="scrollToSection('wifiCard')" title="Zum WiFi">
+            <button class="quick-nav-btn" onclick="switchTab('explore')" title="Zum WiFi">
                 <i data-lucide="wifi"></i>
                 <span data-i18n="header.wifi">WiFi</span>
             </button>
-            <button class="quick-nav-btn" onclick="scrollToSection('energyCard')" title="Zu Kosten">
+            <button class="quick-nav-btn" onclick="switchTab('contact')" title="Zu Kosten">
                 <i data-lucide="receipt"></i>
                 <span data-i18n="header.costs">Kosten</span>
             </button>

@@ -1052,7 +1052,7 @@ function initGuestUI() {
     btn.addEventListener("click", () => {
       const lang = btn.dataset.lang;
       if (typeof I18N !== 'undefined') {
-        I18N.setLanguage(lang);
+        I18N.switchLanguage(lang);
         // Button-Status aktualisieren
         langButtons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
