@@ -202,8 +202,9 @@ body {
 }
 
 .lang-btn.active {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.4);
     color: white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
 .header-user-btn {
