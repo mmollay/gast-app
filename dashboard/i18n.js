@@ -190,8 +190,8 @@ const I18N = {
         switcher.id = 'language-switcher';
         switcher.className = 'language-switcher';
         switcher.innerHTML = `
-          <button class="lang-btn ${this.currentLang === 'de' ? 'active' : ''}" data-lang="de" title="Deutsch">DE</button>
-          <button class="lang-btn ${this.currentLang === 'en' ? 'active' : ''}" data-lang="en" title="English">EN</button>
+          <button class="lang-btn ${this.currentLang === 'de' ? 'active' : ''}" data-lang="de" title="Deutsch"><span class="lang-flag">🇩🇪</span> DE</button>
+          <button class="lang-btn ${this.currentLang === 'en' ? 'active' : ''}" data-lang="en" title="English"><span class="lang-flag">🇬🇧</span> EN</button>
         `;
 
         // Insert at the beginning of header-actions
