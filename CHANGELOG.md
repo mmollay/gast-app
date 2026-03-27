@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.12] - 2026-03-27
+
+### Fixed
+- **Quick-Nav CSS Bug**: `display: flex !important` aus `@media (min-width: 768px)` entfernt — dieser `!important`-Override hat dafür gesorgt, dass die Header-Buttons (Wetter, Empfehlungen, Kosten, WLAN) auf Desktop immer sichtbar waren, auch ohne Login
+- **Guest Login 401**: Admin-Password im Worker auf Standard zurückgesetzt; Gast-Credentials (viki/viki1) verifiziert und funktionsfähig
+- **Cache-Bust styles.css**: `styles.css?v=1774640000` in index.html — erzwingt Browser-Neuladung der korrigierten CSS
+
 ## [0.12.11] - 2026-03-27
 
 ### Fixed
