@@ -2681,6 +2681,15 @@ async function loadHostelInfo() {
           paymentCard.style.display = "block";
         }
       }
+
+      // Kurtaxe-Rate aus Admin-Einstellungen übernehmen
+      if (info.kurtaxePerPersonDay !== undefined) {
+        const kurtaxeEl = document.getElementById("kurtaxeAmount");
+        if (kurtaxeEl) {
+          kurtaxeEl.textContent = `€${info.kurtaxePerPersonDay.toFixed(2).replace('.', ',')}`;
+        }
+        settings.kurtaxePerPersonDay = info.kurtaxePerPersonDay;
+      }
     }
   } catch (error) {
     console.error("Fehler beim Laden der Hostel-Info:", error);

@@ -1365,6 +1365,11 @@ async function getPublicHostelInfo(env, corsHeaders) {
     iban: settings.iban || "",
     bic: settings.bic || "",
     accountHolder: settings.accountHolder || "",
+    kurtaxePerPersonDay: settings.kurtaxePerPersonDay !== undefined ? settings.kurtaxePerPersonDay : 2.50,
+    tagline: settings.tagline || "",
+    tagline_en: settings.tagline_en || "",
+    hostName: settings.hostName || "",
+    website: settings.website || "",
   };
 
   return new Response(JSON.stringify({ success: true, info: publicInfo }), {
