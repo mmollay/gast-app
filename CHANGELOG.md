@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.18] - 2026-03-28
+
+### Fixed
+- **Kurtaxe Worker-API**: €2,70 wird jetzt korrekt aus der Worker-API geladen und angezeigt
+
 ## [0.12.17] - 2026-03-28
 
 ### Fixed
