@@ -62,9 +62,6 @@ const AdminUI = {
     btn.className = 'guest-login-btn admin-mode';
     btn.title = 'Zurück zum Admin-Bereich';
     btn.style.display = 'none'; // Hidden by default
-    btn.style.textDecoration = 'none';
-    btn.style.background = 'rgba(34, 197, 94, 0.3)';
-    btn.style.borderColor = 'rgba(34, 197, 94, 0.5)';
     btn.innerHTML = `
       <i data-lucide="layout-dashboard"></i>
       <span>Admin</span>
@@ -90,8 +87,6 @@ const AdminUI = {
     btn.className = 'guest-login-btn edit-mode';
     btn.title = 'Inline-Bearbeitung aktivieren';
     btn.style.display = 'none'; // Hidden by default
-    btn.style.background = 'rgba(59, 130, 246, 0.3)';
-    btn.style.borderColor = 'rgba(59, 130, 246, 0.5)';
     btn.innerHTML = `
       <i data-lucide="edit-3"></i>
       <span>Bearbeiten</span>
@@ -137,8 +132,6 @@ const AdminUI = {
     
     if (isEditing) {
       btn.classList.add('active');
-      btn.style.background = 'rgba(34, 197, 94, 0.4)';
-      btn.style.borderColor = 'rgba(34, 197, 94, 0.6)';
       btn.innerHTML = `
         <i data-lucide="eye"></i>
         <span>Vorschau</span>
@@ -146,8 +139,6 @@ const AdminUI = {
       btn.title = 'Zurück zur Vorschau';
     } else {
       btn.classList.remove('active');
-      btn.style.background = 'rgba(59, 130, 246, 0.3)';
-      btn.style.borderColor = 'rgba(59, 130, 246, 0.5)';
       btn.innerHTML = `
         <i data-lucide="edit-3"></i>
         <span>Bearbeiten</span>

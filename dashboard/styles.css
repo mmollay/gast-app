@@ -167,6 +167,53 @@ body {
     gap: 10px;
 }
 
+/* ---- Admin Header Buttons (unified style) ---- */
+.guest-login-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: var(--radius-xl);
+    color: white;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: all 0.25s ease;
+    min-height: 36px;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.guest-login-btn:hover {
+    background: rgba(255, 255, 255, 0.35) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.guest-login-btn:active {
+    transform: translateY(0);
+}
+
+.guest-login-btn i,
+.guest-login-btn svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.guest-login-btn.active {
+    background: rgba(255, 255, 255, 0.45) !important;
+    font-weight: 600;
+}
+
 /* ---- Language Switcher Pill ---- */
 .language-switcher {
     display: flex;
@@ -538,7 +585,7 @@ body {
    ============================================ */
 .main {
     max-width: 900px;
-    margin: -40px auto 40px;
+    margin: -50px auto 40px;
     padding: 0 var(--space-5);
     position: relative;
 }
@@ -612,9 +659,9 @@ body {
 .welcome-card {
     position: relative;
     z-index: 150;
-    margin-top: -40px;
+    margin-top: -50px;
     text-align: center;
-    padding: var(--space-10) var(--space-8);
+    padding: var(--space-8) var(--space-8);
     background: white;
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
