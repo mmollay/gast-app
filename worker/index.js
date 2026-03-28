@@ -13,7 +13,7 @@ const DEFAULT_SETTINGS = {
   showFeedIn: true,
   showCO2: true,
   co2PerKwh: 0.2, // kg CO2/kWh (Österreich-Mix)
-  kurtaxePerPersonDay: 2.50, // €/Person/Tag
+  kurtaxePerPersonDay: 2.70, // €/Person/Tag
 };
 
 export default {
@@ -1292,7 +1292,7 @@ async function updateHostelSettings(request, env, corsHeaders) {
     bic: body.bic || "",
     accountHolder: body.accountHolder || "",
     uid: body.uid || "",
-    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.50,
+    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.70,
     pricePerKwh: body.pricePerKwh || 0.29,
     co2PerKwh: body.co2PerKwh || 0.2,
     // Neue Felder für Frontend
@@ -1365,6 +1365,7 @@ async function getPublicHostelInfo(env, corsHeaders) {
     iban: settings.iban || "",
     bic: settings.bic || "",
     accountHolder: settings.accountHolder || "",
+    kurtaxePerPersonDay: settings.kurtaxePerPersonDay !== undefined ? settings.kurtaxePerPersonDay : 2.70,
   };
 
   return new Response(JSON.stringify({ success: true, info: publicInfo }), {
@@ -1468,7 +1469,7 @@ async function createApartment(request, env, corsHeaders) {
     iban: body.iban || "",
     bic: body.bic || "",
     accountHolder: body.accountHolder || "",
-    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.50,
+    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.70,
     pricePerKwh: body.pricePerKwh || 0.29,
     co2PerKwh: body.co2PerKwh || 0.2,
   };
@@ -1522,7 +1523,7 @@ async function updateApartment(request, env, corsHeaders, id) {
     iban: body.iban || "",
     bic: body.bic || "",
     accountHolder: body.accountHolder || "",
-    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.50,
+    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.70,
     pricePerKwh: body.pricePerKwh || 0.29,
     co2PerKwh: body.co2PerKwh || 0.2,
   };
@@ -1649,6 +1650,7 @@ async function getApartmentInfo(slug, env, corsHeaders) {
     website: settings.website || "",
     tagline: settings.tagline || "",
     tagline_en: settings.tagline_en || "",
+    kurtaxePerPersonDay: settings.kurtaxePerPersonDay !== undefined ? settings.kurtaxePerPersonDay : 2.70,
   };
 
   return new Response(JSON.stringify({ success: true, info: publicInfo }), {
