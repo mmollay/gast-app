@@ -614,6 +614,7 @@ body {
     z-index: 150;
     text-align: center;
     padding: var(--space-10) var(--space-8);
+    margin-top: var(--space-6);
     background: white;
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
@@ -3013,7 +3014,7 @@ body {
     /* Welcome card */
     .welcome-card {
         padding: var(--space-6) var(--space-5) !important;
-        margin-top: 0 !important;
+        margin-top: var(--space-4) !important;
         margin-bottom: var(--space-4) !important;
     }
 

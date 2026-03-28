@@ -951,7 +951,7 @@ function updateKurtaxeCalculation() {
   const checkOut = new Date(guestData.checkOut);
   const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
   const persons = guestData.numberOfPersons || 1;
-  const kurtaxeRate = settings.kurtaxePerPersonDay || 2.50;
+  const kurtaxeRate = settings.kurtaxePerPersonDay || 2.70;
   const total = nights * persons * kurtaxeRate;
   
   // Details anzeigen

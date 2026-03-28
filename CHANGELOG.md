@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.16] - 2026-03-28
+
+### Fixed
+- **Kurtaxe-Standardwert korrigiert**: Default von €2,50 auf €2,70 angepasst — Fallback-Wert stimmte nicht mit dem im Admin eingestellten Tarif überein
+- **Welcome-Card Abstand zum Header**: `margin-top` für Desktop und Mobile hinzugefügt — Card hatte keinen Abstand nach oben
+
 ## [0.12.15] - 2026-03-27
 
 ### Fixed
