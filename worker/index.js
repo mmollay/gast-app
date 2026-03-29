@@ -13,7 +13,7 @@ const DEFAULT_SETTINGS = {
   showFeedIn: true,
   showCO2: true,
   co2PerKwh: 0.2, // kg CO2/kWh (Österreich-Mix)
-  kurtaxePerPersonDay: 2.50, // €/Person/Tag
+  kurtaxePerPersonDay: 2.70, // €/Person/Tag
 };
 
 export default {
@@ -1292,7 +1292,7 @@ async function updateHostelSettings(request, env, corsHeaders) {
     bic: body.bic || "",
     accountHolder: body.accountHolder || "",
     uid: body.uid || "",
-    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.50,
+    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.70,
     pricePerKwh: body.pricePerKwh || 0.29,
     co2PerKwh: body.co2PerKwh || 0.2,
     // Neue Felder für Frontend
@@ -1365,11 +1365,7 @@ async function getPublicHostelInfo(env, corsHeaders) {
     iban: settings.iban || "",
     bic: settings.bic || "",
     accountHolder: settings.accountHolder || "",
-    kurtaxePerPersonDay: settings.kurtaxePerPersonDay !== undefined ? settings.kurtaxePerPersonDay : 2.50,
-    tagline: settings.tagline || "",
-    tagline_en: settings.tagline_en || "",
-    hostName: settings.hostName || "",
-    website: settings.website || "",
+    kurtaxePerPersonDay: settings.kurtaxePerPersonDay !== undefined ? settings.kurtaxePerPersonDay : 2.70,
   };
 
   return new Response(JSON.stringify({ success: true, info: publicInfo }), {
@@ -1473,7 +1469,7 @@ async function createApartment(request, env, corsHeaders) {
     iban: body.iban || "",
     bic: body.bic || "",
     accountHolder: body.accountHolder || "",
-    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.50,
+    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.70,
     pricePerKwh: body.pricePerKwh || 0.29,
     co2PerKwh: body.co2PerKwh || 0.2,
   };
@@ -1527,7 +1523,7 @@ async function updateApartment(request, env, corsHeaders, id) {
     iban: body.iban || "",
     bic: body.bic || "",
     accountHolder: body.accountHolder || "",
-    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.50,
+    kurtaxePerPersonDay: body.kurtaxePerPersonDay !== undefined ? body.kurtaxePerPersonDay : 2.70,
     pricePerKwh: body.pricePerKwh || 0.29,
     co2PerKwh: body.co2PerKwh || 0.2,
   };
@@ -1654,6 +1650,7 @@ async function getApartmentInfo(slug, env, corsHeaders) {
     website: settings.website || "",
     tagline: settings.tagline || "",
     tagline_en: settings.tagline_en || "",
+    kurtaxePerPersonDay: settings.kurtaxePerPersonDay !== undefined ? settings.kurtaxePerPersonDay : 2.70,
   };
 
   return new Response(JSON.stringify({ success: true, info: publicInfo }), {
@@ -1797,37 +1794,11 @@ async function geocodeAddress(url, env, corsHeaders) {
   }
 
   try {
-    // Versuch 1: Google Geocoding API
     const googleUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+
     const response = await fetch(googleUrl);
     const data = await response.json();
 
-    if (data.status === "OK") {
-      return new Response(JSON.stringify(data), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Fallback: Places API (Find Place from Text) - bereits aktiviert
-    const placesUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(address)}&inputtype=textquery&fields=geometry&key=${apiKey}`;
-    const placesResponse = await fetch(placesUrl);
-    const placesData = await placesResponse.json();
-
-    if (placesData.status === "OK" && placesData.candidates && placesData.candidates[0]) {
-      const loc = placesData.candidates[0].geometry.location;
-      // Format als Geocoding-API-kompatible Antwort
-      return new Response(JSON.stringify({
-        status: "OK",
-        results: [{
-          geometry: { location: { lat: loc.lat, lng: loc.lng } },
-          formatted_address: address
-        }]
-      }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Beide APIs fehlgeschlagen
     return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

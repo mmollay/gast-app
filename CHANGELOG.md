@@ -5,45 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.12.16] - 2026-03-28
+## [0.12.20] - 2026-03-28
+
+### Changed
+- **Release**: Versionsbump auf 0.12.20
+
+## [0.12.19] - 2026-03-28
 
 ### Fixed
-- **Kurtaxe-Standardwert korrigiert**: Default von €2,50 auf €2,70 angepasst — Fallback-Wert stimmte nicht mit dem im Admin eingestellten Tarif überein
-- **Welcome-Card Abstand zum Header**: `margin-top` für Desktop und Mobile hinzugefügt — Card hatte keinen Abstand nach oben
+- **Admin-Buttons**: Einheitlicher glasmorphen Pill-Style für alle Admin-Buttons
+- **Welcome-Card**: Abstand zum Header reduziert (war zu weit unten)
+- **Icon-Ausrichtung**: Icons in Info-Boxen korrekt neben Text ausgerichtet (nicht darüber)
 
-## [0.12.15] - 2026-03-27
-
-### Fixed
-- **Welcome-Card ragt in Header**: `margin-top: -40px` von `.welcome-card` entfernt — kombiniert mit dem negativen Margin des `.main`-Containers hat die Card in den Header/Quick-Nav-Bereich reingereicht
-
-## [0.12.14] - 2026-03-27
+## [0.12.18] - 2026-03-28
 
 ### Fixed
-- **Empfehlungen — falscher Startpunkt**: Default-Koordinaten korrigiert (47.59/16.26 = Hollenthon statt 47.58/16.17 = Edlitz/Wieden) — Distanzberechnung startete vom völlig falschen Ort
-- **Geocoding Fallback**: Worker nutzt jetzt Places API (Find Place) wenn Geocoding API nicht aktiviert ist — Adresse "Auerstraße 33, 2812 Hollenthon" wird korrekt zu 47.5894/16.2588 aufgelöst
+- **Kurtaxe Worker-API**: €2,70 wird jetzt korrekt aus der Worker-API geladen und angezeigt
 
-## [0.12.13] - 2026-03-27
-
-### Fixed
-- **Kurtaxe-Rate dynamisch**: `/hostel/info` API gibt jetzt `kurtaxePerPersonDay` zurück — bisher war €2,50 hardcoded im HTML, der Admin-Wert (z.B. €2,70) wurde nie angezeigt
-- **WiFi-Card Icons**: Dreifaches WLAN-Symbol reduziert — Überschrift behält WiFi-Icon, Netzwerke nutzen Zap (Power) und Signal (Alternativ)
-
-## [0.12.12] - 2026-03-27
+## [0.12.17] - 2026-03-28
 
 ### Fixed
-- **Quick-Nav CSS Bug**: `display: flex !important` aus `@media (min-width: 768px)` entfernt — dieser `!important`-Override hat dafür gesorgt, dass die Header-Buttons (Wetter, Empfehlungen, Kosten, WLAN) auf Desktop immer sichtbar waren, auch ohne Login
-- **Guest Login 401**: Admin-Password im Worker auf Standard zurückgesetzt; Gast-Credentials (viki/viki1) verifiziert und funktionsfähig
-- **Cache-Bust styles.css**: `styles.css?v=1774640000` in index.html — erzwingt Browser-Neuladung der korrigierten CSS
-
-## [0.12.11] - 2026-03-27
-
-### Fixed
-- **Deployment**: Cache bust erzwungen um Cloudflare CDN zu aktualisieren — Live-Site zeigte noch alte Version (v0.12.8)
-
-## [0.12.10] - 2026-03-27
-
-### Fixed
-- **Quick-Nav standardmäßig versteckt**: `style="display: none;"` direkt am HTML-Element — verhindert kurzes Aufblitzen der Buttons vor JS-Init; Buttons nur sichtbar wenn Gast oder Admin eingeloggt
+- **Kurtaxe-Default**: Standardwert auf €2,70 korrigiert (war €1,50)
+- **Welcome-Card**: Abstand zum Header hinzugefügt (Desktop + Mobile)
+- **config.js Version**: Versionsnummer wird jetzt korrekt beim Release aktualisiert
 
 ## [0.12.9] - 2026-03-27
 

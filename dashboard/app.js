@@ -103,8 +103,8 @@ let allRecommendations = [];
 
 // Location wird dynamisch aus Adresse geocoded (Default: Hollenthon)
 let LOCATION = {
-  lat: 47.5900,
-  lon: 16.2595,
+  lat: 47.5833,
+  lon: 16.1667,
   name: "Hollenthon",
 };
 
@@ -2682,13 +2682,10 @@ async function loadHostelInfo() {
         }
       }
 
-      // Kurtaxe-Rate aus Admin-Einstellungen übernehmen
+      // Kurtaxe-Rate aus Hostel-Info übernehmen
       if (info.kurtaxePerPersonDay !== undefined) {
-        const kurtaxeEl = document.getElementById("kurtaxeAmount");
-        if (kurtaxeEl) {
-          kurtaxeEl.textContent = `€${info.kurtaxePerPersonDay.toFixed(2).replace('.', ',')}`;
-        }
         settings.kurtaxePerPersonDay = info.kurtaxePerPersonDay;
+        updatePriceDisplay();
       }
     }
   } catch (error) {
