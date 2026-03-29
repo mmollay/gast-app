@@ -179,8 +179,20 @@ const I18N = {
    * Create language switcher UI
    */
   createLanguageSwitcher() {
-    // Language switching is handled in the user dropdown menu only
-    // No separate header pill needed
+    // Attach click handlers to static header language buttons
+    const switcher = document.getElementById('language-switcher');
+    if (switcher) {
+      switcher.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const lang = e.currentTarget.getAttribute('data-lang');
+          this.switchLanguage(lang);
+        });
+      });
+      // Set initial active state
+      switcher.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === this.currentLang);
+      });
+    }
   },
 
   /**
@@ -203,8 +215,8 @@ const I18N = {
     this.applyTranslations();
     this.updateHtmlLang();
     
-    // Update switcher buttons in dropdown
-    document.querySelectorAll('.dropdown-lang-btn').forEach(btn => {
+    // Update header switcher buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
     });
     
@@ -261,8 +273,8 @@ window.addEventListener('popstate', async (event) => {
   I18N.applyTranslations();
   I18N.updateHtmlLang();
   
-  // Update switcher buttons in dropdown
-  document.querySelectorAll('.dropdown-lang-btn').forEach(btn => {
+  // Update header switcher buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-lang') === I18N.currentLang);
   });
 });

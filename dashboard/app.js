@@ -1046,20 +1046,6 @@ function initGuestUI() {
     });
   }
   
-  // Sprach-Buttons im Dropdown
-  const langButtons = document.querySelectorAll(".dropdown-lang-btn");
-  langButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const lang = btn.dataset.lang;
-      if (typeof I18N !== 'undefined') {
-        I18N.switchLanguage(lang);
-        // Button-Status aktualisieren
-        langButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-      }
-    });
-  });
-  
   // Edit Mode Toggle im Dropdown
   const dropdownEditToggle = document.getElementById("dropdownEditToggle");
   if (dropdownEditToggle) {

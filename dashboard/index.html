@@ -60,6 +60,12 @@
     <header class="header">
         <!-- MINIMALISTISCHER HEADER: Nur User-Icon sichtbar -->
         <div class="header-actions">
+            <!-- Language Switcher (für Gäste sofort sichtbar) -->
+            <div class="language-switcher" id="language-switcher">
+                <button class="lang-btn active" data-lang="de">DE</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+
             <!-- User Menu Button (immer sichtbar) -->
             <button class="header-user-btn" id="headerUserBtn" title="Menü öffnen">
                 <i data-lucide="user"></i>
@@ -80,15 +86,6 @@
                         <span>Bearbeiten</span>
                     </button>
                     <div class="dropdown-divider"></div>
-                </div>
-                
-                <!-- Sprache -->
-                <div class="dropdown-section">
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-lang-buttons">
-                        <button class="dropdown-lang-btn active" data-lang="de">Deutsch</button>
-                        <button class="dropdown-lang-btn" data-lang="en">English</button>
-                    </div>
                 </div>
                 
                 <!-- Logout (nur wenn eingeloggt) -->

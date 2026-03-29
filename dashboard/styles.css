@@ -214,7 +214,43 @@ body {
     font-weight: 600;
 }
 
-/* ---- Language Switcher (in dropdown only) ---- */
+/* ---- Language Switcher (Header Pill) ---- */
+.language-switcher {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-xl);
+    padding: 3px;
+    gap: 1px;
+}
+
+.lang-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: calc(var(--radius-xl) - 2px);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 34px;
+    line-height: 1;
+}
+
+.lang-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.lang-btn.active {
+    background: rgba(255, 255, 255, 0.4);
+    color: white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
 
 .header-user-btn {
     display: flex;
@@ -362,43 +398,6 @@ body {
     height: 1px;
     background: var(--sand);
     margin: var(--space-2) 0;
-}
-
-/* ---- Language Buttons in Dropdown ---- */
-.dropdown-lang-buttons {
-    display: flex;
-    gap: 6px;
-    padding: 4px var(--space-2) var(--space-2);
-}
-
-.dropdown-lang-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px var(--space-3);
-    background: var(--cream);
-    border: 2px solid transparent;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-light);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.dropdown-lang-btn:hover {
-    background: var(--sand);
-    color: var(--text);
-}
-
-.dropdown-lang-btn.active {
-    background: white;
-    border-color: var(--sage);
-    color: var(--forest);
-    font-weight: 600;
-    box-shadow: 0 2px 6px rgba(156, 175, 136, 0.2);
 }
 
 /* ---- Quick Navigation ---- */
@@ -3043,11 +3042,6 @@ body {
     .dropdown-item {
         padding: 10px var(--space-3);
         font-size: 0.85rem;
-    }
-
-    .dropdown-lang-btn {
-        padding: var(--space-2) 10px;
-        font-size: 0.8rem;
     }
 
     /* Main */
