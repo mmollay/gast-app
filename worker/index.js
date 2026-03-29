@@ -647,9 +647,17 @@ async function createGuest(request, env, corsHeaders) {
     checkIn,
     checkOut,
     numberOfPersons,
+    numberOfAdults,
+    numberOfChildren,
+    numberOfInfants,
     apartmentId,
     title,
     gender,
+    contact,
+    hasDog,
+    airbnbConfirmationCode,
+    bookingDate,
+    earnings,
   } = body;
 
   // Validierung
@@ -677,6 +685,7 @@ async function createGuest(request, env, corsHeaders) {
   }
 
   // Neuen Gast erstellen
+  const totalPersons = numberOfPersons || ((numberOfAdults || 1) + (numberOfChildren || 0) + (numberOfInfants || 0));
   const guest = {
     id: Date.now().toString(),
     name,
@@ -684,10 +693,19 @@ async function createGuest(request, env, corsHeaders) {
     password,
     checkIn,
     checkOut,
-    numberOfPersons: numberOfPersons || 1,
-    apartmentId: apartmentId || 1, // Default Apartment
-    title: title || "", // Titel (Dr., Prof., etc.)
-    gender: gender || "neutral", // weiblich, männlich, neutral
+    numberOfPersons: totalPersons,
+    numberOfAdults: numberOfAdults || totalPersons,
+    numberOfChildren: numberOfChildren || 0,
+    numberOfInfants: numberOfInfants || 0,
+    apartmentId: apartmentId || 1,
+    title: title || "",
+    gender: gender || "neutral",
+    contact: contact || "",
+    hasDog: hasDog || false,
+    airbnbConfirmationCode: airbnbConfirmationCode || null,
+    bookingDate: bookingDate || null,
+    earnings: earnings || null,
+    importedFromAirbnb: !!airbnbConfirmationCode,
     createdAt: new Date().toISOString(),
   };
 
@@ -713,7 +731,12 @@ async function importAirbnbBooking(request, env, corsHeaders) {
   }
 
   const body = await request.json();
-  const { name, checkIn, checkOut, numberOfPersons, airbnbConfirmationCode } = body;
+  const {
+    name, checkIn, checkOut, numberOfPersons,
+    numberOfAdults, numberOfChildren, numberOfInfants,
+    airbnbConfirmationCode, contact, hasDog,
+    bookingDate, earnings
+  } = body;
 
   if (!name || !checkIn || !checkOut) {
     return new Response(
@@ -750,6 +773,7 @@ async function importAirbnbBooking(request, env, corsHeaders) {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const password = Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
 
+  const totalPersons = numberOfPersons || ((numberOfAdults || 1) + (numberOfChildren || 0) + (numberOfInfants || 0));
   const guest = {
     id: Date.now().toString(),
     name,
@@ -757,11 +781,18 @@ async function importAirbnbBooking(request, env, corsHeaders) {
     password,
     checkIn,
     checkOut,
-    numberOfPersons: numberOfPersons || 1,
+    numberOfPersons: totalPersons,
+    numberOfAdults: numberOfAdults || totalPersons,
+    numberOfChildren: numberOfChildren || 0,
+    numberOfInfants: numberOfInfants || 0,
     apartmentId: 1,
     title: "",
     gender: "neutral",
+    contact: contact || "",
+    hasDog: hasDog || false,
     airbnbConfirmationCode: airbnbConfirmationCode || null,
+    bookingDate: bookingDate || null,
+    earnings: earnings || null,
     importedFromAirbnb: true,
     createdAt: new Date().toISOString(),
   };
@@ -794,9 +825,17 @@ async function updateGuest(request, env, corsHeaders, id) {
     checkIn,
     checkOut,
     numberOfPersons,
+    numberOfAdults,
+    numberOfChildren,
+    numberOfInfants,
     apartmentId,
     title,
     gender,
+    contact,
+    hasDog,
+    airbnbConfirmationCode,
+    bookingDate,
+    earnings,
   } = body;
 
   // Validierung (ohne Passwort, da optional)
@@ -837,17 +876,25 @@ async function updateGuest(request, env, corsHeaders, id) {
   }
 
   // Gast aktualisieren
+  const totalPersons = numberOfPersons || ((numberOfAdults || guests[guestIndex].numberOfAdults || 1) + (numberOfChildren || guests[guestIndex].numberOfChildren || 0) + (numberOfInfants || guests[guestIndex].numberOfInfants || 0));
   guests[guestIndex] = {
     ...guests[guestIndex],
     name,
     username,
     checkIn,
     checkOut,
-    numberOfPersons: numberOfPersons || 1,
+    numberOfPersons: totalPersons,
+    numberOfAdults: numberOfAdults !== undefined ? numberOfAdults : guests[guestIndex].numberOfAdults,
+    numberOfChildren: numberOfChildren !== undefined ? numberOfChildren : guests[guestIndex].numberOfChildren,
+    numberOfInfants: numberOfInfants !== undefined ? numberOfInfants : guests[guestIndex].numberOfInfants,
     apartmentId: apartmentId || 1,
     title: title !== undefined ? title : guests[guestIndex].title || "",
-    gender:
-      gender !== undefined ? gender : guests[guestIndex].gender || "neutral",
+    gender: gender !== undefined ? gender : guests[guestIndex].gender || "neutral",
+    contact: contact !== undefined ? contact : guests[guestIndex].contact || "",
+    hasDog: hasDog !== undefined ? hasDog : guests[guestIndex].hasDog || false,
+    airbnbConfirmationCode: airbnbConfirmationCode !== undefined ? airbnbConfirmationCode : guests[guestIndex].airbnbConfirmationCode,
+    bookingDate: bookingDate !== undefined ? bookingDate : guests[guestIndex].bookingDate,
+    earnings: earnings !== undefined ? earnings : guests[guestIndex].earnings,
     updatedAt: new Date().toISOString(),
   };
 

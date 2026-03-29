@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.45] - 2026-03-29
+
+### Added
+- **CSV Import**: Alle Airbnb-Buchungen aus CSV importiert (9 Gäste, vollständige Daten)
+- **Haustiere**: Neues Feld `hasDog` + `numberOfPets` pro Gast — direkt aus Airbnb-PDF ausgelesen (7 von 9 Gästen mit Haustieren)
+- **Erweitertes Gast-Model**: Kontakt, Erwachsene/Kinder/Kleinkinder separat, Buchungsdatum, Einkünfte
+- **Worker**: Import-Endpunkt, createGuest und updateGuest unterstützen alle neuen Felder
+
 ## [0.12.44] - 2026-03-29
 
 ### Added
