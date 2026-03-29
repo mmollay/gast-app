@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.46] - 2026-03-29
+
+### Fixed
+- **User-Dropdown**: Doppelte Trennlinie zwischen "Bearbeiten" und "Abmelden" entfernt
+- **config.js**: Versionsbump auf v0.12.45 nachgeholt (war fälschlicherweise noch v0.12.44)
+
 ## [0.12.45] - 2026-03-29
 
 ### Added
