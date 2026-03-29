@@ -1468,7 +1468,7 @@
             </div>
         </div>
         <div class="header-content">
-            <img src="logo-gast.svg" alt="Logo" class="header-logo">
+            <img src="/logo-neu.png" alt="Logo" class="header-logo">
             <h1>Admin-Bereich</h1>
             <p class="subtitle">Gast auf Erden <span style="opacity: 0.6; font-size: 0.9rem;" id="adminVersion">• v0.12.0</span></p>
         </div>
@@ -2130,7 +2130,7 @@
 
             const total = kurtaxe + (energyCost || 0);
             const fmt = (n) => n.toFixed(2).replace('.', ',');
-            const logoUrl = window.location.origin + '/logo-gast.svg';
+            const logoUrl = window.location.origin + '/logo-neu.png';
 
             const html = `<!DOCTYPE html>
 <html lang="de">
@@ -2179,7 +2179,11 @@
   .thankyou .sub { font-size: 11px; color: #888; margin-top: 8px; font-style: normal; font-weight: 400; }
 
   /* Footer */
-  .footer { text-align: center; font-size: 10px; color: #aaa; margin-top: 28px; padding-top: 14px; border-top: 1px solid #eee; font-weight: 400; }
+  .footer { text-align: center; margin-top: 28px; padding-top: 14px; border-top: 1px solid #eee; }
+  .footer .footer-brand { font-size: 12px; color: #2d4f38; font-weight: 500; margin-bottom: 4px; }
+  .footer .footer-brand a { color: #4a7c59; text-decoration: none; }
+  .footer .footer-brand a:hover { text-decoration: underline; }
+  .footer .footer-copy { font-size: 10px; color: #aaa; font-weight: 400; }
 
   /* Toolbar (kein Druck) */
   .toolbar { position: fixed; top: 0; left: 0; right: 0; background: #2d4f38; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; z-index: 100; }
@@ -2270,7 +2274,10 @@
     <div class="sub" id="t-thanks-sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
   </div>
 
-  <div class="footer" id="t-footer">Gast auf Erden · ${new Date().getFullYear()} · gastauferden.at</div>
+  <div class="footer">
+    <div class="footer-brand"><a href="https://www.gastauferden.at" target="_blank">www.gastauferden.at</a></div>
+    <div class="footer-copy">Gast auf Erden · Hollenthon, Niederösterreich · ${new Date().getFullYear()}</div>
+  </div>
 
 </div>
 
@@ -2329,9 +2336,9 @@ function setLang(lang) {
 </body>
 </html>`;
 
-            const w = window.open('', '_blank');
-            w.document.write(html);
-            w.document.close();
+            const blob = new Blob([html], { type: 'text/html; charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
         }
 
         // Update Kurtaxe Preview
