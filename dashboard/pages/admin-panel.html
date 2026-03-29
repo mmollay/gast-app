@@ -2098,25 +2098,25 @@
             const guest = allGuests.find(g => g.id === guestId);
             if (!guest) { showToast('Gast nicht gefunden', 'error'); return; }
 
-            // Settings aus Formular auslesen (schon geladen)
             const pricePerKwh = parseFloat(document.getElementById('pricePerKwh')?.value) || PRICE_PER_KWH;
             const kurtaxeRate = KURTAXE_PER_PERSON_DAY;
-            const iban = document.getElementById('hostelIban')?.value || document.getElementById('iban')?.textContent || '';
-            const bic = document.getElementById('hostelBic')?.value || document.getElementById('bic')?.textContent || '';
-            const empfaenger = document.getElementById('hostelAccountHolder')?.value || document.getElementById('empfaenger')?.textContent || '';
+            const iban = document.getElementById('hostelIban')?.value || '';
+            const bic = document.getElementById('hostelBic')?.value || '';
+            const empfaenger = document.getElementById('hostelAccountHolder')?.value || '';
 
             const checkIn = new Date(guest.checkIn);
             const checkOut = new Date(guest.checkOut);
             const days = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
             const persons = guest.numberOfPersons || 1;
             const kurtaxe = days * persons * kurtaxeRate;
+            const today = new Date().toISOString().slice(0, 10);
 
-            // Energiedaten vom API laden
+            // Energiedaten: bis heute (nicht bis zukünftigem Checkout)
             let energyKwh = null;
             let energyCost = null;
             try {
                 const fromDate = guest.checkIn.slice(0, 10);
-                const toDate = guest.checkOut.slice(0, 10);
+                const toDate = guest.checkOut.slice(0, 10) < today ? guest.checkOut.slice(0, 10) : today;
                 const resp = await fetch(`${API_URL}/energy/range?from=${fromDate}&to=${toDate}`, {
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
@@ -2126,11 +2126,11 @@
                     if (energyKwh !== null && energyKwh > 0) energyCost = energyKwh * pricePerKwh;
                     else energyKwh = null;
                 }
-            } catch (e) { /* kein Stopp wenn Energie nicht verfügbar */ }
+            } catch (e) { /* Energie nicht verfügbar — kein Stopp */ }
 
             const total = kurtaxe + (energyCost || 0);
             const fmt = (n) => n.toFixed(2).replace('.', ',');
-            const fmtDate = (d) => new Date(d).toLocaleDateString('de-DE');
+            const logoUrl = window.location.origin + '/logo-neu.png';
 
             const html = `<!DOCTYPE html>
 <html lang="de">
@@ -2138,61 +2138,212 @@
 <meta charset="UTF-8">
 <title>Abschlussprotokoll – ${guest.name}</title>
 <style>
-  body { font-family: Arial, sans-serif; font-size: 13px; color: #000; margin: 40px; max-width: 600px; }
-  h1 { font-size: 18px; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 4px; }
-  h2 { font-size: 13px; font-weight: bold; margin: 20px 0 4px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
-  .meta { color: #555; font-size: 11px; margin-bottom: 20px; }
-  table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-  td { padding: 6px 4px; vertical-align: top; }
-  td:last-child { text-align: right; font-weight: bold; }
-  .total-row td { border-top: 2px solid #000; font-size: 15px; font-weight: bold; padding-top: 10px; }
-  .bank { background: #f5f5f5; padding: 12px; margin-top: 20px; border: 1px solid #ddd; }
-  .bank p { margin: 4px 0; }
-  .footer { margin-top: 30px; font-size: 11px; color: #888; text-align: center; border-top: 1px solid #ddd; padding-top: 12px; }
-  @media print { body { margin: 20px; } button { display: none; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; font-size: 13px; color: #1a1a1a; background: #fff; }
+  .page { max-width: 640px; margin: 0 auto; padding: 40px; }
+
+  /* Header */
+  .header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 2px solid #4a7c59; margin-bottom: 24px; }
+  .logo { height: 48px; object-fit: contain; }
+  .header-text { text-align: right; }
+  .header-text h1 { font-size: 20px; font-weight: bold; color: #2d4f38; letter-spacing: 0.5px; }
+  .header-text .issued { font-size: 11px; color: #888; margin-top: 4px; }
+
+  /* Sections */
+  .section { margin-bottom: 20px; }
+  .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #4a7c59; font-weight: bold; font-family: Arial, sans-serif; margin-bottom: 8px; border-bottom: 1px solid #d4e8db; padding-bottom: 4px; }
+
+  /* Info grid */
+  .info-grid { display: grid; grid-template-columns: 140px 1fr; gap: 5px 0; }
+  .info-label { color: #666; font-size: 12px; padding: 3px 0; }
+  .info-value { font-weight: bold; font-size: 12px; padding: 3px 0; }
+
+  /* Leistungen-Tabelle */
+  table.leistungen { width: 100%; border-collapse: collapse; }
+  table.leistungen td { padding: 8px 6px; font-size: 13px; border-bottom: 1px solid #eee; }
+  table.leistungen td:last-child { text-align: right; font-weight: bold; white-space: nowrap; }
+  table.leistungen .sub { font-size: 10px; color: #888; font-family: Arial, sans-serif; margin-top: 2px; }
+  table.leistungen .total-row td { border-top: 2px solid #2d4f38; border-bottom: none; font-size: 15px; font-weight: bold; color: #2d4f38; padding-top: 12px; }
+
+  /* Bank */
+  .bank-box { background: #f4f8f5; border: 1px solid #c8ddd0; border-radius: 6px; padding: 14px 16px; }
+  .bank-box .bank-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #4a7c59; font-weight: bold; font-family: Arial, sans-serif; margin-bottom: 8px; }
+  .bank-box .bank-row { display: flex; gap: 8px; font-size: 12px; margin: 3px 0; }
+  .bank-box .bank-row span:first-child { color: #666; width: 70px; flex-shrink: 0; }
+
+  /* Unterschrift */
+  .sig-row { display: flex; gap: 40px; margin-top: 30px; }
+  .sig-block { flex: 1; }
+  .sig-line { border-bottom: 1px solid #999; height: 32px; margin-bottom: 4px; }
+  .sig-label { font-size: 10px; color: #888; font-family: Arial, sans-serif; }
+
+  /* Dankestext */
+  .thankyou { text-align: center; margin: 28px 0 20px; padding: 16px; background: #f4f8f5; border-radius: 8px; }
+  .thankyou p { font-size: 14px; color: #2d4f38; font-style: italic; line-height: 1.6; }
+  .thankyou .sub { font-size: 11px; color: #888; margin-top: 6px; font-style: normal; font-family: Arial, sans-serif; }
+
+  /* Footer */
+  .footer { text-align: center; font-size: 10px; color: #aaa; font-family: Arial, sans-serif; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  /* Toolbar (kein Druck) */
+  .toolbar { position: fixed; top: 0; left: 0; right: 0; background: #2d4f38; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-family: Arial, sans-serif; font-size: 13px; z-index: 100; }
+  .toolbar button { padding: 6px 16px; border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; background: rgba(255,255,255,0.15); color: #fff; cursor: pointer; font-size: 13px; }
+  .toolbar button:hover { background: rgba(255,255,255,0.3); }
+  .toolbar button.active { background: rgba(255,255,255,0.9); color: #2d4f38; font-weight: bold; }
+  .toolbar .spacer { flex: 1; }
+  .toolbar .print-btn { background: #fff; color: #2d4f38; font-weight: bold; border: none; padding: 8px 20px; }
+
+  @media print {
+    .toolbar { display: none; }
+    .page { padding: 20px; }
+    body { padding-top: 0; }
+  }
+  body { padding-top: 48px; }
 </style>
 </head>
 <body>
-<h1>Abschlussprotokoll</h1>
-<p class="meta">Gast auf Erden · Hollenthon · Ausgestellt am ${new Date().toLocaleDateString('de-DE')}</p>
 
-<h2>Gast</h2>
-<table>
-  <tr><td>Name</td><td>${guest.name}</td></tr>
-  <tr><td>Aufenthalt</td><td>${fmtDate(guest.checkIn)} – ${fmtDate(guest.checkOut)} (${days} ${days === 1 ? 'Nacht' : 'Nächte'})</td></tr>
-  <tr><td>Personen</td><td>${persons}</td></tr>
-</table>
-
-<h2>Leistungen</h2>
-<table>
-  <tr>
-    <td>Kurtaxe<br><small>${days} Nächte × ${persons} ${persons === 1 ? 'Person' : 'Personen'} × €${fmt(kurtaxeRate)}</small></td>
-    <td>€${fmt(kurtaxe)}</td>
-  </tr>
-  ${energyKwh !== null ? `
-  <tr>
-    <td>Stromverbrauch<br><small>${fmt(energyKwh)} kWh × €${fmt(pricePerKwh)}/kWh</small></td>
-    <td>€${fmt(energyCost)}</td>
-  </tr>` : `
-  <tr>
-    <td colspan="2" style="color:#888; font-size:11px;">Stromverbrauch: Daten nicht verfügbar für diesen Zeitraum</td>
-  </tr>`}
-  <tr class="total-row">
-    <td>Gesamt offen</td>
-    <td>€${fmt(total)}</td>
-  </tr>
-</table>
-
-<div class="bank">
-  <p><strong>Zahlung per Überweisung:</strong></p>
-  <p>IBAN: ${iban}</p>
-  <p>BIC: ${bic}</p>
-  ${empfaenger ? `<p>Empfänger: ${empfaenger}</p>` : ''}
+<div class="toolbar">
+  <span>Sprache / Language:</span>
+  <button class="active" onclick="setLang('de')" id="btn-de">Deutsch</button>
+  <button onclick="setLang('en')" id="btn-en">English</button>
+  <span class="spacer"></span>
+  <button class="print-btn" onclick="window.print()">🖨 Drucken / Print PDF</button>
 </div>
 
-<p class="footer">Vielen Dank für Ihren Aufenthalt bei Gast auf Erden!</p>
+<div class="page">
 
-<br><button onclick="window.print()" style="padding:10px 20px;font-size:13px;cursor:pointer;">Drucken / Speichern als PDF</button>
+  <div class="header">
+    <img src="${logoUrl}" class="logo" alt="Gast auf Erden" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'">
+    <div id="logo-fallback" style="display:none;font-size:18px;font-weight:bold;color:#2d4f38;letter-spacing:1px;">Gast auf Erden</div>
+    <div class="header-text">
+      <h1 id="t-title">Abschlussprotokoll</h1>
+      <div class="issued" id="t-issued">Ausgestellt am ${new Date().toLocaleDateString('de-DE')} · Hollenthon</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="t-guest-section">Gast</div>
+    <div class="info-grid">
+      <span class="info-label" id="t-name-label">Name</span>
+      <span class="info-value">${guest.name}</span>
+      <span class="info-label" id="t-stay-label">Aufenthalt</span>
+      <span class="info-value">${checkIn.toLocaleDateString('de-DE')} – ${checkOut.toLocaleDateString('de-DE')}</span>
+      <span class="info-label" id="t-nights-label">Nächte</span>
+      <span class="info-value">${days}</span>
+      <span class="info-label" id="t-persons-label">Personen</span>
+      <span class="info-value">${persons}</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="t-services-section">Leistungen</div>
+    <table class="leistungen">
+      <tr>
+        <td><span id="t-kurtaxe">Kurtaxe</span><div class="sub">${days} × ${persons} × €${fmt(kurtaxeRate)}</div></td>
+        <td>€${fmt(kurtaxe)}</td>
+      </tr>
+      ${energyKwh !== null ? `
+      <tr>
+        <td><span id="t-strom">Stromverbrauch</span><div class="sub">${fmt(energyKwh)} kWh × €${fmt(pricePerKwh)}/kWh</div></td>
+        <td>€${fmt(energyCost)}</td>
+      </tr>` : `
+      <tr>
+        <td colspan="2" style="color:#aaa;font-size:11px;font-family:Arial,sans-serif;" id="t-strom-na">Stromverbrauch: keine Daten für diesen Zeitraum</td>
+      </tr>`}
+      <tr class="total-row">
+        <td id="t-total">Gesamt offen</td>
+        <td>€${fmt(total)}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="t-payment-section">Zahlung</div>
+    <div class="bank-box">
+      <div class="bank-title" id="t-transfer">Überweisung</div>
+      ${iban ? `<div class="bank-row"><span>IBAN</span><span>${iban}</span></div>` : ''}
+      ${bic ? `<div class="bank-row"><span>BIC</span><span>${bic}</span></div>` : ''}
+      ${empfaenger ? `<div class="bank-row"><span id="t-recipient">Empfänger</span><span>${empfaenger}</span></div>` : ''}
+    </div>
+  </div>
+
+  <div class="thankyou">
+    <p id="t-thanks">"Danke, dass du bei uns warst — wir freuen uns, dich wieder bei Gast auf Erden begrüßen zu dürfen."</p>
+    <div class="sub" id="t-thanks-sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
+  </div>
+
+  <div class="sig-row">
+    <div class="sig-block">
+      <div class="sig-line"></div>
+      <div class="sig-label" id="t-sig-guest">Unterschrift Gast / Guest signature</div>
+    </div>
+    <div class="sig-block">
+      <div class="sig-line"></div>
+      <div class="sig-label" id="t-sig-host">Unterschrift Gastgeber / Host signature</div>
+    </div>
+  </div>
+
+  <div class="footer" id="t-footer">Gast auf Erden · ${new Date().getFullYear()} · gastauferden.at</div>
+
+</div>
+
+<script>
+const T = {
+  de: {
+    title: 'Abschlussprotokoll',
+    issued: 'Ausgestellt am ${new Date().toLocaleDateString('de-DE')} · Hollenthon',
+    guestSection: 'Gast',
+    nameLbl: 'Name', stayLbl: 'Aufenthalt', nightsLbl: 'Nächte', personsLbl: 'Personen',
+    servicesSection: 'Leistungen',
+    kurtaxe: 'Kurtaxe', strom: 'Stromverbrauch', stromNa: 'Stromverbrauch: keine Daten für diesen Zeitraum',
+    total: 'Gesamt offen',
+    paymentSection: 'Zahlung', transfer: 'Überweisung', recipient: 'Empfänger',
+    thanks: '"Danke, dass du bei uns warst — wir freuen uns, dich wieder bei Gast auf Erden begrüßen zu dürfen."',
+    thanksSub: 'Gast auf Erden · Hollenthon, Niederösterreich',
+    sigGuest: 'Unterschrift Gast', sigHost: 'Unterschrift Gastgeber',
+  },
+  en: {
+    title: 'Checkout Summary',
+    issued: 'Issued on ${new Date().toLocaleDateString('en-GB')} · Hollenthon',
+    guestSection: 'Guest',
+    nameLbl: 'Name', stayLbl: 'Stay', nightsLbl: 'Nights', personsLbl: 'Persons',
+    servicesSection: 'Services',
+    kurtaxe: 'Tourist Tax', strom: 'Electricity', stromNa: 'Electricity: no data available for this period',
+    total: 'Total due',
+    paymentSection: 'Payment', transfer: 'Bank Transfer', recipient: 'Recipient',
+    thanks: '"Thank you for staying with us — we hope to welcome you back at Gast auf Erden soon."',
+    thanksSub: 'Gast auf Erden · Hollenthon, Lower Austria',
+    sigGuest: 'Guest signature', sigHost: 'Host signature',
+  }
+};
+
+function setLang(lang) {
+  const t = T[lang];
+  document.getElementById('t-title').textContent = t.title;
+  document.getElementById('t-issued').textContent = t.issued;
+  document.getElementById('t-guest-section').textContent = t.guestSection;
+  document.getElementById('t-name-label').textContent = t.nameLbl;
+  document.getElementById('t-stay-label').textContent = t.stayLbl;
+  document.getElementById('t-nights-label').textContent = t.nightsLbl;
+  document.getElementById('t-persons-label').textContent = t.personsLbl;
+  document.getElementById('t-services-section').textContent = t.servicesSection;
+  document.getElementById('t-kurtaxe').textContent = t.kurtaxe;
+  if (document.getElementById('t-strom')) document.getElementById('t-strom').textContent = t.strom;
+  if (document.getElementById('t-strom-na')) document.getElementById('t-strom-na').textContent = t.stromNa;
+  document.getElementById('t-total').textContent = t.total;
+  document.getElementById('t-payment-section').textContent = t.paymentSection;
+  document.getElementById('t-transfer').textContent = t.transfer;
+  if (document.getElementById('t-recipient')) document.getElementById('t-recipient').textContent = t.recipient;
+  document.getElementById('t-thanks').textContent = t.thanks;
+  document.getElementById('t-thanks-sub').textContent = t.thanksSub;
+  document.getElementById('t-sig-guest').textContent = t.sigGuest;
+  document.getElementById('t-sig-host').textContent = t.sigHost;
+  document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+}
+</script>
 </body>
 </html>`;
 
