@@ -65,6 +65,11 @@ export default {
         return await createGuest(request, env, corsHeaders);
       }
 
+      // POST /airbnb-import - Airbnb Buchung importieren (Import-Secret)
+      if (path === "/airbnb-import" && request.method === "POST") {
+        return await importAirbnbBooking(request, env, corsHeaders);
+      }
+
       // PUT /guests/:id - Gast aktualisieren (Admin only)
       if (path.startsWith("/guests/") && request.method === "PUT") {
         const id = path.split("/")[2];
@@ -690,6 +695,81 @@ async function createGuest(request, env, corsHeaders) {
   await env.SETTINGS.put("guests", JSON.stringify(guests));
 
   return new Response(JSON.stringify({ success: true, guest }), {
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+/**
+ * Airbnb Buchung importieren (POST /airbnb-import)
+ * Gesichert durch AIRBNB_IMPORT_SECRET (nicht Admin-Passwort)
+ */
+async function importAirbnbBooking(request, env, corsHeaders) {
+  const authHeader = request.headers.get("Authorization");
+  if (!authHeader || authHeader !== `Bearer ${env.AIRBNB_IMPORT_SECRET}`) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const body = await request.json();
+  const { name, checkIn, checkOut, numberOfPersons, airbnbConfirmationCode } = body;
+
+  if (!name || !checkIn || !checkOut) {
+    return new Response(
+      JSON.stringify({ error: "name, checkIn, checkOut erforderlich" }),
+      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  const guests = await loadGuests(env);
+
+  // Duplikat prüfen: selber Bestätigungs-Code oder selber Name + Zeitraum
+  const duplicate = guests.find(g =>
+    (airbnbConfirmationCode && g.airbnbConfirmationCode === airbnbConfirmationCode) ||
+    (g.name === name && g.checkIn === checkIn && g.checkOut === checkOut)
+  );
+  if (duplicate) {
+    return new Response(JSON.stringify({ success: true, duplicate: true, guest: duplicate }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Username aus Name generieren (vorname.nachname + random suffix)
+  const nameParts = name.toLowerCase().replace(/[^a-z\s]/g, "").trim().split(/\s+/);
+  const baseUsername = nameParts.length >= 2
+    ? `${nameParts[0]}.${nameParts[nameParts.length - 1]}`
+    : nameParts[0];
+  const suffix = Math.floor(100 + Math.random() * 900);
+  let username = `${baseUsername}${suffix}`;
+  while (guests.find(g => g.username === username)) {
+    username = `${baseUsername}${Math.floor(100 + Math.random() * 900)}`;
+  }
+
+  // Passwort generieren: 8 zufällige Zeichen
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const password = Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+
+  const guest = {
+    id: Date.now().toString(),
+    name,
+    username,
+    password,
+    checkIn,
+    checkOut,
+    numberOfPersons: numberOfPersons || 1,
+    apartmentId: 1,
+    title: "",
+    gender: "neutral",
+    airbnbConfirmationCode: airbnbConfirmationCode || null,
+    importedFromAirbnb: true,
+    createdAt: new Date().toISOString(),
+  };
+
+  guests.push(guest);
+  await env.SETTINGS.put("guests", JSON.stringify(guests));
+
+  return new Response(JSON.stringify({ success: true, duplicate: false, guest }), {
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
