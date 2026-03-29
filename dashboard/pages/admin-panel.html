@@ -1832,8 +1832,10 @@
             if (versionEl) versionEl.textContent = '• ' + CONFIG.VERSION;
         }
         let KURTAXE_PER_PERSON_DAY = 2.70; // Default, wird aus Settings geladen
+        let PRICE_PER_KWH = 0.29; // Default, wird aus Settings geladen
         const ADMIN_TOKEN_KEY = 'hostel_admin_token';
         let authToken = null;
+        let allGuests = []; // Global für printProtocol
 
         // Initialize
         lucide.createIcons();
@@ -1948,7 +1950,8 @@
                 });
 
                 const data = await response.json();
-                const guests = data.guests || [];
+                allGuests = data.guests || [];
+                const guests = allGuests;
 
                 // Update stats
                 const now = new Date();
@@ -1992,12 +1995,10 @@
             const checkOut = new Date(guest.checkOut);
             const isActive = now >= checkIn && now <= checkOut;
 
-            // Calculate energy consumption for active guests
+            // Energy stored per guest if available (optional field)
             let energyDisplay = '';
-            if (isActive && guest.energyConsumption !== undefined) {
+            if (guest.energyConsumption !== undefined) {
                 energyDisplay = `<span><i data-lucide="zap"></i> ${guest.energyConsumption.toFixed(2)} kWh</span>`;
-            } else if (isActive) {
-                energyDisplay = `<span><i data-lucide="zap"></i> Wird erfasst...</span>`;
             }
 
             // Gender display
@@ -2023,6 +2024,9 @@
                         </div>
                     </div>
                     <div class="guest-actions">
+                        <button class="icon-btn" onclick="printProtocol('${guest.id}')" title="Abschlussprotokoll drucken">
+                            <i data-lucide="printer"></i>
+                        </button>
                         <button class="icon-btn" onclick="editGuest('${guest.id}')" title="Bearbeiten">
                             <i data-lucide="edit-2"></i>
                         </button>
@@ -2045,6 +2049,113 @@
 
         function calculateTotalKurtaxe(guests) {
             return guests.reduce((sum, guest) => sum + calculateKurtaxe(guest), 0);
+        }
+
+        // Abschlussprotokoll drucken
+        async function printProtocol(guestId) {
+            const guest = allGuests.find(g => g.id === guestId);
+            if (!guest) { showToast('Gast nicht gefunden', 'error'); return; }
+
+            // Settings aus Formular auslesen (schon geladen)
+            const pricePerKwh = parseFloat(document.getElementById('pricePerKwh')?.value) || PRICE_PER_KWH;
+            const kurtaxeRate = KURTAXE_PER_PERSON_DAY;
+            const iban = document.getElementById('hostelIban')?.value || document.getElementById('iban')?.textContent || '';
+            const bic = document.getElementById('hostelBic')?.value || document.getElementById('bic')?.textContent || '';
+            const empfaenger = document.getElementById('hostelAccountHolder')?.value || document.getElementById('empfaenger')?.textContent || '';
+
+            const checkIn = new Date(guest.checkIn);
+            const checkOut = new Date(guest.checkOut);
+            const days = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+            const persons = guest.numberOfPersons || 1;
+            const kurtaxe = days * persons * kurtaxeRate;
+
+            // Energiedaten vom API laden
+            let energyKwh = null;
+            let energyCost = null;
+            try {
+                const fromDate = guest.checkIn.slice(0, 10);
+                const toDate = guest.checkOut.slice(0, 10);
+                const resp = await fetch(`${API_URL}/energy/range?from=${fromDate}&to=${toDate}`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const energyData = await resp.json();
+                if (energyData.success && energyData.data) {
+                    energyKwh = energyData.data.total_kwh ?? energyData.data.energy_kwh ?? null;
+                    if (energyKwh !== null) energyCost = energyKwh * pricePerKwh;
+                }
+            } catch (e) { /* kein Stopp wenn Energie nicht verfügbar */ }
+
+            const total = kurtaxe + (energyCost || 0);
+            const fmt = (n) => n.toFixed(2).replace('.', ',');
+            const fmtDate = (d) => new Date(d).toLocaleDateString('de-DE');
+
+            const html = `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Abschlussprotokoll – ${guest.name}</title>
+<style>
+  body { font-family: Arial, sans-serif; font-size: 13px; color: #000; margin: 40px; max-width: 600px; }
+  h1 { font-size: 18px; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 4px; }
+  h2 { font-size: 13px; font-weight: bold; margin: 20px 0 4px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+  .meta { color: #555; font-size: 11px; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+  td { padding: 6px 4px; vertical-align: top; }
+  td:last-child { text-align: right; font-weight: bold; }
+  .total-row td { border-top: 2px solid #000; font-size: 15px; font-weight: bold; padding-top: 10px; }
+  .bank { background: #f5f5f5; padding: 12px; margin-top: 20px; border: 1px solid #ddd; }
+  .bank p { margin: 4px 0; }
+  .footer { margin-top: 30px; font-size: 11px; color: #888; text-align: center; border-top: 1px solid #ddd; padding-top: 12px; }
+  @media print { body { margin: 20px; } button { display: none; } }
+</style>
+</head>
+<body>
+<h1>Abschlussprotokoll</h1>
+<p class="meta">Gast auf Erden · Hollenthon · Ausgestellt am ${new Date().toLocaleDateString('de-DE')}</p>
+
+<h2>Gast</h2>
+<table>
+  <tr><td>Name</td><td>${guest.name}</td></tr>
+  <tr><td>Aufenthalt</td><td>${fmtDate(guest.checkIn)} – ${fmtDate(guest.checkOut)} (${days} ${days === 1 ? 'Nacht' : 'Nächte'})</td></tr>
+  <tr><td>Personen</td><td>${persons}</td></tr>
+</table>
+
+<h2>Leistungen</h2>
+<table>
+  <tr>
+    <td>Kurtaxe<br><small>${days} Nächte × ${persons} ${persons === 1 ? 'Person' : 'Personen'} × €${fmt(kurtaxeRate)}</small></td>
+    <td>€${fmt(kurtaxe)}</td>
+  </tr>
+  ${energyKwh !== null ? `
+  <tr>
+    <td>Stromverbrauch<br><small>${fmt(energyKwh)} kWh × €${fmt(pricePerKwh)}/kWh</small></td>
+    <td>€${fmt(energyCost)}</td>
+  </tr>` : `
+  <tr>
+    <td colspan="2" style="color:#888; font-size:11px;">Stromverbrauch: Daten nicht verfügbar für diesen Zeitraum</td>
+  </tr>`}
+  <tr class="total-row">
+    <td>Gesamt offen</td>
+    <td>€${fmt(total)}</td>
+  </tr>
+</table>
+
+<div class="bank">
+  <p><strong>Zahlung per Überweisung:</strong></p>
+  <p>IBAN: ${iban}</p>
+  <p>BIC: ${bic}</p>
+  ${empfaenger ? `<p>Empfänger: ${empfaenger}</p>` : ''}
+</div>
+
+<p class="footer">Vielen Dank für Ihren Aufenthalt bei Gast auf Erden!</p>
+
+<br><button onclick="window.print()" style="padding:10px 20px;font-size:13px;cursor:pointer;">Drucken / Speichern als PDF</button>
+</body>
+</html>`;
+
+            const w = window.open('', '_blank');
+            w.document.write(html);
+            w.document.close();
         }
 
         // Update Kurtaxe Preview
@@ -2633,7 +2744,10 @@
                     }
 
                     // Energy
-                    if (s.pricePerKwh) document.getElementById('pricePerKwh').value = s.pricePerKwh;
+                    if (s.pricePerKwh) {
+                        document.getElementById('pricePerKwh').value = s.pricePerKwh;
+                        PRICE_PER_KWH = parseFloat(s.pricePerKwh);
+                    }
                     if (s.co2PerKwh) document.getElementById('co2PerKwh').value = s.co2PerKwh;
 
                     // WLAN
