@@ -670,17 +670,6 @@ body {
     background: white;
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
-    overflow: hidden;
-}
-
-.welcome-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--forest) 0%, var(--sage) 60%, var(--sage-light) 100%);
 }
 
 .welcome-card .greeting {
