@@ -2541,7 +2541,7 @@ body.night-mode {
 
 body.night-mode .header {
   background: linear-gradient(135deg, rgba(20, 30, 25, 0.9) 0%, rgba(40, 50, 45, 0.8) 100%),
-              url('header-bg.jpg');
+              url('header-bg.svg');
 }
 
 body.night-mode .card {
