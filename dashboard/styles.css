@@ -599,7 +599,12 @@ body {
     padding: var(--space-8);
     margin-bottom: var(--space-6);
     box-shadow: var(--shadow-md);
-    border: 1px solid rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:not(.welcome-card):hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.09);
 }
 
 .card-header {
@@ -665,6 +670,17 @@ body {
     background: white;
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.welcome-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--forest) 0%, var(--sage) 60%, var(--sage-light) 100%);
 }
 
 .welcome-card .greeting {
@@ -770,9 +786,15 @@ body {
 }
 
 .info-item .icon {
-    margin-bottom: 10px;
-    display: block;
-    color: var(--sage-dark);
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, rgba(156, 175, 136, 0.15) 0%, rgba(122, 145, 104, 0.2) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--forest);
+    margin: 0 auto 10px;
 }
 
 .info-item .icon svg {
@@ -800,7 +822,7 @@ body {
    COSTS OVERVIEW
    ============================================ */
 .costs-content {
-    padding: 0 var(--space-5) var(--space-5);
+    padding: var(--space-3) var(--space-5) var(--space-5);
 }
 
 .costs-section {

@@ -1936,7 +1936,7 @@ function showSecretMessage() {
 // GOOGLE MAPS PLACES INTEGRATION
 // ==========================================
 
-let currentRadius = 40000; // 40km default (in meters)
+let currentRadius = 20000; // 20km default (in meters)
 let currentCategory = "all";
 const GOOGLE_MAPS_API_KEY = CONFIG.GOOGLE_MAPS_API_KEY || "";
 
