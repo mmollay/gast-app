@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.53] - 2026-03-29
+
+### Changed
+- **Handout PDF**: Kompakteres Layout für 2 Seiten — kleinere Schrift, engere Abstände, weniger Padding überall
+- **Handout PDF**: Quick-Info (Check-in/out, Personen, Nächte) jetzt 4-spaltig in einer Zeile statt 2×2
+- **Handout PDF**: Newsletter-Box am Ende — gestrichelter Rahmen, Mail-Icon, Eintragzeile für E-Mail (DE+EN)
+
 ## [0.12.52] - 2026-03-29
 
 ### Fixed
