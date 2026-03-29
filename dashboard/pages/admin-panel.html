@@ -2371,8 +2371,17 @@ function setLang(lang) {
             const logoUrl = window.location.origin + '/logo-neu.png';
             const appUrl = 'www.gastauferden.at';
 
-            const greetingDe = guest.gender === 'weiblich' ? `Liebe ${firstName}` : guest.gender === 'männlich' ? `Lieber ${firstName}` : `Hallo ${firstName}`;
-            const greetingEn = `Dear ${firstName}`;
+            const greetingDe = persons > 1 ? 'Liebe Gäste'
+                : guest.gender === 'weiblich' ? `Liebe ${firstName}`
+                : guest.gender === 'männlich' ? `Lieber ${firstName}`
+                : `Hallo ${firstName}`;
+            const greetingEn = persons > 1 ? 'Dear Guests' : `Dear ${firstName}`;
+            const greetingTextDe = persons > 1
+                ? 'schön, dass ihr da seid! Hier findet ihr alles Wichtige für euren Aufenthalt.'
+                : 'schön, dass du da bist! Hier findest du alles Wichtige für deinen Aufenthalt.';
+            const greetingTextEn = persons > 1
+                ? 'great to have you all here! Below you will find everything you need for your stay.'
+                : 'great to have you here! Below you will find everything you need for your stay.';
 
             const petBlockDe = guest.hasDog ? `<div class="section" id="pet-section">
               <div class="info-box pet-box">
@@ -2470,7 +2479,7 @@ function setLang(lang) {
 
   <div class="greeting" id="t-greeting">
     <strong>${greetingDe},</strong><br>
-    schön, dass du da bist! Hier findest du alles Wichtige für deinen Aufenthalt.
+    ${greetingTextDe}
   </div>
 
   <div class="section">
@@ -2525,7 +2534,7 @@ function setLang(lang) {
     </div>
     <div class="info-box">
       <div class="info-box-icon"><i data-lucide="smartphone"></i></div>
-      <div id="t-app-hint">Öffne <strong>${appUrl}</strong> im Browser und melde dich mit den obigen Daten an. Du findest dort Wetter, WLAN, Energieverbrauch und mehr.</div>
+      <div id="t-app-hint">Öffne <strong>${appUrl}</strong> im Browser und melde dich mit den obigen Daten an. Du findest dort Wetter, WLAN, Energieverbrauch, lokale Ausflugsziele und mehr.</div>
     </div>
   </div>
 
@@ -2542,6 +2551,22 @@ function setLang(lang) {
       <span class="info-value" id="t-smoke-val">Im Haus verboten, Garten ok</span>
       <span class="info-label"><i data-lucide="receipt"></i><span id="t-tax-lbl">Kurtaxe</span></span>
       <span class="info-value" id="t-tax-val">€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})</span>
+      <span class="info-label"><i data-lucide="washer"></i><span id="t-wash-lbl">Waschmaschine</span></span>
+      <span class="info-value" id="t-wash-val">Garage, braune Türe</span>
+      <span class="info-label"><i data-lucide="trash-2"></i><span id="t-trash-lbl">Müll</span></span>
+      <span class="info-value" id="t-trash-val">Straße: Restmüll · Garage: Plastik, Papier, Glas</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="t-checkout-section">Abreise / Check-out</div>
+    <div class="info-grid">
+      <span class="info-label"><i data-lucide="key-square"></i><span id="t-co-key-lbl">Schlüssel</span></span>
+      <span class="info-value" id="t-co-key-val">Schlüsselbox am Eingang schließen</span>
+      <span class="info-label"><i data-lucide="wind"></i><span id="t-co-win-lbl">Fenster</span></span>
+      <span class="info-value" id="t-co-win-val">Bitte alle Fenster schließen</span>
+      <span class="info-label"><i data-lucide="bath"></i><span id="t-co-tow-lbl">Handtücher</span></span>
+      <span class="info-value" id="t-co-tow-val">Im Bad zusammenlegen</span>
     </div>
   </div>
 
@@ -2578,7 +2603,7 @@ const T = {
   de: {
     title: 'Willkommen bei Gast auf Erden',
     sub: '${checkIn.toLocaleDateString('de-DE')} – ${checkOut.toLocaleDateString('de-DE')} · Hollenthon',
-    greeting: '<strong>${greetingDe},</strong><br>schön, dass du da bist! Hier findest du alles Wichtige für deinen Aufenthalt.',
+    greeting: '<strong>${greetingDe},</strong><br>${greetingTextDe}',
     staySection: 'Dein Aufenthalt',
     checkinLbl: 'Check-in', checkoutLbl: 'Check-out', checkinTime: 'ab 15:00', checkoutTime: 'bis 11:00',
     personsLbl: 'Personen', nightsLbl: 'Nächte',
@@ -2586,13 +2611,19 @@ const T = {
     networkLbl: 'Netzwerk', passLbl: 'Passwort',
     appSection: 'Gäste-App / Guest App', appDesc: 'Alle Infos auf einen Blick',
     userLbl: 'Benutzer', pwLbl: 'Passwort',
-    appHint: 'Öffne <strong>${appUrl}</strong> im Browser und melde dich mit den obigen Daten an. Du findest dort Wetter, WLAN, Energieverbrauch und mehr.',
+    appHint: 'Öffne <strong>${appUrl}</strong> im Browser und melde dich mit den obigen Daten an. Du findest dort Wetter, WLAN, Energieverbrauch, lokale Ausflugsziele und mehr.',
     petTitle: 'Haustiere willkommen!', petText: 'Bitte halte deinen Vierbeiner von den Möbeln fern und entsorge Hinterlassenschaften im Garten. Danke!',
     rulesSection: 'Gut zu wissen',
     keyLbl: 'Schlüssel', keyVal: 'Schlüsselbox am Eingang',
     parkLbl: 'Parken', parkVal: 'Kostenlos am Grundstück',
     smokeLbl: 'Rauchen', smokeVal: 'Im Haus verboten, Garten ok',
     taxLbl: 'Kurtaxe', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
+    washLbl: 'Waschmaschine', washVal: 'Garage, braune Türe',
+    trashLbl: 'Müll', trashVal: 'Straße: Restmüll · Garage: Plastik, Papier, Glas',
+    checkoutSection: 'Abreise',
+    coKeyLbl: 'Schlüssel', coKeyVal: 'Schlüsselbox am Eingang schließen',
+    coWinLbl: 'Fenster', coWinVal: 'Bitte alle Fenster schließen',
+    coTowLbl: 'Handtücher', coTowVal: 'Im Bad zusammenlegen',
     contactSection: 'Kontakt',
     hostLbl: 'Gastgeber', phoneLbl: 'Telefon', emergencyLbl: 'Notfall',
     welcomeMsg: '"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."',
@@ -2600,7 +2631,7 @@ const T = {
   en: {
     title: 'Welcome to Gast auf Erden',
     sub: '${checkIn.toLocaleDateString('en-GB')} – ${checkOut.toLocaleDateString('en-GB')} · Hollenthon',
-    greeting: '<strong>${greetingEn},</strong><br>great to have you here! Below you will find everything you need for your stay.',
+    greeting: '<strong>${greetingEn},</strong><br>${greetingTextEn}',
     staySection: 'Your Stay',
     checkinLbl: 'Check-in', checkoutLbl: 'Check-out', checkinTime: 'from 3 PM', checkoutTime: 'by 11 AM',
     personsLbl: 'Persons', nightsLbl: 'Nights',
@@ -2608,13 +2639,19 @@ const T = {
     networkLbl: 'Network', passLbl: 'Password',
     appSection: 'Guest App', appDesc: 'All info at a glance',
     userLbl: 'Username', pwLbl: 'Password',
-    appHint: 'Open <strong>${appUrl}</strong> in your browser and log in with the credentials above. You will find weather, WiFi, energy usage and more.',
+    appHint: 'Open <strong>${appUrl}</strong> in your browser and log in with the credentials above. You will find weather, WiFi, energy usage, local attractions and more.',
     petTitle: 'Pets welcome!', petText: 'Please keep your furry friend off the furniture and clean up after them in the garden. Thank you!',
     rulesSection: 'Good to know',
     keyLbl: 'Key', keyVal: 'Key box at the entrance',
     parkLbl: 'Parking', parkVal: 'Free on premises',
     smokeLbl: 'Smoking', smokeVal: 'Prohibited indoors, garden ok',
     taxLbl: 'Tourist Tax', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
+    washLbl: 'Washing Machine', washVal: 'Garage, brown door',
+    trashLbl: 'Waste', trashVal: 'Street: general waste · Garage: plastic, paper, glass',
+    checkoutSection: 'Check-out',
+    coKeyLbl: 'Key', coKeyVal: 'Return to key box at entrance',
+    coWinLbl: 'Windows', coWinVal: 'Please close all windows',
+    coTowLbl: 'Towels', coTowVal: 'Leave folded in bathroom',
     contactSection: 'Contact',
     hostLbl: 'Host', phoneLbl: 'Phone', emergencyLbl: 'Emergency',
     welcomeMsg: '"Make yourself at home — this place is yours for the next ${days} days. Enjoy the peace, the forest and the magic."',
@@ -2654,6 +2691,17 @@ function setLang(lang) {
   document.getElementById('t-smoke-val').textContent = t.smokeVal;
   document.getElementById('t-tax-lbl').textContent = t.taxLbl;
   document.getElementById('t-tax-val').textContent = t.taxVal;
+  document.getElementById('t-wash-lbl').textContent = t.washLbl;
+  document.getElementById('t-wash-val').textContent = t.washVal;
+  document.getElementById('t-trash-lbl').textContent = t.trashLbl;
+  document.getElementById('t-trash-val').textContent = t.trashVal;
+  document.getElementById('t-checkout-section').textContent = t.checkoutSection;
+  document.getElementById('t-co-key-lbl').textContent = t.coKeyLbl;
+  document.getElementById('t-co-key-val').textContent = t.coKeyVal;
+  document.getElementById('t-co-win-lbl').textContent = t.coWinLbl;
+  document.getElementById('t-co-win-val').textContent = t.coWinVal;
+  document.getElementById('t-co-tow-lbl').textContent = t.coTowLbl;
+  document.getElementById('t-co-tow-val').textContent = t.coTowVal;
   document.getElementById('t-contact-section').textContent = t.contactSection;
   document.getElementById('t-host-lbl').textContent = t.hostLbl;
   document.getElementById('t-phone-lbl').textContent = t.phoneLbl;
