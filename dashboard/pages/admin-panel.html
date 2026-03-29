@@ -2399,52 +2399,60 @@ function setLang(lang) {
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; color: #1a1a1a; background: #fff; line-height: 1.6; }
-  .page { max-width: 720px; margin: 0 auto; padding: 28px 28px; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12.5px; color: #1a1a1a; background: #fff; line-height: 1.5; }
+  .page { max-width: 720px; margin: 0 auto; padding: 20px 24px; }
 
-  .header { text-align: center; padding-bottom: 24px; border-bottom: 2px solid #4a7c59; margin-bottom: 28px; }
-  .logo { height: 56px; object-fit: contain; margin-bottom: 12px; }
-  .header h1 { font-size: 24px; font-weight: 600; color: #2d4f38; }
-  .header .sub { font-size: 13px; color: #888; margin-top: 4px; }
+  .header { text-align: center; padding-bottom: 14px; border-bottom: 2px solid #4a7c59; margin-bottom: 18px; }
+  .logo { height: 44px; object-fit: contain; margin-bottom: 8px; }
+  .header h1 { font-size: 20px; font-weight: 600; color: #2d4f38; }
+  .header .sub { font-size: 12px; color: #888; margin-top: 3px; }
 
-  .greeting { font-size: 16px; color: #2d4f38; margin-bottom: 24px; line-height: 1.7; }
+  .greeting { font-size: 14px; color: #2d4f38; margin-bottom: 16px; line-height: 1.6; }
   .greeting strong { font-weight: 600; }
 
-  .section { margin-bottom: 24px; }
-  .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 10px; border-bottom: 1px solid #d4e8db; padding-bottom: 5px; }
+  .section { margin-bottom: 16px; }
+  .section-title { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 8px; border-bottom: 1px solid #d4e8db; padding-bottom: 4px; }
 
-  .info-grid { display: grid; grid-template-columns: 170px 1fr; gap: 8px 0; }
-  .info-label { color: #777; font-size: 12.5px; padding: 4px 0; display: flex; align-items: center; gap: 7px; }
-  .info-label i { width: 14px; height: 14px; color: #4a7c59; flex-shrink: 0; }
-  .info-value { font-weight: 600; font-size: 12.5px; padding: 4px 0; display: flex; align-items: center; }
+  .info-grid { display: grid; grid-template-columns: 160px 1fr; gap: 4px 0; }
+  .info-label { color: #777; font-size: 12px; padding: 3px 0; display: flex; align-items: center; gap: 6px; }
+  .info-label i { width: 13px; height: 13px; color: #4a7c59; flex-shrink: 0; }
+  .info-value { font-weight: 600; font-size: 12px; padding: 3px 0; display: flex; align-items: center; }
 
-  .credential-box { background: #f4f8f5; border: 1px solid #c8ddd0; border-radius: 8px; padding: 18px 20px; margin-bottom: 12px; }
-  .credential-box .box-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 10px; }
-  .credential-row { display: flex; gap: 10px; font-size: 13px; margin: 5px 0; align-items: center; }
-  .credential-row .cr-icon { width: 14px; height: 14px; color: #4a7c59; flex-shrink: 0; }
-  .credential-row span:nth-child(2) { color: #777; width: 110px; flex-shrink: 0; }
+  .credential-box { background: #f4f8f5; border: 1px solid #c8ddd0; border-radius: 7px; padding: 11px 14px; margin-bottom: 8px; }
+  .credential-box .box-title { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 7px; }
+  .credential-row { display: flex; gap: 10px; font-size: 12.5px; margin: 3px 0; align-items: center; }
+  .credential-row .cr-icon { width: 13px; height: 13px; color: #4a7c59; flex-shrink: 0; }
+  .credential-row span:nth-child(2) { color: #777; width: 100px; flex-shrink: 0; }
   .credential-row span:last-child { font-weight: 600; font-family: 'Courier New', monospace; letter-spacing: 0.5px; }
 
-  .info-box { display: flex; gap: 14px; background: #fffbf0; border: 1px solid #e8dcc8; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; font-size: 12.5px; line-height: 1.6; align-items: flex-start; }
+  .info-box { display: flex; gap: 12px; background: #fffbf0; border: 1px solid #e8dcc8; border-radius: 7px; padding: 10px 14px; margin-bottom: 8px; font-size: 12px; line-height: 1.5; align-items: flex-start; }
   .info-box.pet-box { background: #f0f8ff; border-color: #c8d8e8; }
-  .info-box-icon { flex-shrink: 0; padding-top: 2px; }
-  .info-box-icon i { width: 20px; height: 20px; color: #4a7c59; }
+  .info-box-icon { flex-shrink: 0; padding-top: 1px; }
+  .info-box-icon i { width: 17px; height: 17px; color: #4a7c59; }
   .info-box.pet-box .info-box-icon i { color: #5a7fa0; }
 
-  .quick-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-  .quick-item { background: #fafafa; border: 1px solid #eee; border-radius: 6px; padding: 12px 14px; text-align: center; }
-  .quick-item .qi-icon { display: flex; justify-content: center; margin-bottom: 6px; }
-  .quick-item .qi-icon i { width: 20px; height: 20px; color: #4a7c59; }
-  .quick-item .qi-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-  .quick-item .qi-value { font-size: 14px; font-weight: 600; color: #2d4f38; margin-top: 2px; }
+  .quick-info { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .quick-item { background: #fafafa; border: 1px solid #eee; border-radius: 6px; padding: 9px 8px; text-align: center; }
+  .quick-item .qi-icon { display: flex; justify-content: center; margin-bottom: 4px; }
+  .quick-item .qi-icon i { width: 16px; height: 16px; color: #4a7c59; }
+  .quick-item .qi-label { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  .quick-item .qi-value { font-size: 13px; font-weight: 600; color: #2d4f38; margin-top: 1px; }
+  .quick-item .qi-sub { font-size: 10px; color: #aaa; }
 
-  .welcome-footer { text-align: center; margin-top: 32px; padding: 18px 24px; background: #f4f8f5; border-radius: 8px; }
-  .welcome-footer p { font-size: 14px; color: #2d4f38; font-style: italic; line-height: 1.7; }
-  .welcome-footer .sub { font-size: 11px; color: #888; margin-top: 8px; font-style: normal; }
+  .welcome-footer { text-align: center; margin-top: 18px; padding: 12px 18px; background: #f4f8f5; border-radius: 8px; }
+  .welcome-footer p { font-size: 13px; color: #2d4f38; font-style: italic; line-height: 1.6; }
+  .welcome-footer .sub { font-size: 10.5px; color: #888; margin-top: 5px; font-style: normal; }
 
-  .footer { text-align: center; margin-top: 24px; padding-top: 14px; border-top: 1px solid #eee; }
-  .footer a { color: #4a7c59; text-decoration: none; font-weight: 500; font-size: 12px; }
-  .footer .copy { font-size: 10px; color: #aaa; margin-top: 4px; }
+  .newsletter-bar { margin-top: 14px; padding: 12px 16px; border: 1.5px dashed #c8ddd0; border-radius: 8px; display: flex; align-items: center; gap: 12px; }
+  .newsletter-bar i { width: 18px; height: 18px; color: #4a7c59; flex-shrink: 0; }
+  .newsletter-bar .nl-text { flex: 1; font-size: 12px; color: #555; line-height: 1.4; }
+  .newsletter-bar .nl-text strong { color: #2d4f38; }
+  .newsletter-bar .nl-line { font-size: 11.5px; color: #999; white-space: nowrap; }
+  .newsletter-bar .nl-input { border: none; border-bottom: 1px solid #999; width: 160px; display: inline-block; margin-left: 4px; }
+
+  .footer { text-align: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid #eee; }
+  .footer a { color: #4a7c59; text-decoration: none; font-weight: 500; font-size: 11.5px; }
+  .footer .copy { font-size: 10px; color: #aaa; margin-top: 3px; }
 
   .toolbar { position: fixed; top: 0; left: 0; right: 0; background: #2d4f38; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; z-index: 100; }
   .toolbar button { padding: 6px 16px; border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; background: rgba(255,255,255,0.15); color: #fff; cursor: pointer; font-size: 13px; }
@@ -2467,6 +2475,7 @@ function setLang(lang) {
   .info-box { page-break-inside: avoid; break-inside: avoid; }
   .info-grid { page-break-inside: avoid; break-inside: avoid; }
   .welcome-footer { page-break-inside: avoid; break-inside: avoid; }
+  .newsletter-bar { page-break-inside: avoid; break-inside: avoid; }
   .footer { page-break-inside: avoid; break-inside: avoid; }
   .section-page-break { page-break-before: always; break-before: page; }
 </style>
@@ -2501,13 +2510,13 @@ function setLang(lang) {
         <div class="qi-icon"><i data-lucide="log-in"></i></div>
         <div class="qi-label" id="t-checkin-lbl">Check-in</div>
         <div class="qi-value">${checkIn.toLocaleDateString('de-DE')}</div>
-        <div class="qi-label" id="t-checkin-time">ab 15:00</div>
+        <div class="qi-sub" id="t-checkin-time">ab 15:00</div>
       </div>
       <div class="quick-item">
         <div class="qi-icon"><i data-lucide="log-out"></i></div>
         <div class="qi-label" id="t-checkout-lbl">Check-out</div>
         <div class="qi-value">${checkOut.toLocaleDateString('de-DE')}</div>
-        <div class="qi-label" id="t-checkout-time">bis 11:00</div>
+        <div class="qi-sub" id="t-checkout-time">bis 11:00</div>
       </div>
       <div class="quick-item">
         <div class="qi-icon"><i data-lucide="users"></i></div>
@@ -2601,6 +2610,15 @@ function setLang(lang) {
     <div class="sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
   </div>
 
+  <div class="newsletter-bar">
+    <i data-lucide="mail"></i>
+    <div class="nl-text">
+      <strong id="t-nl-title">Bleib informiert!</strong>
+      <span id="t-nl-text"> Melde dich für unseren Newsletter an und erfahre als Erstes von Neuigkeiten rund um Gast auf Erden.</span>
+    </div>
+    <span class="nl-line" id="t-nl-label">E-Mail:<span class="nl-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+  </div>
+
   <div class="footer">
     <a href="https://${appUrl}" target="_blank">${appUrl}</a>
     <div class="copy">Gast auf Erden · ${new Date().getFullYear()}</div>
@@ -2639,6 +2657,7 @@ const T = {
     contactSection: 'Kontakt',
     hostLbl: 'Gastgeber', phoneLbl: 'Telefon', emergencyLbl: 'Notfall',
     welcomeMsg: '"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."',
+    nlTitle: 'Bleib informiert!', nlText: ' Melde dich für unseren Newsletter an und erfahre als Erstes von Neuigkeiten rund um Gast auf Erden.', nlLabel: 'E-Mail:',
   },
   en: {
     title: 'Welcome to Gast auf Erden',
@@ -2667,6 +2686,7 @@ const T = {
     contactSection: 'Contact',
     hostLbl: 'Host', phoneLbl: 'Phone', emergencyLbl: 'Emergency',
     welcomeMsg: '"Make yourself at home — this place is yours for the next ${days} days. Enjoy the peace, the forest and the magic."',
+    nlTitle: 'Stay in the loop!', nlText: ' Sign up for our newsletter and be the first to hear about news from Gast auf Erden.', nlLabel: 'E-Mail:',
   }
 };
 
@@ -2719,6 +2739,9 @@ function setLang(lang) {
   document.getElementById('t-phone-lbl').textContent = t.phoneLbl;
   document.getElementById('t-emergency-lbl').textContent = t.emergencyLbl;
   document.getElementById('t-welcome-msg').textContent = t.welcomeMsg;
+  document.getElementById('t-nl-title').textContent = t.nlTitle;
+  document.getElementById('t-nl-text').textContent = t.nlText;
+  document.getElementById('t-nl-label').innerHTML = t.nlLabel + '<span class="nl-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
   document.getElementById('btn-de').classList.toggle('active', lang === 'de');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.documentElement.lang = lang;
