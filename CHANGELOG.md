@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.51] - 2026-03-29
+
+### Added
+- **Handout PDF**: Müllentsorgung (Straße: Restmüll, Garage: Plastik/Papier/Glas) und Waschmaschine (Garage, braune Türe) in "Gut zu wissen"
+- **Handout PDF**: Neue Abreise-Sektion mit Schlüssel, Fenster schließen und Handtücher
+- **Handout PDF**: Gruppen-bewusste Begrüßung — bei mehreren Personen "Liebe Gäste / schön dass ihr da seid" statt einzelner Name
+- **Handout PDF**: App-Hinweis erwähnt jetzt lokale Ausflugsziele (DE+EN)
+
 ## [0.12.50] - 2026-03-29
 
 ### Fixed
