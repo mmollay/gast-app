@@ -2138,66 +2138,63 @@
 <meta charset="UTF-8">
 <title>Abschlussprotokoll – ${guest.name}</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Georgia', serif; font-size: 13px; color: #1a1a1a; background: #fff; }
-  .page { max-width: 640px; margin: 0 auto; padding: 40px; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; color: #1a1a1a; background: #fff; line-height: 1.5; }
+  .page { max-width: 640px; margin: 0 auto; padding: 48px 40px; }
 
   /* Header */
-  .header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 2px solid #4a7c59; margin-bottom: 24px; }
+  .header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 2px solid #4a7c59; margin-bottom: 28px; }
   .logo { height: 48px; object-fit: contain; }
   .header-text { text-align: right; }
-  .header-text h1 { font-size: 20px; font-weight: bold; color: #2d4f38; letter-spacing: 0.5px; }
-  .header-text .issued { font-size: 11px; color: #888; margin-top: 4px; }
+  .header-text h1 { font-size: 22px; font-weight: 600; color: #2d4f38; letter-spacing: 0.3px; }
+  .header-text .issued { font-size: 11px; color: #888; margin-top: 4px; font-weight: 400; }
 
   /* Sections */
-  .section { margin-bottom: 20px; }
-  .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #4a7c59; font-weight: bold; font-family: Arial, sans-serif; margin-bottom: 8px; border-bottom: 1px solid #d4e8db; padding-bottom: 4px; }
+  .section { margin-bottom: 24px; }
+  .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 10px; border-bottom: 1px solid #d4e8db; padding-bottom: 5px; }
 
   /* Info grid */
-  .info-grid { display: grid; grid-template-columns: 140px 1fr; gap: 5px 0; }
-  .info-label { color: #666; font-size: 12px; padding: 3px 0; }
-  .info-value { font-weight: bold; font-size: 12px; padding: 3px 0; }
+  .info-grid { display: grid; grid-template-columns: 140px 1fr; gap: 6px 0; }
+  .info-label { color: #777; font-size: 12.5px; padding: 3px 0; font-weight: 400; }
+  .info-value { font-weight: 600; font-size: 12.5px; padding: 3px 0; }
 
   /* Leistungen-Tabelle */
   table.leistungen { width: 100%; border-collapse: collapse; }
-  table.leistungen td { padding: 8px 6px; font-size: 13px; border-bottom: 1px solid #eee; }
-  table.leistungen td:last-child { text-align: right; font-weight: bold; white-space: nowrap; }
-  table.leistungen .sub { font-size: 10px; color: #888; font-family: Arial, sans-serif; margin-top: 2px; }
-  table.leistungen .total-row td { border-top: 2px solid #2d4f38; border-bottom: none; font-size: 15px; font-weight: bold; color: #2d4f38; padding-top: 12px; }
+  table.leistungen td { padding: 10px 6px; font-size: 13px; border-bottom: 1px solid #eee; vertical-align: top; }
+  table.leistungen td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }
+  table.leistungen .sub { font-size: 10.5px; color: #999; margin-top: 3px; font-weight: 400; }
+  table.leistungen .total-row td { border-top: 2px solid #2d4f38; border-bottom: none; font-size: 15px; font-weight: 700; color: #2d4f38; padding-top: 14px; }
 
   /* Bank */
-  .bank-box { background: #f4f8f5; border: 1px solid #c8ddd0; border-radius: 6px; padding: 14px 16px; }
-  .bank-box .bank-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #4a7c59; font-weight: bold; font-family: Arial, sans-serif; margin-bottom: 8px; }
-  .bank-box .bank-row { display: flex; gap: 8px; font-size: 12px; margin: 3px 0; }
-  .bank-box .bank-row span:first-child { color: #666; width: 70px; flex-shrink: 0; }
-
-  /* Unterschrift */
-  .sig-row { display: flex; gap: 40px; margin-top: 30px; }
-  .sig-block { flex: 1; }
-  .sig-line { border-bottom: 1px solid #999; height: 32px; margin-bottom: 4px; }
-  .sig-label { font-size: 10px; color: #888; font-family: Arial, sans-serif; }
+  .bank-box { background: #f4f8f5; border: 1px solid #c8ddd0; border-radius: 6px; padding: 16px 18px; }
+  .bank-box .bank-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 10px; }
+  .bank-box .bank-row { display: flex; gap: 10px; font-size: 12.5px; margin: 4px 0; }
+  .bank-box .bank-row span:first-child { color: #777; width: 80px; flex-shrink: 0; font-weight: 400; }
+  .bank-box .bank-row span:last-child { font-weight: 500; }
 
   /* Dankestext */
-  .thankyou { text-align: center; margin: 28px 0 20px; padding: 16px; background: #f4f8f5; border-radius: 8px; }
-  .thankyou p { font-size: 14px; color: #2d4f38; font-style: italic; line-height: 1.6; }
-  .thankyou .sub { font-size: 11px; color: #888; margin-top: 6px; font-style: normal; font-family: Arial, sans-serif; }
+  .thankyou { text-align: center; margin: 32px 0 20px; padding: 18px 24px; background: #f4f8f5; border-radius: 8px; }
+  .thankyou p { font-size: 14px; color: #2d4f38; font-style: italic; line-height: 1.7; font-weight: 400; }
+  .thankyou .sub { font-size: 11px; color: #888; margin-top: 8px; font-style: normal; font-weight: 400; }
 
   /* Footer */
-  .footer { text-align: center; font-size: 10px; color: #aaa; font-family: Arial, sans-serif; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+  .footer { text-align: center; font-size: 10px; color: #aaa; margin-top: 28px; padding-top: 14px; border-top: 1px solid #eee; font-weight: 400; }
 
   /* Toolbar (kein Druck) */
-  .toolbar { position: fixed; top: 0; left: 0; right: 0; background: #2d4f38; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-family: Arial, sans-serif; font-size: 13px; z-index: 100; }
+  .toolbar { position: fixed; top: 0; left: 0; right: 0; background: #2d4f38; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; z-index: 100; }
   .toolbar button { padding: 6px 16px; border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; background: rgba(255,255,255,0.15); color: #fff; cursor: pointer; font-size: 13px; }
   .toolbar button:hover { background: rgba(255,255,255,0.3); }
-  .toolbar button.active { background: rgba(255,255,255,0.9); color: #2d4f38; font-weight: bold; }
+  .toolbar button.active { background: rgba(255,255,255,0.9); color: #2d4f38; font-weight: 600; }
   .toolbar .spacer { flex: 1; }
-  .toolbar .print-btn { background: #fff; color: #2d4f38; font-weight: bold; border: none; padding: 8px 20px; }
+  .toolbar .print-btn { background: #fff; color: #2d4f38; font-weight: 600; border: none; padding: 8px 20px; border-radius: 4px; }
 
   @media print {
     .toolbar { display: none; }
-    .page { padding: 20px; }
+    .page { padding: 24px; }
     body { padding-top: 0; }
   }
+  @page { margin: 15mm 10mm; }
   body { padding-top: 48px; }
 </style>
 </head>
@@ -2273,17 +2270,6 @@
     <div class="sub" id="t-thanks-sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
   </div>
 
-  <div class="sig-row">
-    <div class="sig-block">
-      <div class="sig-line"></div>
-      <div class="sig-label" id="t-sig-guest">Unterschrift Gast / Guest signature</div>
-    </div>
-    <div class="sig-block">
-      <div class="sig-line"></div>
-      <div class="sig-label" id="t-sig-host">Unterschrift Gastgeber / Host signature</div>
-    </div>
-  </div>
-
   <div class="footer" id="t-footer">Gast auf Erden · ${new Date().getFullYear()} · gastauferden.at</div>
 
 </div>
@@ -2301,7 +2287,6 @@ const T = {
     paymentSection: 'Zahlung', transfer: 'Überweisung', recipient: 'Empfänger',
     thanks: '"Danke, dass du bei uns warst — wir freuen uns, dich wieder bei Gast auf Erden begrüßen zu dürfen."',
     thanksSub: 'Gast auf Erden · Hollenthon, Niederösterreich',
-    sigGuest: 'Unterschrift Gast', sigHost: 'Unterschrift Gastgeber',
   },
   en: {
     title: 'Checkout Summary',
@@ -2314,7 +2299,6 @@ const T = {
     paymentSection: 'Payment', transfer: 'Bank Transfer', recipient: 'Recipient',
     thanks: '"Thank you for staying with us — we hope to welcome you back at Gast auf Erden soon."',
     thanksSub: 'Gast auf Erden · Hollenthon, Lower Austria',
-    sigGuest: 'Guest signature', sigHost: 'Host signature',
   }
 };
 
@@ -2337,8 +2321,6 @@ function setLang(lang) {
   if (document.getElementById('t-recipient')) document.getElementById('t-recipient').textContent = t.recipient;
   document.getElementById('t-thanks').textContent = t.thanks;
   document.getElementById('t-thanks-sub').textContent = t.thanksSub;
-  document.getElementById('t-sig-guest').textContent = t.sigGuest;
-  document.getElementById('t-sig-host').textContent = t.sigHost;
   document.getElementById('btn-de').classList.toggle('active', lang === 'de');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.documentElement.lang = lang;
