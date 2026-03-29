@@ -295,5 +295,9 @@
     "perPersonNight": "per person / night",
     "yourStay": "For your stay:",
     "total": "Total:"
+  },
+  "booking": {
+    "notBooked": "Not booked yet?",
+    "bookNow": "Book now on Airbnb"
   }
 }

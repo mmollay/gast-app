@@ -725,6 +725,46 @@ body {
     color: var(--text-light);
 }
 
+/* ---- Airbnb Booking CTA ---- */
+.airbnb-booking-cta {
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--sand);
+}
+
+.airbnb-cta-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+}
+
+.airbnb-booking-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: #FF5A5F;
+    color: white;
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(255, 90, 95, 0.3);
+}
+
+.airbnb-booking-btn:hover {
+    background: #e0474c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(255, 90, 95, 0.4);
+}
+
+.airbnb-booking-btn i {
+    width: 18px;
+    height: 18px;
+}
+
 .time-display i {
     width: 16px;
     height: 16px;

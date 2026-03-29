@@ -304,5 +304,9 @@
       "sie": "Für Ihren Aufenthalt:"
     },
     "total": "Gesamt:"
+  },
+  "booking": {
+    "notBooked": "Noch nicht gebucht?",
+    "bookNow": "Jetzt auf Airbnb buchen"
   }
 }

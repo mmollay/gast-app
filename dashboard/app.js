@@ -1426,6 +1426,10 @@ function updateGuestUI() {
   const isAdmin = typeof AdminUI !== 'undefined' && AdminUI.isAdmin;
   const showFeatures = guestToken || isAdmin;
 
+  // Airbnb Booking CTA — nur für nicht eingeloggte Besucher
+  const airbnbCta = document.getElementById("airbnbBookingCta");
+  if (airbnbCta) airbnbCta.style.display = showFeatures ? "none" : "block";
+
   const energyCard = document.getElementById("energyCard");
   const weatherCard = document.getElementById("weatherCard");
   const recommendationsCard = document.getElementById("recommendationsCard");
