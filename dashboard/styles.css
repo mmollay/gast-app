@@ -80,8 +80,8 @@ body {
    HEADER
    ============================================ */
 .header {
-    background: linear-gradient(135deg, rgba(45, 74, 62, 0.7) 0%, rgba(122, 145, 104, 0.6) 100%),
-                url('header-bg.jpg');
+    background: linear-gradient(135deg, rgba(45, 74, 62, 0.35) 0%, rgba(122, 145, 104, 0.25) 100%),
+                url('header-bg.svg');
     background-size: cover;
     background-position: center;
     color: white;

@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1047" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Sky gradient -->
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b8d4c8"/>
+      <stop offset="40%" stop-color="#8fb89e"/>
+      <stop offset="100%" stop-color="#5a8a6a"/>
+    </linearGradient>
+
+    <!-- Sunlight glow -->
+    <radialGradient id="sun" cx="0.7" cy="0.25" r="0.5">
+      <stop offset="0%" stop-color="#d4e8b8" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#a8cf98" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#5a8a6a" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Distant hills gradient -->
+    <linearGradient id="hill-far" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6a9e7a"/>
+      <stop offset="100%" stop-color="#4a7c5e"/>
+    </linearGradient>
+
+    <!-- Mid hills gradient -->
+    <linearGradient id="hill-mid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a8060"/>
+      <stop offset="100%" stop-color="#3a6b4e"/>
+    </linearGradient>
+
+    <!-- Near hills gradient -->
+    <linearGradient id="hill-near" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a6848"/>
+      <stop offset="100%" stop-color="#2d5238"/>
+    </linearGradient>
+
+    <!-- Foreground gradient -->
+    <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2d4f38"/>
+      <stop offset="100%" stop-color="#1e3a28"/>
+    </linearGradient>
+
+    <!-- Soft mist -->
+    <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Tree template -->
+    <filter id="soft" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5"/>
+    </filter>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1920" height="1047" fill="url(#sky)"/>
+
+  <!-- Sunlight -->
+  <rect width="1920" height="1047" fill="url(#sun)"/>
+
+  <!-- Distant misty hills -->
+  <path d="M0,580 C200,500 350,520 500,480 C650,440 750,470 900,450 C1050,430 1200,460 1350,440 C1500,420 1700,450 1920,430 L1920,1047 L0,1047 Z" fill="url(#hill-far)" opacity="0.5"/>
+
+  <!-- Mid-distance rolling hills -->
+  <path d="M0,620 C160,560 280,590 450,550 C620,510 720,540 900,520 C1080,500 1200,530 1400,510 C1600,490 1780,530 1920,500 L1920,1047 L0,1047 Z" fill="url(#hill-mid)" opacity="0.65"/>
+
+  <!-- Closer hills with more detail -->
+  <path d="M0,700 C120,650 240,670 400,640 C560,610 680,650 850,620 C1020,590 1140,630 1300,610 C1460,590 1620,640 1920,600 L1920,1047 L0,1047 Z" fill="url(#hill-near)" opacity="0.75"/>
+
+  <!-- Subtle treeline silhouettes on mid hills -->
+  <g opacity="0.3" filter="url(#soft)">
+    <!-- Tree cluster left -->
+    <path d="M120,660 L130,630 L140,660 Z" fill="#2d5238"/>
+    <path d="M150,655 L162,618 L174,655 Z" fill="#2d5238"/>
+    <path d="M180,660 L188,635 L196,660 Z" fill="#2d5238"/>
+    <path d="M210,658 L222,622 L234,658 Z" fill="#2d5238"/>
+    <path d="M250,655 L260,628 L270,655 Z" fill="#2d5238"/>
+
+    <!-- Tree cluster center -->
+    <path d="M800,625 L812,590 L824,625 Z" fill="#2d5238"/>
+    <path d="M840,620 L855,580 L870,620 Z" fill="#2d5238"/>
+    <path d="M880,628 L890,598 L900,628 Z" fill="#2d5238"/>
+    <path d="M920,622 L935,585 L950,622 Z" fill="#2d5238"/>
+
+    <!-- Tree cluster right -->
+    <path d="M1400,615 L1412,580 L1424,615 Z" fill="#2d5238"/>
+    <path d="M1440,618 L1455,578 L1470,618 Z" fill="#2d5238"/>
+    <path d="M1490,612 L1500,585 L1510,612 Z" fill="#2d5238"/>
+    <path d="M1530,620 L1545,582 L1560,620 Z" fill="#2d5238"/>
+    <path d="M1580,615 L1590,588 L1600,615 Z" fill="#2d5238"/>
+  </g>
+
+  <!-- Foreground -->
+  <path d="M0,800 C180,760 320,790 500,750 C680,710 820,760 1000,730 C1180,700 1340,750 1500,720 C1660,690 1800,740 1920,710 L1920,1047 L0,1047 Z" fill="url(#fg)"/>
+
+  <!-- Soft mist layer -->
+  <rect x="0" y="400" width="1920" height="300" fill="url(#mist)"/>
+
+  <!-- Subtle light particles / bokeh -->
+  <circle cx="300" cy="350" r="3" fill="white" opacity="0.15"/>
+  <circle cx="680" cy="280" r="2.5" fill="white" opacity="0.12"/>
+  <circle cx="1100" cy="320" r="3.5" fill="white" opacity="0.1"/>
+  <circle cx="1500" cy="260" r="2" fill="white" opacity="0.14"/>
+  <circle cx="1700" cy="380" r="3" fill="white" opacity="0.08"/>
+  <circle cx="500" cy="420" r="2" fill="white" opacity="0.1"/>
+  <circle cx="950" cy="380" r="2.5" fill="white" opacity="0.12"/>
+  <circle cx="1300" cy="350" r="2" fill="white" opacity="0.1"/>
+
+  <!-- Subtle leaf-like shapes floating -->
+  <g opacity="0.08" fill="#c8e8b0">
+    <ellipse cx="400" cy="300" rx="8" ry="3" transform="rotate(-30 400 300)"/>
+    <ellipse cx="1200" cy="350" rx="6" ry="2.5" transform="rotate(15 1200 350)"/>
+    <ellipse cx="800" cy="250" rx="7" ry="2.5" transform="rotate(-45 800 250)"/>
+    <ellipse cx="1600" cy="300" rx="5" ry="2" transform="rotate(25 1600 300)"/>
+  </g>
+</svg>
