@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.28] - 2026-03-29
+
+### Added
+- **Abschlussprotokoll**: Drucker-Button pro Gast — öffnet druckfähiges Protokoll mit Kurtaxe, Stromkosten und Zahlungsinfos
+
+### Fixed
+- **"Wird erfasst..."**: Irreführenden Text in Gästeliste entfernt
+
 ## [0.12.27] - 2026-03-29
 
 ### Changed
