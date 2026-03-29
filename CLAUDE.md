@@ -43,7 +43,11 @@ Guest Portal für Hostel/Airbnb mit integriertem Energiemonitoring.
 ```bash
 ./deploy-develop.sh      # → develop.gastauferden.at
 ./deploy-production.sh   # → gastauferden.at (mit Auto-Tag)
+./deploy-pages.sh        # → Cloudflare Pages (aktueller Branch, ohne Merge/Tag)
 ```
+
+**WICHTIG:** Cloudflare Pages zieht NICHT automatisch vom GitHub-Push!
+Nach jedem `git push origin main` MUSS `bash deploy-pages.sh` ausgeführt werden.
 
 ## Environment Variables (.env)
 
