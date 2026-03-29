@@ -2028,15 +2028,18 @@
                 <tr data-guest-name="${guest.name.toLowerCase()}" data-guest-username="${guest.username.toLowerCase()}">
                     <td class="guest-name-cell">
                         <span class="guest-avatar-sm">${guest.name.charAt(0).toUpperCase()}</span>
-                        <span class="guest-status-dot ${dotClass}"></span>${guest.name}${genderSuffix}
+                        <span class="guest-status-dot ${dotClass}"></span>${guest.name}${genderSuffix}${guest.hasDog ? ' 🐕' : ''}
                     </td>
                     <td class="col-login muted">${guest.username}</td>
                     <td>${checkInDate} – ${checkOutDate}<br><small style="color:var(--text-muted)">${days} ${days === 1 ? 'Nacht' : 'Nächte'}</small></td>
-                    <td style="text-align:center">${persons}</td>
+                    <td style="text-align:center">${persons}${guest.numberOfPets ? '<br><small style="color:var(--text-muted)">+' + guest.numberOfPets + '🐾</small>' : ''}</td>
                     <td>€${kurtaxe.toFixed(2)}<br><small style="color:var(--text-muted)">${days}×${persons}×€${KURTAXE_PER_PERSON_DAY.toFixed(2)}</small></td>
                     <td class="col-strom" id="energy-${guest.id}"><span class="energy-loading">lädt…</span></td>
                     <td>
                         <div class="guest-actions">
+                            <button class="icon-btn" onclick="printHandout('${guest.id}')" title="Willkommens-Handout">
+                                <i data-lucide="file-heart"></i>
+                            </button>
                             <button class="icon-btn" onclick="printProtocol('${guest.id}')" title="Abschlussprotokoll">
                                 <i data-lucide="printer"></i>
                             </button>
@@ -2345,6 +2348,323 @@ function setLang(lang) {
             window.open(url, '_blank');
         }
 
+        // ═══════════════════════════════════════════
+        // Willkommens-Handout (PDF im neuen Tab)
+        // ═══════════════════════════════════════════
+        function printHandout(guestId) {
+            const guest = allGuests.find(g => g.id === guestId);
+            if (!guest) { showToast('Gast nicht gefunden', 'error'); return; }
+
+            const wifi1Name = document.getElementById('wifi1Name')?.value || 'Hostel Power';
+            const wifi1Pass = document.getElementById('wifi1Password')?.value || 'hostel21';
+            const wifi2Name = document.getElementById('wifi2Name')?.value || 'Hostel';
+            const wifi2Pass = document.getElementById('wifi2Password')?.value || 'hostel21';
+            const kurtaxeRate = KURTAXE_PER_PERSON_DAY;
+
+            const checkIn = new Date(guest.checkIn);
+            const checkOut = new Date(guest.checkOut);
+            const days = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+            const persons = guest.numberOfPersons || 1;
+            const kurtaxe = days * persons * kurtaxeRate;
+            const fmt = (n) => n.toFixed(2).replace('.', ',');
+            const firstName = guest.name.split(' ')[0];
+            const logoUrl = window.location.origin + '/logo-neu.png';
+            const appUrl = 'www.gastauferden.at';
+
+            const greetingDe = guest.gender === 'weiblich' ? `Liebe ${firstName}` : guest.gender === 'männlich' ? `Lieber ${firstName}` : `Hallo ${firstName}`;
+            const greetingEn = `Dear ${firstName}`;
+
+            const petInfoDe = guest.hasDog ? `<div class="info-box pet-box">
+              <div class="info-box-icon">🐾</div>
+              <div><strong>Haustiere willkommen!</strong><br>Bitte halte deinen Vierbeiner von den Möbeln fern und entsorge Hinterlassenschaften im Garten. Danke!</div>
+            </div>` : '';
+            const petInfoEn = guest.hasDog ? `<div class="info-box pet-box">
+              <div class="info-box-icon">🐾</div>
+              <div><strong>Pets welcome!</strong><br>Please keep your furry friend off the furniture and clean up after them in the garden. Thank you!</div>
+            </div>` : '';
+
+            const html = `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Willkommen – ${guest.name}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; color: #1a1a1a; background: #fff; line-height: 1.6; }
+  .page { max-width: 640px; margin: 0 auto; padding: 48px 40px; }
+
+  .header { text-align: center; padding-bottom: 24px; border-bottom: 2px solid #4a7c59; margin-bottom: 28px; }
+  .logo { height: 56px; object-fit: contain; margin-bottom: 12px; }
+  .header h1 { font-size: 24px; font-weight: 600; color: #2d4f38; }
+  .header .sub { font-size: 13px; color: #888; margin-top: 4px; }
+
+  .greeting { font-size: 16px; color: #2d4f38; margin-bottom: 24px; line-height: 1.7; }
+  .greeting strong { font-weight: 600; }
+
+  .section { margin-bottom: 24px; }
+  .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 10px; border-bottom: 1px solid #d4e8db; padding-bottom: 5px; }
+
+  .info-grid { display: grid; grid-template-columns: 160px 1fr; gap: 6px 0; }
+  .info-label { color: #777; font-size: 12.5px; padding: 3px 0; }
+  .info-value { font-weight: 600; font-size: 12.5px; padding: 3px 0; }
+
+  .credential-box { background: #f4f8f5; border: 1px solid #c8ddd0; border-radius: 8px; padding: 18px 20px; margin-bottom: 12px; }
+  .credential-box .box-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 10px; }
+  .credential-row { display: flex; gap: 10px; font-size: 13px; margin: 5px 0; }
+  .credential-row span:first-child { color: #777; width: 120px; flex-shrink: 0; }
+  .credential-row span:last-child { font-weight: 600; font-family: 'Courier New', monospace; letter-spacing: 0.5px; }
+
+  .info-box { display: flex; gap: 14px; background: #fffbf0; border: 1px solid #e8dcc8; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; font-size: 12.5px; line-height: 1.6; }
+  .info-box.pet-box { background: #f0f8ff; border-color: #c8d8e8; }
+  .info-box-icon { font-size: 22px; flex-shrink: 0; padding-top: 2px; }
+
+  .quick-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .quick-item { background: #fafafa; border: 1px solid #eee; border-radius: 6px; padding: 12px 14px; text-align: center; }
+  .quick-item .qi-icon { font-size: 20px; margin-bottom: 4px; }
+  .quick-item .qi-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  .quick-item .qi-value { font-size: 14px; font-weight: 600; color: #2d4f38; margin-top: 2px; }
+
+  .welcome-footer { text-align: center; margin-top: 32px; padding: 18px 24px; background: #f4f8f5; border-radius: 8px; }
+  .welcome-footer p { font-size: 14px; color: #2d4f38; font-style: italic; line-height: 1.7; }
+  .welcome-footer .sub { font-size: 11px; color: #888; margin-top: 8px; font-style: normal; }
+
+  .footer { text-align: center; margin-top: 24px; padding-top: 14px; border-top: 1px solid #eee; }
+  .footer a { color: #4a7c59; text-decoration: none; font-weight: 500; font-size: 12px; }
+  .footer .copy { font-size: 10px; color: #aaa; margin-top: 4px; }
+
+  .toolbar { position: fixed; top: 0; left: 0; right: 0; background: #2d4f38; color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 13px; z-index: 100; }
+  .toolbar button { padding: 6px 16px; border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; background: rgba(255,255,255,0.15); color: #fff; cursor: pointer; font-size: 13px; }
+  .toolbar button:hover { background: rgba(255,255,255,0.3); }
+  .toolbar button.active { background: rgba(255,255,255,0.9); color: #2d4f38; font-weight: 600; }
+  .toolbar .spacer { flex: 1; }
+  .toolbar .print-btn { background: #fff; color: #2d4f38; font-weight: 600; border: none; padding: 8px 20px; border-radius: 4px; }
+
+  @media print { .toolbar { display: none; } .page { padding: 24px; } body { padding-top: 0; } }
+  @page { margin: 15mm 10mm; }
+  body { padding-top: 48px; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span>Sprache / Language:</span>
+  <button class="active" onclick="setLang('de')" id="btn-de">Deutsch</button>
+  <button onclick="setLang('en')" id="btn-en">English</button>
+  <span class="spacer"></span>
+  <button class="print-btn" onclick="window.print()">🖨 Drucken / Print PDF</button>
+</div>
+
+<div class="page">
+
+  <div class="header">
+    <img src="${logoUrl}" class="logo" alt="Gast auf Erden" onerror="this.style.display='none'">
+    <h1 id="t-title">Willkommen bei Gast auf Erden</h1>
+    <div class="sub" id="t-sub">${checkIn.toLocaleDateString('de-DE')} – ${checkOut.toLocaleDateString('de-DE')} · Hollenthon</div>
+  </div>
+
+  <div class="greeting" id="t-greeting">
+    <strong>${greetingDe},</strong><br>
+    schön, dass du da bist! Hier findest du alles Wichtige für deinen Aufenthalt.
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="t-stay-section">Dein Aufenthalt</div>
+    <div class="quick-info">
+      <div class="quick-item">
+        <div class="qi-icon">📅</div>
+        <div class="qi-label" id="t-checkin-lbl">Check-in</div>
+        <div class="qi-value">${checkIn.toLocaleDateString('de-DE')}</div>
+        <div class="qi-label" id="t-checkin-time">ab 15:00</div>
+      </div>
+      <div class="quick-item">
+        <div class="qi-icon">📅</div>
+        <div class="qi-label" id="t-checkout-lbl">Check-out</div>
+        <div class="qi-value">${checkOut.toLocaleDateString('de-DE')}</div>
+        <div class="qi-label" id="t-checkout-time">bis 11:00</div>
+      </div>
+      <div class="quick-item">
+        <div class="qi-icon">👥</div>
+        <div class="qi-label" id="t-persons-lbl">Personen</div>
+        <div class="qi-value">${persons}</div>
+      </div>
+      <div class="quick-item">
+        <div class="qi-icon">🌙</div>
+        <div class="qi-label" id="t-nights-lbl">Nächte</div>
+        <div class="qi-value">${days}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="t-wifi-section">WLAN / WiFi</div>
+    <div class="credential-box">
+      <div class="box-title" id="t-wifi-rec">Empfohlen / Recommended</div>
+      <div class="credential-row"><span id="t-network-lbl">Netzwerk</span><span>${wifi1Name}</span></div>
+      <div class="credential-row"><span id="t-pass-lbl">Passwort</span><span>${wifi1Pass}</span></div>
+    </div>
+    ${wifi2Name !== wifi1Name ? `<div class="credential-box">
+      <div class="box-title" id="t-wifi-alt">Alternativ / Alternative</div>
+      <div class="credential-row"><span>Netzwerk</span><span>${wifi2Name}</span></div>
+      <div class="credential-row"><span>Passwort</span><span>${wifi2Pass}</span></div>
+    </div>` : ''}
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="t-app-section">Gäste-App / Guest App</div>
+    <div class="credential-box">
+      <div class="box-title" id="t-app-desc">Alle Infos auf einen Blick</div>
+      <div class="credential-row"><span>URL</span><span>${appUrl}</span></div>
+      <div class="credential-row"><span id="t-user-lbl">Benutzer</span><span>${guest.username}</span></div>
+      <div class="credential-row"><span id="t-pw-lbl">Passwort</span><span>${guest.password}</span></div>
+    </div>
+    <div class="info-box">
+      <div class="info-box-icon">📱</div>
+      <div id="t-app-hint">Öffne <strong>${appUrl}</strong> im Browser und melde dich mit den obigen Daten an. Du findest dort Wetter, WLAN, Energieverbrauch und mehr.</div>
+    </div>
+  </div>
+
+  ${petInfoDe ? `<div class="section" id="pet-section">${petInfoDe}</div>` : ''}
+
+  <div class="section">
+    <div class="section-title" id="t-rules-section">Gut zu wissen</div>
+    <div class="info-grid">
+      <span class="info-label" id="t-key-lbl">🔑 Schlüssel</span>
+      <span class="info-value" id="t-key-val">Schlüsselbox am Eingang</span>
+      <span class="info-label" id="t-park-lbl">🚗 Parken</span>
+      <span class="info-value" id="t-park-val">Kostenlos am Grundstück</span>
+      <span class="info-label" id="t-smoke-lbl">🚭 Rauchen</span>
+      <span class="info-value" id="t-smoke-val">Im Haus verboten, Garten ok</span>
+      <span class="info-label" id="t-tax-lbl">💰 Kurtaxe</span>
+      <span class="info-value" id="t-tax-val">€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" id="t-contact-section">Kontakt / Contact</div>
+    <div class="info-grid">
+      <span class="info-label" id="t-host-lbl">Gastgeber</span>
+      <span class="info-value">Martin Mollay</span>
+      <span class="info-label" id="t-phone-lbl">Telefon</span>
+      <span class="info-value">+43 650 25 26 26 26</span>
+      <span class="info-label">E-Mail</span>
+      <span class="info-value">martin@ssi.at</span>
+      <span class="info-label" id="t-emergency-lbl">Notfall</span>
+      <span class="info-value">112</span>
+    </div>
+  </div>
+
+  <div class="welcome-footer">
+    <p id="t-welcome-msg">"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."</p>
+    <div class="sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
+  </div>
+
+  <div class="footer">
+    <a href="https://${appUrl}" target="_blank">${appUrl}</a>
+    <div class="copy">Gast auf Erden · ${new Date().getFullYear()}</div>
+  </div>
+
+</div>
+
+<script>
+const T = {
+  de: {
+    title: 'Willkommen bei Gast auf Erden',
+    sub: '${checkIn.toLocaleDateString('de-DE')} – ${checkOut.toLocaleDateString('de-DE')} · Hollenthon',
+    greeting: '<strong>${greetingDe},</strong><br>schön, dass du da bist! Hier findest du alles Wichtige für deinen Aufenthalt.',
+    staySection: 'Dein Aufenthalt',
+    checkinLbl: 'Check-in', checkoutLbl: 'Check-out', checkinTime: 'ab 15:00', checkoutTime: 'bis 11:00',
+    personsLbl: 'Personen', nightsLbl: 'Nächte',
+    wifiSection: 'WLAN / WiFi', wifiRec: 'Empfohlen', wifiAlt: 'Alternativ',
+    networkLbl: 'Netzwerk', passLbl: 'Passwort',
+    appSection: 'Gäste-App / Guest App', appDesc: 'Alle Infos auf einen Blick',
+    userLbl: 'Benutzer', pwLbl: 'Passwort',
+    appHint: 'Öffne <strong>${appUrl}</strong> im Browser und melde dich mit den obigen Daten an. Du findest dort Wetter, WLAN, Energieverbrauch und mehr.',
+    petInfo: '${guest.hasDog ? '<strong>Haustiere willkommen!</strong><br>Bitte halte deinen Vierbeiner von den Möbeln fern und entsorge Hinterlassenschaften im Garten. Danke!' : ''}',
+    rulesSection: 'Gut zu wissen',
+    keyLbl: '🔑 Schlüssel', keyVal: 'Schlüsselbox am Eingang',
+    parkLbl: '🚗 Parken', parkVal: 'Kostenlos am Grundstück',
+    smokeLbl: '🚭 Rauchen', smokeVal: 'Im Haus verboten, Garten ok',
+    taxLbl: '💰 Kurtaxe', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
+    contactSection: 'Kontakt',
+    hostLbl: 'Gastgeber', phoneLbl: 'Telefon', emergencyLbl: 'Notfall',
+    welcomeMsg: '"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."',
+  },
+  en: {
+    title: 'Welcome to Gast auf Erden',
+    sub: '${checkIn.toLocaleDateString('en-GB')} – ${checkOut.toLocaleDateString('en-GB')} · Hollenthon',
+    greeting: '<strong>${greetingEn},</strong><br>great to have you here! Below you will find everything you need for your stay.',
+    staySection: 'Your Stay',
+    checkinLbl: 'Check-in', checkoutLbl: 'Check-out', checkinTime: 'from 3 PM', checkoutTime: 'by 11 AM',
+    personsLbl: 'Persons', nightsLbl: 'Nights',
+    wifiSection: 'WiFi', wifiRec: 'Recommended', wifiAlt: 'Alternative',
+    networkLbl: 'Network', passLbl: 'Password',
+    appSection: 'Guest App', appDesc: 'All info at a glance',
+    userLbl: 'Username', pwLbl: 'Password',
+    appHint: 'Open <strong>${appUrl}</strong> in your browser and log in with the credentials above. You will find weather, WiFi, energy usage and more.',
+    petInfo: '${guest.hasDog ? '<strong>Pets welcome!</strong><br>Please keep your furry friend off the furniture and clean up after them in the garden. Thank you!' : ''}',
+    rulesSection: 'Good to know',
+    keyLbl: '🔑 Key', keyVal: 'Key box at the entrance',
+    parkLbl: '🚗 Parking', parkVal: 'Free on premises',
+    smokeLbl: '🚭 Smoking', smokeVal: 'Prohibited indoors, garden ok',
+    taxLbl: '💰 Tourist Tax', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
+    contactSection: 'Contact',
+    hostLbl: 'Host', phoneLbl: 'Phone', emergencyLbl: 'Emergency',
+    welcomeMsg: '"Make yourself at home — this place is yours for the next ${days} days. Enjoy the peace, the forest and the magic."',
+  }
+};
+
+function setLang(lang) {
+  const t = T[lang];
+  document.getElementById('t-title').textContent = t.title;
+  document.getElementById('t-sub').textContent = t.sub;
+  document.getElementById('t-greeting').innerHTML = t.greeting;
+  document.getElementById('t-stay-section').textContent = t.staySection;
+  document.getElementById('t-checkin-lbl').textContent = t.checkinLbl;
+  document.getElementById('t-checkout-lbl').textContent = t.checkoutLbl;
+  document.getElementById('t-checkin-time').textContent = t.checkinTime;
+  document.getElementById('t-checkout-time').textContent = t.checkoutTime;
+  document.getElementById('t-persons-lbl').textContent = t.personsLbl;
+  document.getElementById('t-nights-lbl').textContent = t.nightsLbl;
+  document.getElementById('t-wifi-section').textContent = t.wifiSection;
+  document.getElementById('t-wifi-rec').textContent = t.wifiRec;
+  if (document.getElementById('t-wifi-alt')) document.getElementById('t-wifi-alt').textContent = t.wifiAlt;
+  document.getElementById('t-network-lbl').textContent = t.networkLbl;
+  document.getElementById('t-pass-lbl').textContent = t.passLbl;
+  document.getElementById('t-app-section').textContent = t.appSection;
+  document.getElementById('t-app-desc').textContent = t.appDesc;
+  document.getElementById('t-user-lbl').textContent = t.userLbl;
+  document.getElementById('t-pw-lbl').textContent = t.pwLbl;
+  document.getElementById('t-app-hint').innerHTML = t.appHint;
+  const petSection = document.getElementById('pet-section');
+  if (petSection && t.petInfo) petSection.innerHTML = '<div class="info-box pet-box"><div class="info-box-icon">🐾</div><div>' + t.petInfo + '</div></div>';
+  document.getElementById('t-rules-section').textContent = t.rulesSection;
+  document.getElementById('t-key-lbl').textContent = t.keyLbl;
+  document.getElementById('t-key-val').textContent = t.keyVal;
+  document.getElementById('t-park-lbl').textContent = t.parkLbl;
+  document.getElementById('t-park-val').textContent = t.parkVal;
+  document.getElementById('t-smoke-lbl').textContent = t.smokeLbl;
+  document.getElementById('t-smoke-val').textContent = t.smokeVal;
+  document.getElementById('t-tax-lbl').textContent = t.taxLbl;
+  document.getElementById('t-tax-val').textContent = t.taxVal;
+  document.getElementById('t-contact-section').textContent = t.contactSection;
+  document.getElementById('t-host-lbl').textContent = t.hostLbl;
+  document.getElementById('t-phone-lbl').textContent = t.phoneLbl;
+  document.getElementById('t-emergency-lbl').textContent = t.emergencyLbl;
+  document.getElementById('t-welcome-msg').textContent = t.welcomeMsg;
+  document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.documentElement.lang = lang;
+}
+<\/script>
+</body>
+</html>`;
+
+            const blob = new Blob([html], { type: 'text/html; charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        }
+
         // Update Kurtaxe Preview
         function updateKurtaxePreview() {
             const checkIn = document.getElementById('guestCheckIn').value;
@@ -2373,17 +2693,59 @@ function setLang(lang) {
             if (checkOutInput) checkOutInput.addEventListener('change', updateKurtaxePreview);
         });
 
+        // Auto-generate username from first name (unique)
+        function generateUsername(fullName) {
+            const firstName = fullName.trim().split(/\s+/)[0].toLowerCase()
+                .replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss')
+                .replace(/[^a-z0-9]/g, '');
+            if (!firstName) return '';
+            const existing = allGuests.map(g => g.username.toLowerCase());
+            if (!existing.includes(firstName)) return firstName;
+            let i = 2;
+            while (existing.includes(firstName + i)) i++;
+            return firstName + i;
+        }
+
+        // Auto-generate simple password
+        function generatePassword() {
+            const words = ['Wald', 'Erden', 'Feuer', 'Stern', 'Ruhe', 'Licht', 'Mond', 'Baum'];
+            const word = words[Math.floor(Math.random() * words.length)];
+            const num = Math.floor(Math.random() * 90) + 10;
+            return word + num;
+        }
+
+        // Auto-fill username when name changes
+        document.addEventListener('DOMContentLoaded', () => {
+            const nameInput = document.getElementById('guestName');
+            const userInput = document.getElementById('guestUsername');
+            const passInput = document.getElementById('guestPassword');
+            if (nameInput && userInput) {
+                nameInput.addEventListener('blur', () => {
+                    if (nameInput.value && !userInput.value) {
+                        userInput.value = generateUsername(nameInput.value);
+                    }
+                    if (nameInput.value && !passInput.value) {
+                        passInput.value = generatePassword();
+                    }
+                });
+            }
+        });
+
         // Create Guest
         async function createGuest() {
             const title = document.getElementById('guestTitle').value;
             const gender = document.getElementById('guestGender').value;
             const name = document.getElementById('guestName').value;
-            const username = document.getElementById('guestUsername').value;
-            const password = document.getElementById('guestPassword').value;
+            let username = document.getElementById('guestUsername').value;
+            let password = document.getElementById('guestPassword').value;
             const checkIn = document.getElementById('guestCheckIn').value;
             const checkOut = document.getElementById('guestCheckOut').value;
             const numberOfPersons = parseInt(document.getElementById('guestPersons').value) || 1;
             const apartmentId = parseInt(document.getElementById('guestApartment').value) || 1;
+
+            // Auto-generate if empty
+            if (!username && name) username = generateUsername(name);
+            if (!password) password = generatePassword();
 
             const errorEl = document.getElementById('guestError');
             const successEl = document.getElementById('guestSuccess');
