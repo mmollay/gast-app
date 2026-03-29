@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.48] - 2026-03-29
+
+### Added
+- **Willkommens-Handout**: Personalisiertes PDF pro Gast mit WLAN, App-Login, Check-in/out, Hausregeln, Kontakt und Haustier-Hinweis (DE/EN, direkt druckbar)
+- **Auto-Username**: Beim Anlegen eines Gastes wird Vorname als Username vorgeschlagen (Duplikate erhalten Zahl)
+- **Auto-Passwort**: Einfaches Passwort wird automatisch generiert (z.B. "Wald42")
+- **Haustier-Anzeige**: 🐕 und 🐾 in der Gästeliste wenn Haustiere dabei sind
+
 ## [0.12.47] - 2026-03-29
 
 ### Fixed
