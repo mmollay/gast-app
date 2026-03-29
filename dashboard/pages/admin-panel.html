@@ -497,98 +497,88 @@
             gap: 12px;
         }
 
-        .guest-item {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 24px;
+        /* Gästeliste als kompakte Tabelle */
+        .guest-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .guest-table thead th {
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--sand);
+            white-space: nowrap;
+        }
+
+        .guest-table thead th:last-child {
+            text-align: right;
+        }
+
+        .guest-table tbody tr {
+            border-bottom: 1px solid var(--sand);
+            transition: background 0.15s;
+        }
+
+        .guest-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .guest-table tbody tr:hover {
             background: var(--cream);
-            border-radius: 14px;
-            transition: background 0.2s, transform 0.2s;
-            margin-bottom: 12px;
         }
 
-        .guest-item:hover {
-            background: var(--sand);
-            transform: translateX(4px);
+        .guest-table td {
+            padding: 13px 14px;
+            font-size: 0.88rem;
+            color: var(--text);
+            vertical-align: middle;
         }
 
-        .guest-avatar {
-            width: 56px;
-            height: 56px;
+        .guest-table td.guest-name-cell {
+            font-weight: 600;
+            min-width: 140px;
+        }
+
+        .guest-table td.muted {
+            color: var(--text-light);
+            font-size: 0.84rem;
+        }
+
+        .guest-table td:last-child {
+            text-align: right;
+        }
+
+        .guest-status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .guest-status-dot.active { background: var(--forest); }
+        .guest-status-dot.inactive { background: var(--text-muted); }
+
+        .guest-avatar-sm {
+            width: 32px;
+            height: 32px;
             background: linear-gradient(135deg, var(--sage-light) 0%, var(--sage) 100%);
             border-radius: 50%;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.4rem;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .guest-info {
-            flex: 1;
-        }
-
-        .guest-info h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .guest-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            font-size: 0.9rem;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        .guest-meta span {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .guest-meta i {
-            width: 16px;
-            height: 16px;
-            color: var(--sage-dark);
-        }
-
-        .guest-details-table {
-            width: 100%;
-            margin-top: 10px;
-            border-collapse: collapse;
             font-size: 0.85rem;
-        }
-
-        .guest-details-table td {
-            padding: 5px 10px 5px 0;
-            vertical-align: top;
-            color: var(--text-light);
-        }
-
-        .guest-details-table td:first-child {
-            white-space: nowrap;
-            color: var(--text-muted);
-            width: 110px;
-        }
-
-        .guest-details-table td:last-child {
-            font-weight: 500;
-            color: var(--text);
-        }
-
-        .guest-details-table td i {
-            width: 14px;
-            height: 14px;
-            color: var(--sage-dark);
+            font-weight: 600;
+            margin-right: 10px;
             vertical-align: middle;
-            margin-right: 4px;
+            flex-shrink: 0;
         }
 
         .energy-loading {
@@ -599,8 +589,12 @@
 
         .guest-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
+            justify-content: flex-end;
         }
+
+        /* Legacy — nur für Fallback, falls noch irgendwo referenziert */
+        .guest-item { display: none; }
 
         .icon-btn {
             width: 36px;
@@ -968,48 +962,14 @@
                 grid-template-columns: 1fr;
             }
 
-            .guest-item {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 20px;
-                gap: 16px;
+            .guest-table thead th.col-strom,
+            .guest-table td.col-strom {
+                display: none;
             }
 
-            .guest-avatar {
-                width: 48px;
-                height: 48px;
-                font-size: 1.2rem;
-            }
-
-            .guest-info {
-                width: 100%;
-            }
-
-            .guest-info h3 {
-                font-size: 1.05rem;
-                margin-bottom: 8px;
-            }
-
-            .guest-meta {
-                flex-direction: column;
-                gap: 10px;
-                font-size: 0.85rem;
-            }
-
-            .guest-meta span {
-                width: 100%;
-            }
-
-            .guest-details-table td:first-child {
-                width: 90px;
-                font-size: 0.8rem;
-            }
-
-            .guest-actions {
-                width: 100%;
-                justify-content: flex-end;
-                padding-top: 12px;
-                border-top: 1px solid rgba(0,0,0,0.05);
+            .guest-table thead th.col-login,
+            .guest-table td.col-login {
+                display: none;
             }
 
             .tabs-container {
@@ -2010,12 +1970,29 @@
                 const totalKurtaxe = calculateTotalKurtaxe(activeGuests);
                 document.getElementById('totalKurtaxe').textContent = totalKurtaxe.toFixed(2);
 
-                // Render guest list
+                // Render guest list als Tabelle
                 const listEl = document.getElementById('guestList');
                 if (guests.length === 0) {
                     listEl.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 32px;">Noch keine Gäste angelegt</p>';
                 } else {
-                    listEl.innerHTML = guests.map(guest => renderGuest(guest)).join('');
+                    listEl.innerHTML = `
+                        <table class="guest-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th class="col-login">Login</th>
+                                    <th>Zeitraum</th>
+                                    <th style="text-align:center">Pers.</th>
+                                    <th>Kurtaxe</th>
+                                    <th class="col-strom">Strom</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${guests.map(guest => renderGuest(guest)).join('')}
+                            </tbody>
+                        </table>
+                    `;
                 }
 
                 // Re-initialize icons after rendering
@@ -2028,7 +2005,7 @@
             }
         }
 
-        // Render Guest
+        // Render Guest — gibt eine <tr> zurück, wird in guest-table eingefügt
         function renderGuest(guest) {
             const kurtaxe = calculateKurtaxe(guest);
             const persons = guest.numberOfPersons || 1;
@@ -2039,87 +2016,66 @@
             const days = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
             const now = new Date();
             const isActive = now >= checkIn && now <= checkOut;
-            const pricePerKwh = parseFloat(document.getElementById('pricePerKwh')?.value) || PRICE_PER_KWH;
 
-            // Gender icon
-            let genderIcon = '';
-            if (guest.gender === 'weiblich') genderIcon = ' ♀';
-            else if (guest.gender === 'männlich') genderIcon = ' ♂';
-
-            // Status badge
-            const statusBadge = isActive
-                ? '<span style="color: var(--forest); font-weight: 600; font-size: 0.8rem;">● Aktiv</span>'
-                : '<span style="color: var(--text-muted); font-size: 0.8rem;">○ Abgeschlossen</span>';
+            const genderSuffix = guest.gender === 'weiblich' ? ' ♀' : guest.gender === 'männlich' ? ' ♂' : '';
+            const dotClass = isActive ? 'active' : 'inactive';
 
             return `
-                <div class="guest-item" data-guest-name="${guest.name.toLowerCase()}" data-guest-username="${guest.username.toLowerCase()}">
-                    <div class="guest-avatar">${guest.name.charAt(0).toUpperCase()}</div>
-                    <div class="guest-info">
-                        <h3>${guest.name}${genderIcon} ${statusBadge}</h3>
-                        <table class="guest-details-table">
-                            <tr>
-                                <td><i data-lucide="user"></i> Login</td>
-                                <td>${guest.username}</td>
-                            </tr>
-                            <tr>
-                                <td><i data-lucide="calendar"></i> Zeitraum</td>
-                                <td>${checkInDate} – ${checkOutDate} (${days} ${days === 1 ? 'Nacht' : 'Nächte'})</td>
-                            </tr>
-                            <tr>
-                                <td><i data-lucide="users"></i> Personen</td>
-                                <td>${persons}</td>
-                            </tr>
-                            <tr>
-                                <td><i data-lucide="banknote"></i> Kurtaxe</td>
-                                <td>€${kurtaxe.toFixed(2)} <small style="color:var(--text-muted)">(${days}×${persons}×€${KURTAXE_PER_PERSON_DAY.toFixed(2)})</small></td>
-                            </tr>
-                            <tr>
-                                <td><i data-lucide="zap"></i> Strom</td>
-                                <td id="energy-${guest.id}"><span class="energy-loading">lädt…</span></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="guest-actions">
-                        <button class="icon-btn" onclick="printProtocol('${guest.id}')" title="Abschlussprotokoll drucken">
-                            <i data-lucide="printer"></i>
-                        </button>
-                        <button class="icon-btn" onclick="editGuest('${guest.id}')" title="Bearbeiten">
-                            <i data-lucide="edit-2"></i>
-                        </button>
-                        <button class="icon-btn delete" onclick="deleteGuest('${guest.id}')" title="Löschen">
-                            <i data-lucide="trash-2"></i>
-                        </button>
-                    </div>
-                </div>
+                <tr data-guest-name="${guest.name.toLowerCase()}" data-guest-username="${guest.username.toLowerCase()}">
+                    <td class="guest-name-cell">
+                        <span class="guest-avatar-sm">${guest.name.charAt(0).toUpperCase()}</span>
+                        <span class="guest-status-dot ${dotClass}"></span>${guest.name}${genderSuffix}
+                    </td>
+                    <td class="col-login muted">${guest.username}</td>
+                    <td>${checkInDate} – ${checkOutDate}<br><small style="color:var(--text-muted)">${days} ${days === 1 ? 'Nacht' : 'Nächte'}</small></td>
+                    <td style="text-align:center">${persons}</td>
+                    <td>€${kurtaxe.toFixed(2)}<br><small style="color:var(--text-muted)">${days}×${persons}×€${KURTAXE_PER_PERSON_DAY.toFixed(2)}</small></td>
+                    <td class="col-strom" id="energy-${guest.id}"><span class="energy-loading">lädt…</span></td>
+                    <td>
+                        <div class="guest-actions">
+                            <button class="icon-btn" onclick="printProtocol('${guest.id}')" title="Abschlussprotokoll">
+                                <i data-lucide="printer"></i>
+                            </button>
+                            <button class="icon-btn" onclick="editGuest('${guest.id}')" title="Bearbeiten">
+                                <i data-lucide="edit-2"></i>
+                            </button>
+                            <button class="icon-btn delete" onclick="deleteGuest('${guest.id}')" title="Löschen">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
             `;
         }
 
-        // Energiedaten für alle Gäste nachladen
+        // Energiedaten für alle Gäste nachladen (Feldname: totalEnergy)
         async function loadGuestEnergy(guests) {
             const pricePerKwh = parseFloat(document.getElementById('pricePerKwh')?.value) || PRICE_PER_KWH;
+            const today = new Date().toISOString().slice(0, 10);
             for (const guest of guests) {
                 const el = document.getElementById(`energy-${guest.id}`);
                 if (!el) continue;
                 try {
                     const fromDate = guest.checkIn.slice(0, 10);
-                    const toDate = guest.checkOut.slice(0, 10);
+                    // für aktive Gäste bis heute (nicht bis zukünftigem Checkout)
+                    const toDate = guest.checkOut.slice(0, 10) < today ? guest.checkOut.slice(0, 10) : today;
                     const resp = await fetch(`${API_URL}/energy/range?from=${fromDate}&to=${toDate}`, {
                         headers: { 'Authorization': `Bearer ${authToken}` }
                     });
                     const data = await resp.json();
                     if (data.success && data.data) {
-                        const kwh = data.data.total_kwh ?? data.data.energy_kwh ?? null;
-                        if (kwh !== null) {
+                        const kwh = data.data.totalEnergy ?? null;
+                        if (kwh !== null && kwh > 0) {
                             const cost = kwh * pricePerKwh;
-                            el.innerHTML = `${kwh.toFixed(2)} kWh · €${cost.toFixed(2)} <small style="color:var(--text-muted)">(×€${pricePerKwh.toFixed(2)}/kWh)</small>`;
+                            el.innerHTML = `${kwh.toFixed(2)} kWh<br><small style="color:var(--text-muted)">€${cost.toFixed(2)}</small>`;
                         } else {
-                            el.innerHTML = '<span style="color:var(--text-muted)">keine Daten</span>';
+                            el.innerHTML = '<span style="color:var(--text-muted)">—</span>';
                         }
                     } else {
-                        el.innerHTML = '<span style="color:var(--text-muted)">keine Daten</span>';
+                        el.innerHTML = '<span style="color:var(--text-muted)">—</span>';
                     }
                 } catch (e) {
-                    el.innerHTML = '<span style="color:var(--text-muted)">nicht verfügbar</span>';
+                    el.innerHTML = '<span style="color:var(--text-muted)">—</span>';
                 }
             }
         }
@@ -2166,8 +2122,9 @@
                 });
                 const energyData = await resp.json();
                 if (energyData.success && energyData.data) {
-                    energyKwh = energyData.data.total_kwh ?? energyData.data.energy_kwh ?? null;
-                    if (energyKwh !== null) energyCost = energyKwh * pricePerKwh;
+                    energyKwh = energyData.data.totalEnergy ?? null;
+                    if (energyKwh !== null && energyKwh > 0) energyCost = energyKwh * pricePerKwh;
+                    else energyKwh = null;
                 }
             } catch (e) { /* kein Stopp wenn Energie nicht verfügbar */ }
 
@@ -2583,17 +2540,12 @@
         // Filter Guests
         function filterGuests() {
             const searchTerm = document.getElementById('guestSearch').value.toLowerCase();
-            const guestItems = document.querySelectorAll('.guest-item');
+            const guestRows = document.querySelectorAll('.guest-table tbody tr');
 
-            guestItems.forEach(item => {
-                const name = item.dataset.guestName || '';
-                const username = item.dataset.guestUsername || '';
-
-                if (name.includes(searchTerm) || username.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
+            guestRows.forEach(row => {
+                const name = row.dataset.guestName || '';
+                const username = row.dataset.guestUsername || '';
+                row.style.display = (name.includes(searchTerm) || username.includes(searchTerm)) ? '' : 'none';
             });
         }
 
