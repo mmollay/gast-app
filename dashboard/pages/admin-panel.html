@@ -559,6 +559,44 @@
             color: var(--sage-dark);
         }
 
+        .guest-details-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .guest-details-table td {
+            padding: 5px 10px 5px 0;
+            vertical-align: top;
+            color: var(--text-light);
+        }
+
+        .guest-details-table td:first-child {
+            white-space: nowrap;
+            color: var(--text-muted);
+            width: 110px;
+        }
+
+        .guest-details-table td:last-child {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .guest-details-table td i {
+            width: 14px;
+            height: 14px;
+            color: var(--sage-dark);
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        .energy-loading {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
         .guest-actions {
             display: flex;
             gap: 8px;
@@ -960,6 +998,11 @@
 
             .guest-meta span {
                 width: 100%;
+            }
+
+            .guest-details-table td:first-child {
+                width: 90px;
+                font-size: 0.8rem;
             }
 
             .guest-actions {
@@ -1976,7 +2019,10 @@
                 }
 
                 // Re-initialize icons after rendering
-                setTimeout(() => lucide.createIcons(), 0);
+                setTimeout(() => {
+                    lucide.createIcons();
+                    loadGuestEnergy(guests);
+                }, 0);
             } catch (error) {
                 console.error('Error loading guests:', error);
             }
@@ -1988,40 +2034,50 @@
             const persons = guest.numberOfPersons || 1;
             const checkInDate = new Date(guest.checkIn).toLocaleDateString('de-DE');
             const checkOutDate = new Date(guest.checkOut).toLocaleDateString('de-DE');
-
-            // Check if guest is currently active
-            const now = new Date();
             const checkIn = new Date(guest.checkIn);
             const checkOut = new Date(guest.checkOut);
+            const days = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+            const now = new Date();
             const isActive = now >= checkIn && now <= checkOut;
+            const pricePerKwh = parseFloat(document.getElementById('pricePerKwh')?.value) || PRICE_PER_KWH;
 
-            // Energy stored per guest if available (optional field)
-            let energyDisplay = '';
-            if (guest.energyConsumption !== undefined) {
-                energyDisplay = `<span><i data-lucide="zap"></i> ${guest.energyConsumption.toFixed(2)} kWh</span>`;
-            }
+            // Gender icon
+            let genderIcon = '';
+            if (guest.gender === 'weiblich') genderIcon = ' ♀';
+            else if (guest.gender === 'männlich') genderIcon = ' ♂';
 
-            // Gender display
-            let genderDisplay = '';
-            if (guest.gender === 'weiblich') {
-                genderDisplay = `<span style="color: var(--sage-dark);">♀ Weiblich</span>`;
-            } else if (guest.gender === 'männlich') {
-                genderDisplay = `<span style="color: var(--forest);">♂ Männlich</span>`;
-            }
+            // Status badge
+            const statusBadge = isActive
+                ? '<span style="color: var(--forest); font-weight: 600; font-size: 0.8rem;">● Aktiv</span>'
+                : '<span style="color: var(--text-muted); font-size: 0.8rem;">○ Abgeschlossen</span>';
 
             return `
                 <div class="guest-item" data-guest-name="${guest.name.toLowerCase()}" data-guest-username="${guest.username.toLowerCase()}">
                     <div class="guest-avatar">${guest.name.charAt(0).toUpperCase()}</div>
                     <div class="guest-info">
-                        <h3>${guest.name}</h3>
-                        <div class="guest-meta">
-                            <span><i data-lucide="user"></i> ${guest.username}</span>
-                            ${genderDisplay}
-                            <span><i data-lucide="users"></i> ${persons} ${persons === 1 ? 'Person' : 'Personen'}</span>
-                            <span><i data-lucide="calendar"></i> ${checkInDate} - ${checkOutDate}</span>
-                            ${energyDisplay}
-                            <span><i data-lucide="banknote"></i> Kurtaxe: €${kurtaxe.toFixed(2)}</span>
-                        </div>
+                        <h3>${guest.name}${genderIcon} ${statusBadge}</h3>
+                        <table class="guest-details-table">
+                            <tr>
+                                <td><i data-lucide="user"></i> Login</td>
+                                <td>${guest.username}</td>
+                            </tr>
+                            <tr>
+                                <td><i data-lucide="calendar"></i> Zeitraum</td>
+                                <td>${checkInDate} – ${checkOutDate} (${days} ${days === 1 ? 'Nacht' : 'Nächte'})</td>
+                            </tr>
+                            <tr>
+                                <td><i data-lucide="users"></i> Personen</td>
+                                <td>${persons}</td>
+                            </tr>
+                            <tr>
+                                <td><i data-lucide="banknote"></i> Kurtaxe</td>
+                                <td>€${kurtaxe.toFixed(2)} <small style="color:var(--text-muted)">(${days}×${persons}×€${KURTAXE_PER_PERSON_DAY.toFixed(2)})</small></td>
+                            </tr>
+                            <tr>
+                                <td><i data-lucide="zap"></i> Strom</td>
+                                <td id="energy-${guest.id}"><span class="energy-loading">lädt…</span></td>
+                            </tr>
+                        </table>
                     </div>
                     <div class="guest-actions">
                         <button class="icon-btn" onclick="printProtocol('${guest.id}')" title="Abschlussprotokoll drucken">
@@ -2036,6 +2092,36 @@
                     </div>
                 </div>
             `;
+        }
+
+        // Energiedaten für alle Gäste nachladen
+        async function loadGuestEnergy(guests) {
+            const pricePerKwh = parseFloat(document.getElementById('pricePerKwh')?.value) || PRICE_PER_KWH;
+            for (const guest of guests) {
+                const el = document.getElementById(`energy-${guest.id}`);
+                if (!el) continue;
+                try {
+                    const fromDate = guest.checkIn.slice(0, 10);
+                    const toDate = guest.checkOut.slice(0, 10);
+                    const resp = await fetch(`${API_URL}/energy/range?from=${fromDate}&to=${toDate}`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    });
+                    const data = await resp.json();
+                    if (data.success && data.data) {
+                        const kwh = data.data.total_kwh ?? data.data.energy_kwh ?? null;
+                        if (kwh !== null) {
+                            const cost = kwh * pricePerKwh;
+                            el.innerHTML = `${kwh.toFixed(2)} kWh · €${cost.toFixed(2)} <small style="color:var(--text-muted)">(×€${pricePerKwh.toFixed(2)}/kWh)</small>`;
+                        } else {
+                            el.innerHTML = '<span style="color:var(--text-muted)">keine Daten</span>';
+                        }
+                    } else {
+                        el.innerHTML = '<span style="color:var(--text-muted)">keine Daten</span>';
+                    }
+                } catch (e) {
+                    el.innerHTML = '<span style="color:var(--text-muted)">nicht verfügbar</span>';
+                }
+            }
         }
 
         // Calculate Kurtaxe

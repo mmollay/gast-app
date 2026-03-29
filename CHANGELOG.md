@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.29] - 2026-03-29
+
+### Changed
+- **Admin Gästeliste**: Tabellarisches Layout statt Inline-Spans — Zeitraum, Personen, Kurtaxe, Strom klar strukturiert
+- **Stromverbrauch**: Live-Abfrage per Gast aus API (`/energy/range`) mit kWh + €-Kosten
+- **Status-Badge**: Aktiv/Abgeschlossen direkt beim Gastnamen sichtbar
+
 ## [0.12.28] - 2026-03-29
 
 ### Added
