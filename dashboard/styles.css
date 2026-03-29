@@ -214,57 +214,7 @@ body {
     font-weight: 600;
 }
 
-/* ---- Language Switcher Pill ---- */
-.language-switcher {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: var(--radius-xl);
-    padding: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    min-height: 44px;
-    gap: 2px;
-}
-
-.lang-btn {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 6px 14px;
-    border: none;
-    border-radius: calc(var(--radius-xl) - 3px);
-    background: transparent;
-    color: rgba(255, 255, 255, 0.65);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 500;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    min-height: 36px;
-    line-height: 1;
-    white-space: nowrap;
-}
-
-.lang-btn .lang-flag {
-    font-size: 1rem;
-    line-height: 1;
-}
-
-.lang-btn:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.lang-btn.active {
-    background: rgba(255, 255, 255, 0.45);
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-}
+/* ---- Language Switcher (in dropdown only) ---- */
 
 .header-user-btn {
     display: flex;
@@ -418,7 +368,7 @@ body {
 .dropdown-lang-buttons {
     display: flex;
     gap: 6px;
-    padding: 0 var(--space-2);
+    padding: 4px var(--space-2) var(--space-2);
 }
 
 .dropdown-lang-btn {
@@ -426,8 +376,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 10px var(--space-3);
+    padding: 8px var(--space-3);
     background: var(--cream);
     border: 2px solid transparent;
     border-radius: 10px;
@@ -437,26 +386,6 @@ body {
     color: var(--text-light);
     cursor: pointer;
     transition: all 0.2s ease;
-}
-
-.lang-code {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 18px;
-    background: rgba(0,0,0,0.08);
-    border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: inherit;
-    flex-shrink: 0;
-}
-
-.dropdown-lang-btn.active .lang-code {
-    background: var(--sage);
-    color: white;
 }
 
 .dropdown-lang-btn:hover {
@@ -3185,22 +3114,6 @@ body {
 
     .contact-grid {
         grid-template-columns: 1fr;
-    }
-
-    .language-switcher {
-        padding: 3px;
-        min-height: 38px;
-    }
-
-    .lang-btn {
-        padding: 4px 10px;
-        font-size: 0.75rem;
-        min-height: 30px;
-        gap: 4px;
-    }
-
-    .lang-btn .lang-flag {
-        font-size: 0.9rem;
     }
 
     .quick-nav {

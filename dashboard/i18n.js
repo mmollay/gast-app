@@ -179,33 +179,8 @@ const I18N = {
    * Create language switcher UI
    */
   createLanguageSwitcher() {
-    // Find or create the switcher container
-    let switcher = document.getElementById('language-switcher');
-
-    if (!switcher) {
-      // Create switcher and add to header-actions
-      const headerActions = document.querySelector('.header-actions');
-      if (headerActions) {
-        switcher = document.createElement('div');
-        switcher.id = 'language-switcher';
-        switcher.className = 'language-switcher';
-        switcher.innerHTML = `
-          <button class="lang-btn ${this.currentLang === 'de' ? 'active' : ''}" data-lang="de" title="Deutsch"><span class="lang-flag">🇩🇪</span> DE</button>
-          <button class="lang-btn ${this.currentLang === 'en' ? 'active' : ''}" data-lang="en" title="English"><span class="lang-flag">🇬🇧</span> EN</button>
-        `;
-
-        // Insert at the beginning of header-actions
-        headerActions.insertBefore(switcher, headerActions.firstChild);
-
-        // Add click handlers
-        switcher.querySelectorAll('.lang-btn').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            const lang = e.currentTarget.getAttribute('data-lang');
-            this.switchLanguage(lang);
-          });
-        });
-      }
-    }
+    // Language switching is handled in the user dropdown menu only
+    // No separate header pill needed
   },
 
   /**
@@ -228,8 +203,8 @@ const I18N = {
     this.applyTranslations();
     this.updateHtmlLang();
     
-    // Update switcher buttons (header pill + dropdown)
-    document.querySelectorAll('.lang-btn, .dropdown-lang-btn').forEach(btn => {
+    // Update switcher buttons in dropdown
+    document.querySelectorAll('.dropdown-lang-btn').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
     });
     
@@ -286,8 +261,8 @@ window.addEventListener('popstate', async (event) => {
   I18N.applyTranslations();
   I18N.updateHtmlLang();
   
-  // Update switcher buttons
-  document.querySelectorAll('.lang-btn').forEach(btn => {
+  // Update switcher buttons in dropdown
+  document.querySelectorAll('.dropdown-lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-lang') === I18N.currentLang);
   });
 });
