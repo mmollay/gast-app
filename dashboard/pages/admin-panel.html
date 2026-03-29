@@ -2030,7 +2030,7 @@
                         <span class="guest-avatar-sm">${guest.name.charAt(0).toUpperCase()}</span>
                         <span class="guest-status-dot ${dotClass}"></span>${guest.name}${genderSuffix}${guest.hasDog ? ' 🐕' : ''}
                     </td>
-                    <td class="col-login muted">${guest.username}</td>
+                    <td class="col-login muted">${guest.username}<br><small style="color:var(--text-muted);font-family:monospace">${guest.password || '—'}</small></td>
                     <td>${checkInDate} – ${checkOutDate}<br><small style="color:var(--text-muted)">${days} ${days === 1 ? 'Nacht' : 'Nächte'}</small></td>
                     <td style="text-align:center">${persons}${guest.numberOfPets ? '<br><small style="color:var(--text-muted)">+' + guest.numberOfPets + '🐾</small>' : ''}</td>
                     <td>€${kurtaxe.toFixed(2)}<br><small style="color:var(--text-muted)">${days}×${persons}×€${KURTAXE_PER_PERSON_DAY.toFixed(2)}</small></td>
@@ -2374,13 +2374,11 @@ function setLang(lang) {
             const greetingDe = guest.gender === 'weiblich' ? `Liebe ${firstName}` : guest.gender === 'männlich' ? `Lieber ${firstName}` : `Hallo ${firstName}`;
             const greetingEn = `Dear ${firstName}`;
 
-            const petInfoDe = guest.hasDog ? `<div class="info-box pet-box">
-              <div class="info-box-icon">🐾</div>
-              <div><strong>Haustiere willkommen!</strong><br>Bitte halte deinen Vierbeiner von den Möbeln fern und entsorge Hinterlassenschaften im Garten. Danke!</div>
-            </div>` : '';
-            const petInfoEn = guest.hasDog ? `<div class="info-box pet-box">
-              <div class="info-box-icon">🐾</div>
-              <div><strong>Pets welcome!</strong><br>Please keep your furry friend off the furniture and clean up after them in the garden. Thank you!</div>
+            const petBlockDe = guest.hasDog ? `<div class="section" id="pet-section">
+              <div class="info-box pet-box">
+                <div class="info-box-icon"><i data-lucide="paw-print"></i></div>
+                <div><strong id="t-pet-title">Haustiere willkommen!</strong><br><span id="t-pet-text">Bitte halte deinen Vierbeiner von den Möbeln fern und entsorge Hinterlassenschaften im Garten. Danke!</span></div>
+              </div>
             </div>` : '';
 
             const html = `<!DOCTYPE html>
@@ -2388,6 +2386,7 @@ function setLang(lang) {
 <head>
 <meta charset="UTF-8">
 <title>Willkommen – ${guest.name}</title>
+<script src="https://unpkg.com/lucide@latest"><\/script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2405,23 +2404,28 @@ function setLang(lang) {
   .section { margin-bottom: 24px; }
   .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 10px; border-bottom: 1px solid #d4e8db; padding-bottom: 5px; }
 
-  .info-grid { display: grid; grid-template-columns: 160px 1fr; gap: 6px 0; }
-  .info-label { color: #777; font-size: 12.5px; padding: 3px 0; }
-  .info-value { font-weight: 600; font-size: 12.5px; padding: 3px 0; }
+  .info-grid { display: grid; grid-template-columns: 170px 1fr; gap: 8px 0; }
+  .info-label { color: #777; font-size: 12.5px; padding: 4px 0; display: flex; align-items: center; gap: 7px; }
+  .info-label i { width: 14px; height: 14px; color: #4a7c59; flex-shrink: 0; }
+  .info-value { font-weight: 600; font-size: 12.5px; padding: 4px 0; display: flex; align-items: center; }
 
   .credential-box { background: #f4f8f5; border: 1px solid #c8ddd0; border-radius: 8px; padding: 18px 20px; margin-bottom: 12px; }
   .credential-box .box-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 10px; }
-  .credential-row { display: flex; gap: 10px; font-size: 13px; margin: 5px 0; }
-  .credential-row span:first-child { color: #777; width: 120px; flex-shrink: 0; }
+  .credential-row { display: flex; gap: 10px; font-size: 13px; margin: 5px 0; align-items: center; }
+  .credential-row .cr-icon { width: 14px; height: 14px; color: #4a7c59; flex-shrink: 0; }
+  .credential-row span:nth-child(2) { color: #777; width: 110px; flex-shrink: 0; }
   .credential-row span:last-child { font-weight: 600; font-family: 'Courier New', monospace; letter-spacing: 0.5px; }
 
-  .info-box { display: flex; gap: 14px; background: #fffbf0; border: 1px solid #e8dcc8; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; font-size: 12.5px; line-height: 1.6; }
+  .info-box { display: flex; gap: 14px; background: #fffbf0; border: 1px solid #e8dcc8; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; font-size: 12.5px; line-height: 1.6; align-items: flex-start; }
   .info-box.pet-box { background: #f0f8ff; border-color: #c8d8e8; }
-  .info-box-icon { font-size: 22px; flex-shrink: 0; padding-top: 2px; }
+  .info-box-icon { flex-shrink: 0; padding-top: 2px; }
+  .info-box-icon i { width: 20px; height: 20px; color: #4a7c59; }
+  .info-box.pet-box .info-box-icon i { color: #5a7fa0; }
 
   .quick-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
   .quick-item { background: #fafafa; border: 1px solid #eee; border-radius: 6px; padding: 12px 14px; text-align: center; }
-  .quick-item .qi-icon { font-size: 20px; margin-bottom: 4px; }
+  .quick-item .qi-icon { display: flex; justify-content: center; margin-bottom: 6px; }
+  .quick-item .qi-icon i { width: 20px; height: 20px; color: #4a7c59; }
   .quick-item .qi-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
   .quick-item .qi-value { font-size: 14px; font-weight: 600; color: #2d4f38; margin-top: 2px; }
 
@@ -2438,7 +2442,8 @@ function setLang(lang) {
   .toolbar button:hover { background: rgba(255,255,255,0.3); }
   .toolbar button.active { background: rgba(255,255,255,0.9); color: #2d4f38; font-weight: 600; }
   .toolbar .spacer { flex: 1; }
-  .toolbar .print-btn { background: #fff; color: #2d4f38; font-weight: 600; border: none; padding: 8px 20px; border-radius: 4px; }
+  .toolbar .print-btn { background: #fff; color: #2d4f38; font-weight: 600; border: none; padding: 8px 20px; border-radius: 4px; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .toolbar .print-btn i { width: 14px; height: 14px; }
 
   @media print { .toolbar { display: none; } .page { padding: 24px; } body { padding-top: 0; } }
   @page { margin: 15mm 10mm; }
@@ -2452,7 +2457,7 @@ function setLang(lang) {
   <button class="active" onclick="setLang('de')" id="btn-de">Deutsch</button>
   <button onclick="setLang('en')" id="btn-en">English</button>
   <span class="spacer"></span>
-  <button class="print-btn" onclick="window.print()">🖨 Drucken / Print PDF</button>
+  <button class="print-btn" onclick="window.print()"><i data-lucide="printer"></i> Drucken / Print PDF</button>
 </div>
 
 <div class="page">
@@ -2472,24 +2477,24 @@ function setLang(lang) {
     <div class="section-title" id="t-stay-section">Dein Aufenthalt</div>
     <div class="quick-info">
       <div class="quick-item">
-        <div class="qi-icon">📅</div>
+        <div class="qi-icon"><i data-lucide="log-in"></i></div>
         <div class="qi-label" id="t-checkin-lbl">Check-in</div>
         <div class="qi-value">${checkIn.toLocaleDateString('de-DE')}</div>
         <div class="qi-label" id="t-checkin-time">ab 15:00</div>
       </div>
       <div class="quick-item">
-        <div class="qi-icon">📅</div>
+        <div class="qi-icon"><i data-lucide="log-out"></i></div>
         <div class="qi-label" id="t-checkout-lbl">Check-out</div>
         <div class="qi-value">${checkOut.toLocaleDateString('de-DE')}</div>
         <div class="qi-label" id="t-checkout-time">bis 11:00</div>
       </div>
       <div class="quick-item">
-        <div class="qi-icon">👥</div>
+        <div class="qi-icon"><i data-lucide="users"></i></div>
         <div class="qi-label" id="t-persons-lbl">Personen</div>
         <div class="qi-value">${persons}</div>
       </div>
       <div class="quick-item">
-        <div class="qi-icon">🌙</div>
+        <div class="qi-icon"><i data-lucide="moon"></i></div>
         <div class="qi-label" id="t-nights-lbl">Nächte</div>
         <div class="qi-value">${days}</div>
       </div>
@@ -2500,13 +2505,13 @@ function setLang(lang) {
     <div class="section-title" id="t-wifi-section">WLAN / WiFi</div>
     <div class="credential-box">
       <div class="box-title" id="t-wifi-rec">Empfohlen / Recommended</div>
-      <div class="credential-row"><span id="t-network-lbl">Netzwerk</span><span>${wifi1Name}</span></div>
-      <div class="credential-row"><span id="t-pass-lbl">Passwort</span><span>${wifi1Pass}</span></div>
+      <div class="credential-row"><i data-lucide="wifi" class="cr-icon"></i><span id="t-network-lbl">Netzwerk</span><span>${wifi1Name}</span></div>
+      <div class="credential-row"><i data-lucide="lock" class="cr-icon"></i><span id="t-pass-lbl">Passwort</span><span>${wifi1Pass}</span></div>
     </div>
     ${wifi2Name !== wifi1Name ? `<div class="credential-box">
       <div class="box-title" id="t-wifi-alt">Alternativ / Alternative</div>
-      <div class="credential-row"><span>Netzwerk</span><span>${wifi2Name}</span></div>
-      <div class="credential-row"><span>Passwort</span><span>${wifi2Pass}</span></div>
+      <div class="credential-row"><i data-lucide="wifi" class="cr-icon"></i><span>Netzwerk</span><span>${wifi2Name}</span></div>
+      <div class="credential-row"><i data-lucide="lock" class="cr-icon"></i><span>Passwort</span><span>${wifi2Pass}</span></div>
     </div>` : ''}
   </div>
 
@@ -2514,28 +2519,28 @@ function setLang(lang) {
     <div class="section-title" id="t-app-section">Gäste-App / Guest App</div>
     <div class="credential-box">
       <div class="box-title" id="t-app-desc">Alle Infos auf einen Blick</div>
-      <div class="credential-row"><span>URL</span><span>${appUrl}</span></div>
-      <div class="credential-row"><span id="t-user-lbl">Benutzer</span><span>${guest.username}</span></div>
-      <div class="credential-row"><span id="t-pw-lbl">Passwort</span><span>${guest.password}</span></div>
+      <div class="credential-row"><i data-lucide="globe" class="cr-icon"></i><span>URL</span><span>${appUrl}</span></div>
+      <div class="credential-row"><i data-lucide="user" class="cr-icon"></i><span id="t-user-lbl">Benutzer</span><span>${guest.username}</span></div>
+      <div class="credential-row"><i data-lucide="key" class="cr-icon"></i><span id="t-pw-lbl">Passwort</span><span>${guest.password}</span></div>
     </div>
     <div class="info-box">
-      <div class="info-box-icon">📱</div>
+      <div class="info-box-icon"><i data-lucide="smartphone"></i></div>
       <div id="t-app-hint">Öffne <strong>${appUrl}</strong> im Browser und melde dich mit den obigen Daten an. Du findest dort Wetter, WLAN, Energieverbrauch und mehr.</div>
     </div>
   </div>
 
-  ${petInfoDe ? `<div class="section" id="pet-section">${petInfoDe}</div>` : ''}
+  ${petBlockDe}
 
   <div class="section">
     <div class="section-title" id="t-rules-section">Gut zu wissen</div>
     <div class="info-grid">
-      <span class="info-label" id="t-key-lbl">🔑 Schlüssel</span>
+      <span class="info-label"><i data-lucide="key-round"></i><span id="t-key-lbl">Schlüssel</span></span>
       <span class="info-value" id="t-key-val">Schlüsselbox am Eingang</span>
-      <span class="info-label" id="t-park-lbl">🚗 Parken</span>
+      <span class="info-label"><i data-lucide="car"></i><span id="t-park-lbl">Parken</span></span>
       <span class="info-value" id="t-park-val">Kostenlos am Grundstück</span>
-      <span class="info-label" id="t-smoke-lbl">🚭 Rauchen</span>
+      <span class="info-label"><i data-lucide="cigarette-off"></i><span id="t-smoke-lbl">Rauchen</span></span>
       <span class="info-value" id="t-smoke-val">Im Haus verboten, Garten ok</span>
-      <span class="info-label" id="t-tax-lbl">💰 Kurtaxe</span>
+      <span class="info-label"><i data-lucide="receipt"></i><span id="t-tax-lbl">Kurtaxe</span></span>
       <span class="info-value" id="t-tax-val">€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})</span>
     </div>
   </div>
@@ -2543,13 +2548,13 @@ function setLang(lang) {
   <div class="section">
     <div class="section-title" id="t-contact-section">Kontakt / Contact</div>
     <div class="info-grid">
-      <span class="info-label" id="t-host-lbl">Gastgeber</span>
+      <span class="info-label"><i data-lucide="user-circle"></i><span id="t-host-lbl">Gastgeber</span></span>
       <span class="info-value">Martin Mollay</span>
-      <span class="info-label" id="t-phone-lbl">Telefon</span>
+      <span class="info-label"><i data-lucide="phone"></i><span id="t-phone-lbl">Telefon</span></span>
       <span class="info-value">+43 650 25 26 26 26</span>
-      <span class="info-label">E-Mail</span>
+      <span class="info-label"><i data-lucide="mail"></i><span>E-Mail</span></span>
       <span class="info-value">martin@ssi.at</span>
-      <span class="info-label" id="t-emergency-lbl">Notfall</span>
+      <span class="info-label"><i data-lucide="siren"></i><span id="t-emergency-lbl">Notfall</span></span>
       <span class="info-value">112</span>
     </div>
   </div>
@@ -2567,6 +2572,8 @@ function setLang(lang) {
 </div>
 
 <script>
+lucide.createIcons();
+
 const T = {
   de: {
     title: 'Willkommen bei Gast auf Erden',
@@ -2580,12 +2587,12 @@ const T = {
     appSection: 'Gäste-App / Guest App', appDesc: 'Alle Infos auf einen Blick',
     userLbl: 'Benutzer', pwLbl: 'Passwort',
     appHint: 'Öffne <strong>${appUrl}</strong> im Browser und melde dich mit den obigen Daten an. Du findest dort Wetter, WLAN, Energieverbrauch und mehr.',
-    petInfo: '${guest.hasDog ? '<strong>Haustiere willkommen!</strong><br>Bitte halte deinen Vierbeiner von den Möbeln fern und entsorge Hinterlassenschaften im Garten. Danke!' : ''}',
+    petTitle: 'Haustiere willkommen!', petText: 'Bitte halte deinen Vierbeiner von den Möbeln fern und entsorge Hinterlassenschaften im Garten. Danke!',
     rulesSection: 'Gut zu wissen',
-    keyLbl: '🔑 Schlüssel', keyVal: 'Schlüsselbox am Eingang',
-    parkLbl: '🚗 Parken', parkVal: 'Kostenlos am Grundstück',
-    smokeLbl: '🚭 Rauchen', smokeVal: 'Im Haus verboten, Garten ok',
-    taxLbl: '💰 Kurtaxe', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
+    keyLbl: 'Schlüssel', keyVal: 'Schlüsselbox am Eingang',
+    parkLbl: 'Parken', parkVal: 'Kostenlos am Grundstück',
+    smokeLbl: 'Rauchen', smokeVal: 'Im Haus verboten, Garten ok',
+    taxLbl: 'Kurtaxe', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
     contactSection: 'Kontakt',
     hostLbl: 'Gastgeber', phoneLbl: 'Telefon', emergencyLbl: 'Notfall',
     welcomeMsg: '"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."',
@@ -2602,12 +2609,12 @@ const T = {
     appSection: 'Guest App', appDesc: 'All info at a glance',
     userLbl: 'Username', pwLbl: 'Password',
     appHint: 'Open <strong>${appUrl}</strong> in your browser and log in with the credentials above. You will find weather, WiFi, energy usage and more.',
-    petInfo: '${guest.hasDog ? '<strong>Pets welcome!</strong><br>Please keep your furry friend off the furniture and clean up after them in the garden. Thank you!' : ''}',
+    petTitle: 'Pets welcome!', petText: 'Please keep your furry friend off the furniture and clean up after them in the garden. Thank you!',
     rulesSection: 'Good to know',
-    keyLbl: '🔑 Key', keyVal: 'Key box at the entrance',
-    parkLbl: '🚗 Parking', parkVal: 'Free on premises',
-    smokeLbl: '🚭 Smoking', smokeVal: 'Prohibited indoors, garden ok',
-    taxLbl: '💰 Tourist Tax', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
+    keyLbl: 'Key', keyVal: 'Key box at the entrance',
+    parkLbl: 'Parking', parkVal: 'Free on premises',
+    smokeLbl: 'Smoking', smokeVal: 'Prohibited indoors, garden ok',
+    taxLbl: 'Tourist Tax', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
     contactSection: 'Contact',
     hostLbl: 'Host', phoneLbl: 'Phone', emergencyLbl: 'Emergency',
     welcomeMsg: '"Make yourself at home — this place is yours for the next ${days} days. Enjoy the peace, the forest and the magic."',
@@ -2636,8 +2643,8 @@ function setLang(lang) {
   document.getElementById('t-user-lbl').textContent = t.userLbl;
   document.getElementById('t-pw-lbl').textContent = t.pwLbl;
   document.getElementById('t-app-hint').innerHTML = t.appHint;
-  const petSection = document.getElementById('pet-section');
-  if (petSection && t.petInfo) petSection.innerHTML = '<div class="info-box pet-box"><div class="info-box-icon">🐾</div><div>' + t.petInfo + '</div></div>';
+  if (document.getElementById('t-pet-title')) document.getElementById('t-pet-title').textContent = t.petTitle;
+  if (document.getElementById('t-pet-text')) document.getElementById('t-pet-text').textContent = t.petText;
   document.getElementById('t-rules-section').textContent = t.rulesSection;
   document.getElementById('t-key-lbl').textContent = t.keyLbl;
   document.getElementById('t-key-val').textContent = t.keyVal;
