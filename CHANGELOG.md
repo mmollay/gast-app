@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.21] - 2026-03-29
+
+### Changed
+- **Deploy**: Production-Deploy auf main — v0.12.20 live auf gastauferden.at
+- **Git-Tags**: Tags mit App-Version synchronisiert (war seit v0.8.8 nicht aktuell)
+
 ## [0.12.20] - 2026-03-28
 
 ### Changed
