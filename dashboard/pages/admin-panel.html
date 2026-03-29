@@ -2457,6 +2457,18 @@ function setLang(lang) {
   @media print { .toolbar { display: none; } .page { padding: 12px 16px; } body { padding-top: 0; } }
   @page { margin: 8mm 8mm; }
   body { padding-top: 48px; }
+
+  /* Seitenumbrüche */
+  .section { page-break-inside: avoid; break-inside: avoid; }
+  .header { page-break-inside: avoid; break-inside: avoid; }
+  .greeting { page-break-inside: avoid; break-inside: avoid; }
+  .quick-info { page-break-inside: avoid; break-inside: avoid; }
+  .credential-box { page-break-inside: avoid; break-inside: avoid; }
+  .info-box { page-break-inside: avoid; break-inside: avoid; }
+  .info-grid { page-break-inside: avoid; break-inside: avoid; }
+  .welcome-footer { page-break-inside: avoid; break-inside: avoid; }
+  .footer { page-break-inside: avoid; break-inside: avoid; }
+  .section-page-break { page-break-before: always; break-before: page; }
 </style>
 </head>
 <body>
@@ -2558,7 +2570,7 @@ function setLang(lang) {
     </div>
   </div>
 
-  <div class="section">
+  <div class="section section-page-break">
     <div class="section-title" id="t-checkout-section">Abreise / Check-out</div>
     <div class="info-grid">
       <span class="info-label"><i data-lucide="key-square"></i><span id="t-co-key-lbl">Schlüssel</span></span>
