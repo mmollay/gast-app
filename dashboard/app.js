@@ -772,6 +772,7 @@ async function fetchData() {
  * UI aktualisieren
  */
 function updateUI(status) {
+  if (!status) return;
   // Aktuelle Leistung (kann negativ sein = Einspeisung)
   const totalPower = status.total_act_power || 0;
   const displayPower = Math.abs(Math.round(totalPower));
