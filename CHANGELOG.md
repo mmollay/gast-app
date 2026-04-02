@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.63] - 2026-04-02
+
+### Changed
+- **Gäste-Portal**: Heizkostenzuschuss-Karte und Info-Bar erst ab €5,00 Gesamtkosten sichtbar — darunter ausgeblendet
+
 ## [0.12.62] - 2026-04-02
 
 ### Changed
