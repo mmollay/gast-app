@@ -2470,7 +2470,6 @@ function setLang(lang) {
     body { padding-top: 0; }
   }
   @page { size: A4 portrait; margin: 7mm 9mm; }
-  @page back { size: A4 landscape; margin: 10mm 14mm; }
   body { padding-top: 48px; }
 
   /* Seitenumbrüche */
@@ -2485,19 +2484,18 @@ function setLang(lang) {
   .newsletter-bar { page-break-inside: avoid; break-inside: avoid; }
   .footer { page-break-inside: avoid; break-inside: avoid; }
 
-  /* Seite 2 — Landscape Rückseite "Wenden" */
+  /* Seite 2 — Portrait Rückseite "Wenden" */
   .back-page {
-    page: back;
     break-before: page;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    gap: 0 32px;
+    grid-template-rows: auto auto;
+    gap: 0 28px;
     padding: 0;
   }
   .back-page .back-left { grid-column: 1; }
   .back-page .back-right { grid-column: 2; }
-  .back-page .back-full { grid-column: 1 / -1; margin-top: 18px; }
+  .back-page .back-full { grid-column: 1 / -1; margin-top: 16px; }
 </style>
 </head>
 <body>
@@ -2614,16 +2612,6 @@ function setLang(lang) {
         </div>
       </div>
 
-      <div class="section" style="margin-top: 20px;">
-        <div class="newsletter-bar">
-          <i data-lucide="mail"></i>
-          <div class="nl-text">
-            <strong id="t-nl-title">Bleib informiert!</strong>
-            <span id="t-nl-text"> Melde dich für unseren Newsletter an und erfahre als Erstes von Neuigkeiten rund um Gast auf Erden.</span>
-          </div>
-        </div>
-        <div style="margin-top: 8px; font-size: 11.5px; color: #999;" id="t-nl-label">E-Mail: <span style="border-bottom: 1px solid #bbb; display: inline-block; width: 220px;">&nbsp;</span></div>
-      </div>
     </div>
 
     <div class="back-right">
@@ -2641,13 +2629,24 @@ function setLang(lang) {
         </div>
       </div>
 
-      <div class="welcome-footer" style="margin-top: 20px;">
+      <div class="welcome-footer" style="margin-top: 16px;">
         <p id="t-welcome-msg">"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."</p>
         <div class="sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
       </div>
     </div>
 
-    <div class="back-full footer">
+    <div class="back-full">
+      <div class="newsletter-bar">
+        <i data-lucide="mail"></i>
+        <div class="nl-text">
+          <strong id="t-nl-title">Bleib informiert!</strong>
+          <span id="t-nl-text"> Melde dich für unseren Newsletter an und erfahre als Erstes von Neuigkeiten rund um Gast auf Erden.</span>
+        </div>
+        <span style="font-size:11.5px;color:#999;white-space:nowrap;" id="t-nl-label">E-Mail: <span style="border-bottom:1px solid #bbb;display:inline-block;width:180px;">&nbsp;</span></span>
+      </div>
+    </div>
+
+    <div class="back-full footer" style="margin-top: 8px;">
       <a href="https://${appUrl}" target="_blank">${appUrl}</a>
       <div class="copy">Gast auf Erden · ${new Date().getFullYear()}</div>
     </div>
@@ -2771,7 +2770,7 @@ function setLang(lang) {
   document.getElementById('t-welcome-msg').textContent = t.welcomeMsg;
   document.getElementById('t-nl-title').textContent = t.nlTitle;
   document.getElementById('t-nl-text').textContent = t.nlText;
-  document.getElementById('t-nl-label').innerHTML = t.nlLabel + '<span style="border-bottom:1px solid #bbb;display:inline-block;width:220px;margin-left:4px;">&nbsp;</span>';
+  document.getElementById('t-nl-label').innerHTML = t.nlLabel + '<span style="border-bottom:1px solid #bbb;display:inline-block;width:180px;margin-left:4px;">&nbsp;</span>';
   document.getElementById('btn-de').classList.toggle('active', lang === 'de');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.documentElement.lang = lang;
