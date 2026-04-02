@@ -2260,7 +2260,7 @@
         <td>€${fmt(energyCost)}</td>
       </tr>` : `
       <tr>
-        <td colspan="2" style="color:#aaa;font-size:11px;" id="t-strom-incl">${energyCost !== null ? 'Stromverbrauch inkludiert (unter €' + ENERGY_MIN_CHARGE.toFixed(2).replace('.', ',') + ')' : 'Stromverbrauch: keine Daten verfügbar'}</td>
+        <td colspan="2" style="color:#aaa;font-size:11px;font-style:italic;" id="t-strom-incl">Zusatzheizkosten werden gegebenenfalls im Nachhinein verrechnet.</td>
       </tr>`}
       <tr class="total-row">
         <td id="t-total">Gesamt offen</td>
