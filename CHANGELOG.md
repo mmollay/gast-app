@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.56] - 2026-04-02
+
+### Changed
+- **Protokoll-Logik**: Dokument passt sich automatisch an — Stromkosten unter €5,00 → "Aufenthaltsbeleg" ohne Stromzeile (für Check-in); ab €5,00 → "Abschlussprotokoll" mit Stromkosten (für Checkout)
+
 ## [0.12.55] - 2026-03-29
 
 ### Changed
