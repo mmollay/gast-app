@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.62] - 2026-04-02
+
+### Changed
+- **Handout PDF**: Beide Seiten Hochformat (kein Querformat mehr) — sauberes Wenden, Newsletter über volle Breite mit E-Mail-Zeile inline
+
 ## [0.12.61] - 2026-04-02
 
 ### Changed
