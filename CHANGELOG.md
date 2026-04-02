@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.59] - 2026-04-02
+
+### Fixed
+- **Handout PDF**: "Gut zu wissen" von Seite 1 auf Landscape-Rückseite verschoben — PDF ist jetzt exakt 2 Seiten (Hochformat + Querformat zum Wenden)
+
 ## [0.12.58] - 2026-04-02
 
 ### Fixed
