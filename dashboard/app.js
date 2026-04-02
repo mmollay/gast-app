@@ -409,6 +409,14 @@ function updateStayEnergyUI() {
   
   // Tages-Liste vorbereiten
   displayStayDays();
+
+  // Karte ausblenden wenn Kosten unter Schwellenwert (Gast soll nicht belastet werden)
+  const ENERGY_MIN_DISPLAY = 5; // €
+  const showEnergyCard = stayEnergyData.totalCost >= ENERGY_MIN_DISPLAY;
+  const energyCardEl = document.getElementById('energyCard');
+  const energyInfoBarEl = document.getElementById('energyInfoBar');
+  if (energyCardEl) energyCardEl.style.display = showEnergyCard ? 'block' : 'none';
+  if (energyInfoBarEl) energyInfoBarEl.style.display = showEnergyCard ? 'block' : 'none';
 }
 
 /**
