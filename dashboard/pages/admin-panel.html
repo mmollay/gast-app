@@ -2135,7 +2135,10 @@
                 }
             } catch (e) { /* Energie nicht verfügbar — kein Stopp */ }
 
-            const total = kurtaxe + (energyCost || 0);
+            const ENERGY_MIN_CHARGE = 5; // Unter 5€ → inkludiert, nicht anzeigen
+            const showEnergy = energyCost !== null && energyCost >= ENERGY_MIN_CHARGE;
+            const isAbschluss = showEnergy;
+            const total = kurtaxe + (showEnergy ? energyCost : 0);
             const fmt = (n) => n.toFixed(2).replace('.', ',');
             const logoUrl = window.location.origin + '/logo-neu.png';
 
@@ -2143,7 +2146,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Abschlussprotokoll – ${guest.name}</title>
+<title>${isAbschluss ? 'Abschlussprotokoll' : 'Aufenthaltsbeleg'} – ${guest.name}</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2225,7 +2228,7 @@
     <img src="${logoUrl}" class="logo" alt="Gast auf Erden" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'">
     <div id="logo-fallback" style="display:none;font-size:18px;font-weight:bold;color:#2d4f38;letter-spacing:1px;">Gast auf Erden</div>
     <div class="header-text">
-      <h1 id="t-title">Abschlussprotokoll</h1>
+      <h1 id="t-title">${isAbschluss ? 'Abschlussprotokoll' : 'Aufenthaltsbeleg'}</h1>
       <div class="issued" id="t-issued">Ausgestellt am ${new Date().toLocaleDateString('de-DE')} · Hollenthon</div>
     </div>
   </div>
@@ -2251,13 +2254,13 @@
         <td><span id="t-kurtaxe">Kurtaxe</span><div class="sub">${days} × ${persons} × €${fmt(kurtaxeRate)}</div></td>
         <td>€${fmt(kurtaxe)}</td>
       </tr>
-      ${energyKwh !== null ? `
+      ${showEnergy ? `
       <tr>
         <td><span id="t-strom">Stromverbrauch</span><div class="sub">${fmt(energyKwh)} kWh × €${fmt(pricePerKwh)}/kWh</div></td>
         <td>€${fmt(energyCost)}</td>
       </tr>` : `
       <tr>
-        <td colspan="2" style="color:#aaa;font-size:11px;font-family:Arial,sans-serif;" id="t-strom-na">Stromverbrauch: keine Daten für diesen Zeitraum</td>
+        <td colspan="2" style="color:#aaa;font-size:11px;" id="t-strom-incl">${energyCost !== null ? 'Stromverbrauch inkludiert (unter €' + ENERGY_MIN_CHARGE.toFixed(2).replace('.', ',') + ')' : 'Stromverbrauch: keine Daten verfügbar'}</td>
       </tr>`}
       <tr class="total-row">
         <td id="t-total">Gesamt offen</td>
@@ -2291,24 +2294,24 @@
 <script>
 const T = {
   de: {
-    title: 'Abschlussprotokoll',
+    title: ${isAbschluss ? "'Abschlussprotokoll'" : "'Aufenthaltsbeleg'"},
     issued: 'Ausgestellt am ${new Date().toLocaleDateString('de-DE')} · Hollenthon',
     guestSection: 'Gast',
     nameLbl: 'Name', stayLbl: 'Aufenthalt', nightsLbl: 'Nächte', personsLbl: 'Personen',
     servicesSection: 'Leistungen',
-    kurtaxe: 'Kurtaxe', strom: 'Stromverbrauch', stromNa: 'Stromverbrauch: keine Daten für diesen Zeitraum',
+    kurtaxe: 'Kurtaxe', strom: 'Stromverbrauch',
     total: 'Gesamt offen',
     paymentSection: 'Zahlung', transfer: 'Überweisung', recipient: 'Empfänger',
     thanks: '"Danke, dass du bei uns warst — wir freuen uns, dich wieder bei Gast auf Erden begrüßen zu dürfen."',
     thanksSub: 'Gast auf Erden · Hollenthon, Niederösterreich',
   },
   en: {
-    title: 'Checkout Summary',
+    title: ${isAbschluss ? "'Checkout Summary'" : "'Stay Receipt'"},
     issued: 'Issued on ${new Date().toLocaleDateString('en-GB')} · Hollenthon',
     guestSection: 'Guest',
     nameLbl: 'Name', stayLbl: 'Stay', nightsLbl: 'Nights', personsLbl: 'Persons',
     servicesSection: 'Services',
-    kurtaxe: 'Tourist Tax', strom: 'Electricity', stromNa: 'Electricity: no data available for this period',
+    kurtaxe: 'Tourist Tax', strom: 'Electricity',
     total: 'Total due',
     paymentSection: 'Payment', transfer: 'Bank Transfer', recipient: 'Recipient',
     thanks: '"Thank you for staying with us — we hope to welcome you back at Gast auf Erden soon."',
@@ -2328,7 +2331,6 @@ function setLang(lang) {
   document.getElementById('t-services-section').textContent = t.servicesSection;
   document.getElementById('t-kurtaxe').textContent = t.kurtaxe;
   if (document.getElementById('t-strom')) document.getElementById('t-strom').textContent = t.strom;
-  if (document.getElementById('t-strom-na')) document.getElementById('t-strom-na').textContent = t.stromNa;
   document.getElementById('t-total').textContent = t.total;
   document.getElementById('t-payment-section').textContent = t.paymentSection;
   document.getElementById('t-transfer').textContent = t.transfer;
