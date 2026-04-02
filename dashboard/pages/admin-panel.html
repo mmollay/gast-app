@@ -2412,8 +2412,8 @@ function setLang(lang) {
   .greeting { font-size: 14px; color: #2d4f38; margin-bottom: 16px; line-height: 1.6; }
   .greeting strong { font-weight: 600; }
 
-  .section { margin-bottom: 16px; }
-  .section-title { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 8px; border-bottom: 1px solid #d4e8db; padding-bottom: 4px; }
+  .section { margin-bottom: 13px; }
+  .section-title { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 7px; border-bottom: 1px solid #d4e8db; padding-bottom: 3px; }
 
   .info-grid { display: grid; grid-template-columns: 160px 1fr; gap: 4px 0; }
   .info-label { color: #777; font-size: 12px; padding: 3px 0; display: flex; align-items: center; gap: 6px; }
@@ -2464,8 +2464,13 @@ function setLang(lang) {
   .toolbar .print-btn { background: #fff; color: #2d4f38; font-weight: 600; border: none; padding: 8px 20px; border-radius: 4px; display: flex; align-items: center; gap: 6px; cursor: pointer; }
   .toolbar .print-btn i { width: 14px; height: 14px; }
 
-  @media print { .toolbar { display: none; } .page { padding: 12px 16px; } body { padding-top: 0; } }
-  @page { margin: 8mm 8mm; }
+  @media print {
+    .toolbar { display: none; }
+    .page { padding: 10px 14px; }
+    body { padding-top: 0; }
+  }
+  @page { size: A4 portrait; margin: 7mm 9mm; }
+  @page back { size: A4 landscape; margin: 10mm 14mm; }
   body { padding-top: 48px; }
 
   /* Seitenumbrüche */
@@ -2479,7 +2484,20 @@ function setLang(lang) {
   .welcome-footer { page-break-inside: avoid; break-inside: avoid; }
   .newsletter-bar { page-break-inside: avoid; break-inside: avoid; }
   .footer { page-break-inside: avoid; break-inside: avoid; }
-  .section-page-break { page-break-before: always; break-before: page; }
+
+  /* Seite 2 — Landscape Rückseite "Wenden" */
+  .back-page {
+    page: back;
+    break-before: page;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 0 32px;
+    padding: 0;
+  }
+  .back-page .back-left { grid-column: 1; }
+  .back-page .back-right { grid-column: 2; }
+  .back-page .back-full { grid-column: 1 / -1; margin-top: 18px; }
 </style>
 </head>
 <body>
@@ -2581,49 +2599,59 @@ function setLang(lang) {
     </div>
   </div>
 
-  <div class="section section-page-break">
-    <div class="section-title" id="t-checkout-section">Abreise / Check-out</div>
-    <div class="info-grid">
-      <span class="info-label"><i data-lucide="key-square"></i><span id="t-co-key-lbl">Schlüssel</span></span>
-      <span class="info-value" id="t-co-key-val">Schlüsselbox am Eingang schließen</span>
-      <span class="info-label"><i data-lucide="wind"></i><span id="t-co-win-lbl">Fenster</span></span>
-      <span class="info-value" id="t-co-win-val">Bitte alle Fenster schließen</span>
-      <span class="info-label"><i data-lucide="bath"></i><span id="t-co-tow-lbl">Handtücher</span></span>
-      <span class="info-value" id="t-co-tow-val">Im Bad zusammenlegen</span>
+  <div class="back-page">
+
+    <div class="back-left">
+      <div class="section">
+        <div class="section-title" id="t-checkout-section">Abreise / Check-out</div>
+        <div class="info-grid">
+          <span class="info-label"><i data-lucide="key-square"></i><span id="t-co-key-lbl">Schlüssel</span></span>
+          <span class="info-value" id="t-co-key-val">Schlüsselbox am Eingang schließen</span>
+          <span class="info-label"><i data-lucide="wind"></i><span id="t-co-win-lbl">Fenster</span></span>
+          <span class="info-value" id="t-co-win-val">Bitte alle Fenster schließen</span>
+          <span class="info-label"><i data-lucide="bath"></i><span id="t-co-tow-lbl">Handtücher</span></span>
+          <span class="info-value" id="t-co-tow-val">Im Bad zusammenlegen</span>
+        </div>
+      </div>
+
+      <div class="section" style="margin-top: 20px;">
+        <div class="newsletter-bar">
+          <i data-lucide="mail"></i>
+          <div class="nl-text">
+            <strong id="t-nl-title">Bleib informiert!</strong>
+            <span id="t-nl-text"> Melde dich für unseren Newsletter an und erfahre als Erstes von Neuigkeiten rund um Gast auf Erden.</span>
+          </div>
+        </div>
+        <div style="margin-top: 8px; font-size: 11.5px; color: #999;" id="t-nl-label">E-Mail: <span style="border-bottom: 1px solid #bbb; display: inline-block; width: 220px;">&nbsp;</span></div>
+      </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title" id="t-contact-section">Kontakt / Contact</div>
-    <div class="info-grid">
-      <span class="info-label"><i data-lucide="user-circle"></i><span id="t-host-lbl">Gastgeber</span></span>
-      <span class="info-value">Martin Mollay</span>
-      <span class="info-label"><i data-lucide="phone"></i><span id="t-phone-lbl">Telefon</span></span>
-      <span class="info-value">+43 650 25 26 26 26</span>
-      <span class="info-label"><i data-lucide="mail"></i><span>E-Mail</span></span>
-      <span class="info-value">martin@ssi.at</span>
-      <span class="info-label"><i data-lucide="siren"></i><span id="t-emergency-lbl">Notfall</span></span>
-      <span class="info-value">112</span>
+    <div class="back-right">
+      <div class="section">
+        <div class="section-title" id="t-contact-section">Kontakt / Contact</div>
+        <div class="info-grid">
+          <span class="info-label"><i data-lucide="user-circle"></i><span id="t-host-lbl">Gastgeber</span></span>
+          <span class="info-value">Martin Mollay</span>
+          <span class="info-label"><i data-lucide="phone"></i><span id="t-phone-lbl">Telefon</span></span>
+          <span class="info-value">+43 650 25 26 26 26</span>
+          <span class="info-label"><i data-lucide="mail"></i><span>E-Mail</span></span>
+          <span class="info-value">martin@ssi.at</span>
+          <span class="info-label"><i data-lucide="siren"></i><span id="t-emergency-lbl">Notfall</span></span>
+          <span class="info-value">112</span>
+        </div>
+      </div>
+
+      <div class="welcome-footer" style="margin-top: 20px;">
+        <p id="t-welcome-msg">"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."</p>
+        <div class="sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
+      </div>
     </div>
-  </div>
 
-  <div class="welcome-footer">
-    <p id="t-welcome-msg">"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."</p>
-    <div class="sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
-  </div>
-
-  <div class="newsletter-bar">
-    <i data-lucide="mail"></i>
-    <div class="nl-text">
-      <strong id="t-nl-title">Bleib informiert!</strong>
-      <span id="t-nl-text"> Melde dich für unseren Newsletter an und erfahre als Erstes von Neuigkeiten rund um Gast auf Erden.</span>
+    <div class="back-full footer">
+      <a href="https://${appUrl}" target="_blank">${appUrl}</a>
+      <div class="copy">Gast auf Erden · ${new Date().getFullYear()}</div>
     </div>
-    <span class="nl-line" id="t-nl-label">E-Mail:<span class="nl-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
-  </div>
 
-  <div class="footer">
-    <a href="https://${appUrl}" target="_blank">${appUrl}</a>
-    <div class="copy">Gast auf Erden · ${new Date().getFullYear()}</div>
   </div>
 
 </div>
@@ -2743,7 +2771,7 @@ function setLang(lang) {
   document.getElementById('t-welcome-msg').textContent = t.welcomeMsg;
   document.getElementById('t-nl-title').textContent = t.nlTitle;
   document.getElementById('t-nl-text').textContent = t.nlText;
-  document.getElementById('t-nl-label').innerHTML = t.nlLabel + '<span class="nl-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+  document.getElementById('t-nl-label').innerHTML = t.nlLabel + '<span style="border-bottom:1px solid #bbb;display:inline-block;width:220px;margin-left:4px;">&nbsp;</span>';
   document.getElementById('btn-de').classList.toggle('active', lang === 'de');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.documentElement.lang = lang;
