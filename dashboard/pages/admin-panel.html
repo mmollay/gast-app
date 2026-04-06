@@ -1627,6 +1627,45 @@
                 <!-- Guests will be inserted here -->
             </div>
         </div>
+
+        <!-- API-Info Box -->
+        <div class="card" style="margin-top: 16px;">
+            <div class="card-header" style="cursor:pointer;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                <div class="card-icon"><i data-lucide="terminal"></i></div>
+                <div>
+                    <h3 class="card-title">Bot-Schnittstelle — Gast hinzufügen</h3>
+                    <p class="card-subtitle">POST /bot-guest — Format für schnelles Nachtragen per Bot</p>
+                </div>
+                <span style="margin-left:auto; opacity:0.5; font-size:0.85rem;">▼ einblenden</span>
+            </div>
+            <div style="display:none; padding: 16px 20px;">
+                <p style="margin: 0 0 12px; font-size: 0.85rem; opacity: 0.7;">Sag dem Bot: <em>"Trag folgenden Gast ein:"</em> und gib diese Informationen:</p>
+                <table style="width:100%; border-collapse:collapse; font-size:0.82rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <th style="text-align:left; padding: 6px 8px; opacity:0.6;">Feld</th>
+                            <th style="text-align:left; padding: 6px 8px; opacity:0.6;">Pflicht</th>
+                            <th style="text-align:left; padding: 6px 8px; opacity:0.6;">Beispiel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>name</code></td><td style="padding:6px 8px; color:#4ade80;">✔ ja</td><td style="padding:6px 8px; opacity:0.7;">Corina Brottrager</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>checkIn</code></td><td style="padding:6px 8px; color:#4ade80;">✔ ja</td><td style="padding:6px 8px; opacity:0.7;">2026-04-06</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>checkOut</code></td><td style="padding:6px 8px; color:#4ade80;">✔ ja</td><td style="padding:6px 8px; opacity:0.7;">2026-04-10</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>numberOfPersons</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">2</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>numberOfAdults</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">2</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>numberOfChildren</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">0</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>numberOfInfants</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">0</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>apartmentSlug</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">waldrand</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>contact</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">+43 664 …</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>hasDog</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">true / false</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>earnings</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">320.00</td></tr>
+                        <tr><td style="padding:6px 8px;"><code>airbnbConfirmationCode</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">HMXXXXXX</td></tr>
+                    </tbody>
+                </table>
+                <p style="margin: 12px 0 0; font-size: 0.8rem; opacity: 0.5;">Username + Passwort werden automatisch generiert. Duplikate werden erkannt (per Name+Datum oder Airbnb-Code).</p>
+            </div>
+        </div>
         </div><!-- End Tab: Guests -->
 
         <!-- Tab: Apartments -->
