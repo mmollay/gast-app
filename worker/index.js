@@ -70,6 +70,11 @@ export default {
         return await importAirbnbBooking(request, env, corsHeaders);
       }
 
+      // POST /bot-guest - Schnelles Gast-Anlegen per Bot (Admin-Auth, auto Username+PW)
+      if (path === "/bot-guest" && request.method === "POST") {
+        return await botAddGuest(request, env, corsHeaders);
+      }
+
       // PUT /guests/:id - Gast aktualisieren (Admin only)
       if (path.startsWith("/guests/") && request.method === "PUT") {
         const id = path.split("/")[2];
@@ -735,7 +740,7 @@ async function importAirbnbBooking(request, env, corsHeaders) {
     name, checkIn, checkOut, numberOfPersons,
     numberOfAdults, numberOfChildren, numberOfInfants,
     airbnbConfirmationCode, contact, hasDog,
-    bookingDate, earnings
+    bookingDate, earnings, apartmentId
   } = body;
 
   if (!name || !checkIn || !checkOut) {
@@ -785,7 +790,7 @@ async function importAirbnbBooking(request, env, corsHeaders) {
     numberOfAdults: numberOfAdults || totalPersons,
     numberOfChildren: numberOfChildren || 0,
     numberOfInfants: numberOfInfants || 0,
-    apartmentId: 1,
+    apartmentId: apartmentId || 1,
     title: "",
     gender: "neutral",
     contact: contact || "",
@@ -794,6 +799,100 @@ async function importAirbnbBooking(request, env, corsHeaders) {
     bookingDate: bookingDate || null,
     earnings: earnings || null,
     importedFromAirbnb: true,
+    createdAt: new Date().toISOString(),
+  };
+
+  guests.push(guest);
+  await env.SETTINGS.put("guests", JSON.stringify(guests));
+
+  return new Response(JSON.stringify({ success: true, duplicate: false, guest }), {
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+/**
+ * Schnelles Gast-Anlegen per Bot (POST /bot-guest)
+ * Admin-Auth, auto Username+Passwort, unterstützt apartmentSlug
+ */
+async function botAddGuest(request, env, corsHeaders) {
+  if (!(await isAdmin(request, env))) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const body = await request.json();
+  const {
+    name, checkIn, checkOut, numberOfPersons,
+    numberOfAdults, numberOfChildren, numberOfInfants,
+    apartmentId, apartmentSlug, contact, hasDog,
+    bookingDate, earnings, airbnbConfirmationCode
+  } = body;
+
+  if (!name || !checkIn || !checkOut) {
+    return new Response(
+      JSON.stringify({ error: "name, checkIn, checkOut erforderlich" }),
+      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  // apartmentSlug → apartmentId auflösen
+  let resolvedApartmentId = apartmentId || 1;
+  if (apartmentSlug && !apartmentId) {
+    const apt = await env.DB.prepare("SELECT id FROM apartments WHERE slug = ?")
+      .bind(apartmentSlug).first();
+    if (apt) resolvedApartmentId = apt.id;
+  }
+
+  const guests = await loadGuests(env);
+
+  // Duplikat prüfen
+  const duplicate = guests.find(g =>
+    (airbnbConfirmationCode && g.airbnbConfirmationCode === airbnbConfirmationCode) ||
+    (g.name === name && g.checkIn === checkIn && g.checkOut === checkOut)
+  );
+  if (duplicate) {
+    return new Response(JSON.stringify({ success: true, duplicate: true, guest: duplicate }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Username aus Name generieren
+  const nameParts = name.toLowerCase().replace(/[^a-z\s]/g, "").trim().split(/\s+/);
+  const baseUsername = nameParts.length >= 2
+    ? `${nameParts[0]}.${nameParts[nameParts.length - 1]}`
+    : nameParts[0];
+  let username = `${baseUsername}${Math.floor(100 + Math.random() * 900)}`;
+  while (guests.find(g => g.username === username)) {
+    username = `${baseUsername}${Math.floor(100 + Math.random() * 900)}`;
+  }
+
+  // Passwort generieren
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const password = Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+
+  const totalPersons = numberOfPersons || ((numberOfAdults || 1) + (numberOfChildren || 0) + (numberOfInfants || 0));
+  const guest = {
+    id: Date.now().toString(),
+    name,
+    username,
+    password,
+    checkIn,
+    checkOut,
+    numberOfPersons: totalPersons,
+    numberOfAdults: numberOfAdults || totalPersons,
+    numberOfChildren: numberOfChildren || 0,
+    numberOfInfants: numberOfInfants || 0,
+    apartmentId: resolvedApartmentId,
+    title: "",
+    gender: "neutral",
+    contact: contact || "",
+    hasDog: hasDog || false,
+    airbnbConfirmationCode: airbnbConfirmationCode || null,
+    bookingDate: bookingDate || null,
+    earnings: earnings || null,
+    importedFromAirbnb: false,
     createdAt: new Date().toISOString(),
   };
 

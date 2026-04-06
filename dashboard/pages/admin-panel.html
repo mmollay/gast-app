@@ -1614,13 +1614,56 @@
                 </button>
             </div>
 
-            <div class="search-box">
+            <div class="search-box" style="display:flex; gap:8px; align-items:center;">
                 <span class="search-icon"><i data-lucide="search"></i></span>
-                <input type="text" id="guestSearch" placeholder="Gäste durchsuchen..." oninput="filterGuests()">
+                <input type="text" id="guestSearch" placeholder="Gäste durchsuchen..." oninput="filterGuests()" style="flex:1;">
+                <button id="toggleExpiredBtn" class="btn btn-secondary" onclick="toggleExpiredGuests()" title="Vergangene anzeigen" style="white-space:nowrap; flex-shrink:0; opacity:0.5;">
+                    <i data-lucide="history" style="width:14px;height:14px;"></i>
+                    Vergangene
+                </button>
             </div>
 
             <div class="guest-list" id="guestList">
                 <!-- Guests will be inserted here -->
+            </div>
+        </div>
+
+        <!-- API-Info Box -->
+        <div class="card" style="margin-top: 16px;">
+            <div class="card-header" style="cursor:pointer;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                <div class="card-icon"><i data-lucide="terminal"></i></div>
+                <div>
+                    <h3 class="card-title">Bot-Schnittstelle — Gast hinzufügen</h3>
+                    <p class="card-subtitle">POST /bot-guest — Format für schnelles Nachtragen per Bot</p>
+                </div>
+                <span style="margin-left:auto; opacity:0.5; font-size:0.85rem;">▼ einblenden</span>
+            </div>
+            <div style="display:none; padding: 16px 20px;">
+                <p style="margin: 0 0 12px; font-size: 0.85rem; opacity: 0.7;">Sag dem Bot: <em>"Trag folgenden Gast ein:"</em> und gib diese Informationen:</p>
+                <table style="width:100%; border-collapse:collapse; font-size:0.82rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <th style="text-align:left; padding: 6px 8px; opacity:0.6;">Feld</th>
+                            <th style="text-align:left; padding: 6px 8px; opacity:0.6;">Pflicht</th>
+                            <th style="text-align:left; padding: 6px 8px; opacity:0.6;">Beispiel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>name</code></td><td style="padding:6px 8px; color:#4ade80;">✔ ja</td><td style="padding:6px 8px; opacity:0.7;">Corina Brottrager</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>checkIn</code></td><td style="padding:6px 8px; color:#4ade80;">✔ ja</td><td style="padding:6px 8px; opacity:0.7;">2026-04-06</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>checkOut</code></td><td style="padding:6px 8px; color:#4ade80;">✔ ja</td><td style="padding:6px 8px; opacity:0.7;">2026-04-10</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>numberOfPersons</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">2</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>numberOfAdults</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">2</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>numberOfChildren</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">0</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>numberOfInfants</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">0</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>apartmentSlug</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">waldrand</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>contact</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">+43 664 …</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>hasDog</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">true / false</td></tr>
+                        <tr style="border-bottom: 1px solid var(--border);"><td style="padding:6px 8px;"><code>earnings</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">320.00</td></tr>
+                        <tr><td style="padding:6px 8px;"><code>airbnbConfirmationCode</code></td><td style="padding:6px 8px; opacity:0.5;">optional</td><td style="padding:6px 8px; opacity:0.7;">HMXXXXXX</td></tr>
+                    </tbody>
+                </table>
+                <p style="margin: 12px 0 0; font-size: 0.8rem; opacity: 0.5;">Username + Passwort werden automatisch generiert. Duplikate werden erkannt (per Name+Datum oder Airbnb-Code).</p>
             </div>
         </div>
         </div><!-- End Tab: Guests -->
@@ -2003,6 +2046,7 @@
                 setTimeout(() => {
                     lucide.createIcons();
                     loadGuestEnergy(guests);
+                    filterGuests();
                 }, 0);
             } catch (error) {
                 console.error('Error loading guests:', error);
@@ -2024,8 +2068,10 @@
             const genderSuffix = guest.gender === 'weiblich' ? ' ♀' : guest.gender === 'männlich' ? ' ♂' : '';
             const dotClass = isActive ? 'active' : 'inactive';
 
+            const isExpired = now > checkOut;
+
             return `
-                <tr data-guest-name="${guest.name.toLowerCase()}" data-guest-username="${guest.username.toLowerCase()}">
+                <tr data-guest-name="${guest.name.toLowerCase()}" data-guest-username="${guest.username.toLowerCase()}" data-expired="${isExpired}">
                     <td class="guest-name-cell">
                         <span class="guest-avatar-sm">${guest.name.charAt(0).toUpperCase()}</span>
                         <span class="guest-status-dot ${dotClass}"></span>${guest.name}${genderSuffix}${guest.hasDog ? ' 🐕' : ''}
@@ -2135,10 +2181,7 @@
                 }
             } catch (e) { /* Energie nicht verfügbar — kein Stopp */ }
 
-            const ENERGY_MIN_CHARGE = 5; // Unter 5€ → inkludiert, nicht anzeigen
-            const showEnergy = energyCost !== null && energyCost >= ENERGY_MIN_CHARGE;
-            const isAbschluss = showEnergy;
-            const total = kurtaxe + (showEnergy ? energyCost : 0);
+            const total = kurtaxe + (energyCost || 0);
             const fmt = (n) => n.toFixed(2).replace('.', ',');
             const logoUrl = window.location.origin + '/logo-neu.png';
 
@@ -2146,7 +2189,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>${isAbschluss ? 'Abschlussprotokoll' : 'Aufenthaltsbeleg'} – ${guest.name}</title>
+<title>Abschlussprotokoll – ${guest.name}</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2228,7 +2271,7 @@
     <img src="${logoUrl}" class="logo" alt="Gast auf Erden" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'">
     <div id="logo-fallback" style="display:none;font-size:18px;font-weight:bold;color:#2d4f38;letter-spacing:1px;">Gast auf Erden</div>
     <div class="header-text">
-      <h1 id="t-title">${isAbschluss ? 'Abschlussprotokoll' : 'Aufenthaltsbeleg'}</h1>
+      <h1 id="t-title">Abschlussprotokoll</h1>
       <div class="issued" id="t-issued">Ausgestellt am ${new Date().toLocaleDateString('de-DE')} · Hollenthon</div>
     </div>
   </div>
@@ -2254,13 +2297,13 @@
         <td><span id="t-kurtaxe">Kurtaxe</span><div class="sub">${days} × ${persons} × €${fmt(kurtaxeRate)}</div></td>
         <td>€${fmt(kurtaxe)}</td>
       </tr>
-      ${showEnergy ? `
+      ${energyKwh !== null ? `
       <tr>
         <td><span id="t-strom">Stromverbrauch</span><div class="sub">${fmt(energyKwh)} kWh × €${fmt(pricePerKwh)}/kWh</div></td>
         <td>€${fmt(energyCost)}</td>
       </tr>` : `
       <tr>
-        <td colspan="2" style="color:#aaa;font-size:11px;font-style:italic;" id="t-strom-incl">Zusatzheizkosten werden gegebenenfalls im Nachhinein verrechnet.</td>
+        <td colspan="2" style="color:#aaa;font-size:11px;font-family:Arial,sans-serif;" id="t-strom-na">Stromverbrauch: keine Daten für diesen Zeitraum</td>
       </tr>`}
       <tr class="total-row">
         <td id="t-total">Gesamt offen</td>
@@ -2294,24 +2337,24 @@
 <script>
 const T = {
   de: {
-    title: ${isAbschluss ? "'Abschlussprotokoll'" : "'Aufenthaltsbeleg'"},
+    title: 'Abschlussprotokoll',
     issued: 'Ausgestellt am ${new Date().toLocaleDateString('de-DE')} · Hollenthon',
     guestSection: 'Gast',
     nameLbl: 'Name', stayLbl: 'Aufenthalt', nightsLbl: 'Nächte', personsLbl: 'Personen',
     servicesSection: 'Leistungen',
-    kurtaxe: 'Kurtaxe', strom: 'Stromverbrauch',
+    kurtaxe: 'Kurtaxe', strom: 'Stromverbrauch', stromNa: 'Stromverbrauch: keine Daten für diesen Zeitraum',
     total: 'Gesamt offen',
     paymentSection: 'Zahlung', transfer: 'Überweisung', recipient: 'Empfänger',
     thanks: '"Danke, dass du bei uns warst — wir freuen uns, dich wieder bei Gast auf Erden begrüßen zu dürfen."',
     thanksSub: 'Gast auf Erden · Hollenthon, Niederösterreich',
   },
   en: {
-    title: ${isAbschluss ? "'Checkout Summary'" : "'Stay Receipt'"},
+    title: 'Checkout Summary',
     issued: 'Issued on ${new Date().toLocaleDateString('en-GB')} · Hollenthon',
     guestSection: 'Guest',
     nameLbl: 'Name', stayLbl: 'Stay', nightsLbl: 'Nights', personsLbl: 'Persons',
     servicesSection: 'Services',
-    kurtaxe: 'Tourist Tax', strom: 'Electricity',
+    kurtaxe: 'Tourist Tax', strom: 'Electricity', stromNa: 'Electricity: no data available for this period',
     total: 'Total due',
     paymentSection: 'Payment', transfer: 'Bank Transfer', recipient: 'Recipient',
     thanks: '"Thank you for staying with us — we hope to welcome you back at Gast auf Erden soon."',
@@ -2331,6 +2374,7 @@ function setLang(lang) {
   document.getElementById('t-services-section').textContent = t.servicesSection;
   document.getElementById('t-kurtaxe').textContent = t.kurtaxe;
   if (document.getElementById('t-strom')) document.getElementById('t-strom').textContent = t.strom;
+  if (document.getElementById('t-strom-na')) document.getElementById('t-strom-na').textContent = t.stromNa;
   document.getElementById('t-total').textContent = t.total;
   document.getElementById('t-payment-section').textContent = t.paymentSection;
   document.getElementById('t-transfer').textContent = t.transfer;
@@ -2412,8 +2456,8 @@ function setLang(lang) {
   .greeting { font-size: 14px; color: #2d4f38; margin-bottom: 16px; line-height: 1.6; }
   .greeting strong { font-weight: 600; }
 
-  .section { margin-bottom: 13px; }
-  .section-title { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 7px; border-bottom: 1px solid #d4e8db; padding-bottom: 3px; }
+  .section { margin-bottom: 16px; }
+  .section-title { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.5px; color: #4a7c59; font-weight: 600; margin-bottom: 8px; border-bottom: 1px solid #d4e8db; padding-bottom: 4px; }
 
   .info-grid { display: grid; grid-template-columns: 160px 1fr; gap: 4px 0; }
   .info-label { color: #777; font-size: 12px; padding: 3px 0; display: flex; align-items: center; gap: 6px; }
@@ -2464,12 +2508,8 @@ function setLang(lang) {
   .toolbar .print-btn { background: #fff; color: #2d4f38; font-weight: 600; border: none; padding: 8px 20px; border-radius: 4px; display: flex; align-items: center; gap: 6px; cursor: pointer; }
   .toolbar .print-btn i { width: 14px; height: 14px; }
 
-  @media print {
-    .toolbar { display: none; }
-    .page { padding: 10px 14px; }
-    body { padding-top: 0; }
-  }
-  @page { size: A4 portrait; margin: 7mm 9mm; }
+  @media print { .toolbar { display: none; } .page { padding: 12px 16px; } body { padding-top: 0; } }
+  @page { margin: 8mm 8mm; }
   body { padding-top: 48px; }
 
   /* Seitenumbrüche */
@@ -2483,19 +2523,7 @@ function setLang(lang) {
   .welcome-footer { page-break-inside: avoid; break-inside: avoid; }
   .newsletter-bar { page-break-inside: avoid; break-inside: avoid; }
   .footer { page-break-inside: avoid; break-inside: avoid; }
-
-  /* Seite 2 — Portrait Rückseite "Wenden" */
-  .back-page {
-    break-before: page;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 0 28px;
-    padding: 0;
-  }
-  .back-page .back-left { grid-column: 1; }
-  .back-page .back-right { grid-column: 2; }
-  .back-page .back-full { grid-column: 1 / -1; margin-top: 16px; }
+  .section-page-break { page-break-before: always; break-before: page; }
 </style>
 </head>
 <body>
@@ -2579,78 +2607,67 @@ function setLang(lang) {
 
   ${petBlockDe}
 
-  <div class="back-page">
-
-    <div class="back-left">
-      <div class="section">
-        <div class="section-title" id="t-rules-section">Gut zu wissen</div>
-        <div class="info-grid">
-          <span class="info-label"><i data-lucide="key-round"></i><span id="t-key-lbl">Schlüssel</span></span>
-          <span class="info-value" id="t-key-val">Schlüsselbox am Eingang</span>
-          <span class="info-label"><i data-lucide="car"></i><span id="t-park-lbl">Parken</span></span>
-          <span class="info-value" id="t-park-val">Kostenlos am Grundstück</span>
-          <span class="info-label"><i data-lucide="cigarette-off"></i><span id="t-smoke-lbl">Rauchen</span></span>
-          <span class="info-value" id="t-smoke-val">Im Haus verboten, Garten ok</span>
-          <span class="info-label"><i data-lucide="receipt"></i><span id="t-tax-lbl">Kurtaxe</span></span>
-          <span class="info-value" id="t-tax-val">€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})</span>
-          <span class="info-label"><i data-lucide="washer"></i><span id="t-wash-lbl">Waschmaschine</span></span>
-          <span class="info-value" id="t-wash-val">Garage, braune Türe</span>
-          <span class="info-label"><i data-lucide="trash-2"></i><span id="t-trash-lbl">Müll</span></span>
-          <span class="info-value" id="t-trash-val">Straße: Restmüll · Garage: Plastik, Papier, Glas</span>
-        </div>
-      </div>
-
-      <div class="section" style="margin-top: 16px;">
-        <div class="section-title" id="t-checkout-section">Abreise / Check-out</div>
-        <div class="info-grid">
-          <span class="info-label"><i data-lucide="key-square"></i><span id="t-co-key-lbl">Schlüssel</span></span>
-          <span class="info-value" id="t-co-key-val">Schlüsselbox am Eingang schließen</span>
-          <span class="info-label"><i data-lucide="wind"></i><span id="t-co-win-lbl">Fenster</span></span>
-          <span class="info-value" id="t-co-win-val">Bitte alle Fenster schließen</span>
-          <span class="info-label"><i data-lucide="bath"></i><span id="t-co-tow-lbl">Handtücher</span></span>
-          <span class="info-value" id="t-co-tow-val">Im Bad zusammenlegen</span>
-        </div>
-      </div>
-
+  <div class="section">
+    <div class="section-title" id="t-rules-section">Gut zu wissen</div>
+    <div class="info-grid">
+      <span class="info-label"><i data-lucide="key-round"></i><span id="t-key-lbl">Schlüssel</span></span>
+      <span class="info-value" id="t-key-val">Schlüsselbox am Eingang</span>
+      <span class="info-label"><i data-lucide="car"></i><span id="t-park-lbl">Parken</span></span>
+      <span class="info-value" id="t-park-val">Kostenlos am Grundstück</span>
+      <span class="info-label"><i data-lucide="cigarette-off"></i><span id="t-smoke-lbl">Rauchen</span></span>
+      <span class="info-value" id="t-smoke-val">Im Haus verboten, Garten ok</span>
+      <span class="info-label"><i data-lucide="receipt"></i><span id="t-tax-lbl">Kurtaxe</span></span>
+      <span class="info-value" id="t-tax-val">€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})</span>
+      <span class="info-label"><i data-lucide="washer"></i><span id="t-wash-lbl">Waschmaschine</span></span>
+      <span class="info-value" id="t-wash-val">Garage, braune Türe</span>
+      <span class="info-label"><i data-lucide="trash-2"></i><span id="t-trash-lbl">Müll</span></span>
+      <span class="info-value" id="t-trash-val">Straße: Restmüll · Garage: Plastik, Papier, Glas</span>
     </div>
+  </div>
 
-    <div class="back-right">
-      <div class="section">
-        <div class="section-title" id="t-contact-section">Kontakt / Contact</div>
-        <div class="info-grid">
-          <span class="info-label"><i data-lucide="user-circle"></i><span id="t-host-lbl">Gastgeber</span></span>
-          <span class="info-value">Martin Mollay</span>
-          <span class="info-label"><i data-lucide="phone"></i><span id="t-phone-lbl">Telefon</span></span>
-          <span class="info-value">+43 650 25 26 26 26</span>
-          <span class="info-label"><i data-lucide="mail"></i><span>E-Mail</span></span>
-          <span class="info-value">martin@ssi.at</span>
-          <span class="info-label"><i data-lucide="siren"></i><span id="t-emergency-lbl">Notfall</span></span>
-          <span class="info-value">112</span>
-        </div>
-      </div>
-
-      <div class="welcome-footer" style="margin-top: 16px;">
-        <p id="t-welcome-msg">"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."</p>
-        <div class="sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
-      </div>
+  <div class="section section-page-break">
+    <div class="section-title" id="t-checkout-section">Abreise / Check-out</div>
+    <div class="info-grid">
+      <span class="info-label"><i data-lucide="key-square"></i><span id="t-co-key-lbl">Schlüssel</span></span>
+      <span class="info-value" id="t-co-key-val">Schlüsselbox am Eingang schließen</span>
+      <span class="info-label"><i data-lucide="wind"></i><span id="t-co-win-lbl">Fenster</span></span>
+      <span class="info-value" id="t-co-win-val">Bitte alle Fenster schließen</span>
+      <span class="info-label"><i data-lucide="bath"></i><span id="t-co-tow-lbl">Handtücher</span></span>
+      <span class="info-value" id="t-co-tow-val">Im Bad zusammenlegen</span>
     </div>
+  </div>
 
-    <div class="back-full">
-      <div class="newsletter-bar">
-        <i data-lucide="mail"></i>
-        <div class="nl-text">
-          <strong id="t-nl-title">Bleib informiert!</strong>
-          <span id="t-nl-text"> Melde dich für unseren Newsletter an und erfahre als Erstes von Neuigkeiten rund um Gast auf Erden.</span>
-        </div>
-        <span style="font-size:11.5px;color:#999;white-space:nowrap;" id="t-nl-label">E-Mail: <span style="border-bottom:1px solid #bbb;display:inline-block;width:180px;">&nbsp;</span></span>
-      </div>
+  <div class="section">
+    <div class="section-title" id="t-contact-section">Kontakt / Contact</div>
+    <div class="info-grid">
+      <span class="info-label"><i data-lucide="user-circle"></i><span id="t-host-lbl">Gastgeber</span></span>
+      <span class="info-value">Martin Mollay</span>
+      <span class="info-label"><i data-lucide="phone"></i><span id="t-phone-lbl">Telefon</span></span>
+      <span class="info-value">+43 650 25 26 26 26</span>
+      <span class="info-label"><i data-lucide="mail"></i><span>E-Mail</span></span>
+      <span class="info-value">martin@ssi.at</span>
+      <span class="info-label"><i data-lucide="siren"></i><span id="t-emergency-lbl">Notfall</span></span>
+      <span class="info-value">112</span>
     </div>
+  </div>
 
-    <div class="back-full footer" style="margin-top: 8px;">
-      <a href="https://${appUrl}" target="_blank">${appUrl}</a>
-      <div class="copy">Gast auf Erden · ${new Date().getFullYear()}</div>
+  <div class="welcome-footer">
+    <p id="t-welcome-msg">"Fühl dich wie zu Hause — dieser Ort gehört dir für die nächsten ${days} Tage. Genieße die Ruhe, den Wald und die Magie."</p>
+    <div class="sub">Gast auf Erden · Hollenthon, Niederösterreich</div>
+  </div>
+
+  <div class="newsletter-bar">
+    <i data-lucide="mail"></i>
+    <div class="nl-text">
+      <strong id="t-nl-title">Bleib informiert!</strong>
+      <span id="t-nl-text"> Melde dich für unseren Newsletter an und erfahre als Erstes von Neuigkeiten rund um Gast auf Erden.</span>
     </div>
+    <span class="nl-line" id="t-nl-label">E-Mail:<span class="nl-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+  </div>
 
+  <div class="footer">
+    <a href="https://${appUrl}" target="_blank">${appUrl}</a>
+    <div class="copy">Gast auf Erden · ${new Date().getFullYear()}</div>
   </div>
 
 </div>
@@ -2770,7 +2787,7 @@ function setLang(lang) {
   document.getElementById('t-welcome-msg').textContent = t.welcomeMsg;
   document.getElementById('t-nl-title').textContent = t.nlTitle;
   document.getElementById('t-nl-text').textContent = t.nlText;
-  document.getElementById('t-nl-label').innerHTML = t.nlLabel + '<span style="border-bottom:1px solid #bbb;display:inline-block;width:180px;margin-left:4px;">&nbsp;</span>';
+  document.getElementById('t-nl-label').innerHTML = t.nlLabel + '<span class="nl-input">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
   document.getElementById('btn-de').classList.toggle('active', lang === 'de');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.documentElement.lang = lang;
@@ -3163,6 +3180,18 @@ function setLang(lang) {
         }
 
         // Filter Guests
+        let showExpiredGuests = false;
+
+        function toggleExpiredGuests() {
+            showExpiredGuests = !showExpiredGuests;
+            const btn = document.getElementById('toggleExpiredBtn');
+            if (btn) {
+                btn.style.opacity = showExpiredGuests ? '1' : '0.5';
+                btn.title = showExpiredGuests ? 'Vergangene ausblenden' : 'Vergangene anzeigen';
+            }
+            filterGuests();
+        }
+
         function filterGuests() {
             const searchTerm = document.getElementById('guestSearch').value.toLowerCase();
             const guestRows = document.querySelectorAll('.guest-table tbody tr');
@@ -3170,7 +3199,10 @@ function setLang(lang) {
             guestRows.forEach(row => {
                 const name = row.dataset.guestName || '';
                 const username = row.dataset.guestUsername || '';
-                row.style.display = (name.includes(searchTerm) || username.includes(searchTerm)) ? '' : 'none';
+                const expired = row.dataset.expired === 'true';
+                const matchesSearch = name.includes(searchTerm) || username.includes(searchTerm);
+                const showRow = matchesSearch && (showExpiredGuests || !expired);
+                row.style.display = showRow ? '' : 'none';
             });
         }
 

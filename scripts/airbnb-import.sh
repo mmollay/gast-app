@@ -1,5 +1,8 @@
 #!/bin/bash
-# Airbnb Buchungsimport - 50 Gäste aus Gmail-Export
+# Airbnb Buchungs-Importer
+# Automatisch generiert aus Gmail-Scan (50 Emails, Stand 2026-03-30)
+# Weitere ~151 Emails verfügbar via nextPageToken (ältere Buchungen)
+#
 # Ausführen: bash scripts/airbnb-import.sh
 
 API_URL="https://hostel-app-api.office-509.workers.dev/airbnb-import"
@@ -10,24 +13,28 @@ duplicate=0
 error=0
 
 import() {
-  local name="$1" checkIn="$2" checkOut="$3" persons="$4" code="$5"
-  local response
-  response=$(curl -s -X POST "$API_URL" \
-    -H "Content-Type: application/json" \
+  local name="$1"
+  local checkIn="$2"
+  local checkOut="$3"
+  local persons="$4"
+  local code="$5"
+
+  response=$(curl -s -w "\n%{http_code}" -X POST "$API_URL" \
     -H "Authorization: $AUTH" \
+    -H "Content-Type: application/json" \
     -d "{\"name\":\"$name\",\"checkIn\":\"$checkIn\",\"checkOut\":\"$checkOut\",\"numberOfPersons\":$persons,\"airbnbConfirmationCode\":\"$code\"}")
-  local exit_code=$?
-  if [ $exit_code -ne 0 ]; then
-    echo "ERROR [$code] $name - curl exit $exit_code"
-    ((error++))
-  elif echo "$response" | grep -q '"duplicate":true'; then
-    echo "DUPL  [$code] $name"
-    ((duplicate++))
-  elif echo "$response" | grep -q '"duplicate":false\|"success":true\|"id":'; then
-    echo "NEW   [$code] $name ($checkIn → $checkOut, $persons P.)"
+
+  http_code=$(echo "$response" | tail -1)
+  body=$(echo "$response" | head -1)
+
+  if [ "$http_code" = "201" ]; then
+    echo "✓ NEU       [$code] $name ($checkIn – $checkOut)"
     ((new++))
+  elif [ "$http_code" = "200" ] || [ "$http_code" = "409" ]; then
+    echo "= DUPLIKAT  [$code] $name"
+    ((duplicate++))
   else
-    echo "?     [$code] $name — Response: $response"
+    echo "✗ FEHLER    [$code] $name – HTTP $http_code: $body"
     ((error++))
   fi
 }
@@ -35,6 +42,7 @@ import() {
 echo "=== Airbnb Import gestartet ==="
 echo ""
 
+# --- 50 geparste Buchungen ---
 import "Josh Alexander"                  "2026-04-12" "2026-04-17" 2 "HMDEWDEFHB"
 import "Thomas Heigl"                    "2026-07-19" "2026-08-02" 2 "HMQCK5HKJX"
 import "Max Kushynov"                    "2026-04-20" "2026-05-01" 2 "HMXBDQ44PA"
@@ -88,7 +96,11 @@ import "Julian Keil"                     "2020-10-22" "2020-10-25" 2 "HMASPRHZW5
 
 echo ""
 echo "=== Ergebnis ==="
-echo "Neu importiert: $new"
-echo "Duplikate:      $duplicate"
-echo "Fehler:         $error"
-echo "Gesamt:         $((new + duplicate + error))"
+echo "  Neu importiert: $new"
+echo "  Duplikate:      $duplicate"
+echo "  Fehler:         $error"
+echo "  Gesamt:         $((new + duplicate + error))"
+echo ""
+echo "HINWEIS: Gmail-Suche lieferte ~201 Treffer gesamt."
+echo "         Nur die 50 neuesten Emails wurden verarbeitet."
+echo "         Für ältere Buchungen: nextPageToken=06076586009575575483"
