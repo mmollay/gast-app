@@ -1614,9 +1614,13 @@
                 </button>
             </div>
 
-            <div class="search-box">
+            <div class="search-box" style="display:flex; gap:8px; align-items:center;">
                 <span class="search-icon"><i data-lucide="search"></i></span>
-                <input type="text" id="guestSearch" placeholder="Gäste durchsuchen..." oninput="filterGuests()">
+                <input type="text" id="guestSearch" placeholder="Gäste durchsuchen..." oninput="filterGuests()" style="flex:1;">
+                <button id="toggleExpiredBtn" class="btn btn-secondary" onclick="toggleExpiredGuests()" title="Vergangene anzeigen" style="white-space:nowrap; flex-shrink:0; opacity:0.5;">
+                    <i data-lucide="history" style="width:14px;height:14px;"></i>
+                    Vergangene
+                </button>
             </div>
 
             <div class="guest-list" id="guestList">
@@ -2003,6 +2007,7 @@
                 setTimeout(() => {
                     lucide.createIcons();
                     loadGuestEnergy(guests);
+                    filterGuests();
                 }, 0);
             } catch (error) {
                 console.error('Error loading guests:', error);
@@ -2024,8 +2029,10 @@
             const genderSuffix = guest.gender === 'weiblich' ? ' ♀' : guest.gender === 'männlich' ? ' ♂' : '';
             const dotClass = isActive ? 'active' : 'inactive';
 
+            const isExpired = now > checkOut;
+
             return `
-                <tr data-guest-name="${guest.name.toLowerCase()}" data-guest-username="${guest.username.toLowerCase()}">
+                <tr data-guest-name="${guest.name.toLowerCase()}" data-guest-username="${guest.username.toLowerCase()}" data-expired="${isExpired}">
                     <td class="guest-name-cell">
                         <span class="guest-avatar-sm">${guest.name.charAt(0).toUpperCase()}</span>
                         <span class="guest-status-dot ${dotClass}"></span>${guest.name}${genderSuffix}${guest.hasDog ? ' 🐕' : ''}
@@ -3134,6 +3141,18 @@ function setLang(lang) {
         }
 
         // Filter Guests
+        let showExpiredGuests = false;
+
+        function toggleExpiredGuests() {
+            showExpiredGuests = !showExpiredGuests;
+            const btn = document.getElementById('toggleExpiredBtn');
+            if (btn) {
+                btn.style.opacity = showExpiredGuests ? '1' : '0.5';
+                btn.title = showExpiredGuests ? 'Vergangene ausblenden' : 'Vergangene anzeigen';
+            }
+            filterGuests();
+        }
+
         function filterGuests() {
             const searchTerm = document.getElementById('guestSearch').value.toLowerCase();
             const guestRows = document.querySelectorAll('.guest-table tbody tr');
@@ -3141,7 +3160,10 @@ function setLang(lang) {
             guestRows.forEach(row => {
                 const name = row.dataset.guestName || '';
                 const username = row.dataset.guestUsername || '';
-                row.style.display = (name.includes(searchTerm) || username.includes(searchTerm)) ? '' : 'none';
+                const expired = row.dataset.expired === 'true';
+                const matchesSearch = name.includes(searchTerm) || username.includes(searchTerm);
+                const showRow = matchesSearch && (showExpiredGuests || !expired);
+                row.style.display = showRow ? '' : 'none';
             });
         }
 
