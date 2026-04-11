@@ -44,6 +44,7 @@ import_guest() {
 echo "=== Airbnb Guest Import ==="
 echo ""
 
+import_guest "Corina Brottrager"                 "2026-04-06" "2026-04-10" 1 "HMPPPR888D"
 import_guest "Josh Alexander"                    "2026-04-12" "2026-04-17" 2 "HMDEWDEFHB"
 import_guest "Thomas Heigl"                      "2026-07-19" "2026-08-02" 2 "HMQCK5HKJX"
 import_guest "Max Kushynov"                      "2026-04-20" "2026-05-01" 2 "HMXBDQ44PA"
@@ -93,7 +94,6 @@ import_guest "Chris Sacher"                      "2021-01-04" "2021-01-07" 2 "HM
 import_guest "Theresa Steininger"                "2020-10-17" "2020-10-20" 2 "HM82MDB9YJ"
 import_guest "Chris Sacher"                      "2020-10-29" "2020-11-05" 1 "HMZDAHS9ZD"
 import_guest "Niki"                              "2020-09-29" "2020-10-02" 1 "HMDZCQPZYM"
-import_guest "Julian Keil"                       "2020-10-22" "2020-10-25" 2 "HMASPRHZW5"
 
 echo ""
 echo "=== Summary ==="
