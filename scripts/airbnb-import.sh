@@ -42,7 +42,8 @@ import() {
 echo "=== Airbnb Import gestartet ==="
 echo ""
 
-# --- 50 geparste Buchungen ---
+# --- 51 geparste Buchungen ---
+import "Corina Brottrager"               "2026-04-06" "2026-04-10" 1 "HMPPPR888D"
 import "Josh Alexander"                  "2026-04-12" "2026-04-17" 2 "HMDEWDEFHB"
 import "Thomas Heigl"                    "2026-07-19" "2026-08-02" 2 "HMQCK5HKJX"
 import "Max Kushynov"                    "2026-04-20" "2026-05-01" 2 "HMXBDQ44PA"
@@ -100,7 +101,3 @@ echo "  Neu importiert: $new"
 echo "  Duplikate:      $duplicate"
 echo "  Fehler:         $error"
 echo "  Gesamt:         $((new + duplicate + error))"
-echo ""
-echo "HINWEIS: Gmail-Suche lieferte ~201 Treffer gesamt."
-echo "         Nur die 50 neuesten Emails wurden verarbeitet."
-echo "         Für ältere Buchungen: nextPageToken=06076586009575575483"
