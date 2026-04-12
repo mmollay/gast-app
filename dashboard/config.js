@@ -1,5 +1,5 @@
 const CONFIG = {
-  // App Version
+  // App Version (build: 20260412)
   VERSION: "v0.12.65",
 
   // API Proxy URL (Cloudflare Worker - hält Auth-Key sicher)
