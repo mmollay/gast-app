@@ -39,15 +39,16 @@ Guest Portal für Hostel/Airbnb mit integriertem Energiemonitoring.
 3. Publish: `./deploy-production.sh` (merged develop → main, tagged, deployed)
 4. Rollback: `git checkout vX.Y.Z` jederzeit möglich
 
-### Deploy
+### Deploy (Standard: `cf-deploy`)
+
 ```bash
-./deploy-develop.sh      # → develop.gastauferden.at
-./deploy-production.sh   # → gastauferden.at (mit Auto-Tag)
-./deploy-pages.sh        # → Cloudflare Pages (aktueller Branch, ohne Merge/Tag)
+cf-deploy               # aktueller Branch → deploy, dann merge nach main → deploy, purge, prune, verify
+cf-deploy --dev-only    # nur aktueller Branch, kein main-Merge
 ```
 
-**WICHTIG:** Cloudflare Pages zieht NICHT automatisch vom GitHub-Push!
-Nach jedem `git push origin main` MUSS `bash deploy-pages.sh` ausgeführt werden.
+`cf-deploy` ist das unified Deploy-Skript in `~/bin/` und liest die Projekt-Config aus `.cf-deploy.conf` (im Projekt-Root, in `.gitignore`). Nach jedem Lauf bleiben nur die **2 aktiv-aliased Deployments** auf Cloudflare Pages — History wird automatisch sauber gehalten. Rollback erfolgt über Git (`git checkout <tag> && cf-deploy`), nicht über CF-History.
+
+Legacy-Skripte (`deploy-develop.sh`, `deploy-production.sh`) funktionieren noch, haben aber kaputtes Auto-Tagging (letzter git-Tag `v0.12.21` ist out-of-sync mit `config.js`) — nicht mehr benutzen.
 
 ## Environment Variables (.env)
 
