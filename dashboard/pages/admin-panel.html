@@ -2248,10 +2248,16 @@
 
   @media print {
     .toolbar { display: none; }
-    .page { padding: 24px; }
+    .page { padding: 8px 16px; }
     body { padding-top: 0; }
+    .section { margin-bottom: 14px; }
+    .header { padding-bottom: 14px; margin-bottom: 18px; }
+    .thankyou { margin: 16px 0 10px; padding: 12px 18px; }
+    .footer { margin-top: 14px; padding-top: 10px; }
+    table.leistungen td { padding: 7px 6px; }
+    .bank-box { padding: 12px 14px; }
   }
-  @page { margin: 15mm 10mm; }
+  @page { margin: 8mm 8mm; }
   body { padding-top: 48px; }
 </style>
 </head>
@@ -2293,10 +2299,6 @@
   <div class="section">
     <div class="section-title" id="t-services-section">Leistungen</div>
     <table class="leistungen">
-      <tr>
-        <td><span id="t-kurtaxe">Kurtaxe</span><div class="sub">${days} × ${persons} × €${fmt(kurtaxeRate)}</div></td>
-        <td>€${fmt(kurtaxe)}</td>
-      </tr>
       <tr class="total-row">
         <td id="t-total">Gesamt offen</td>
         <td>€${fmt(total)}</td>
@@ -2364,7 +2366,6 @@ function setLang(lang) {
   document.getElementById('t-nights-label').textContent = t.nightsLbl;
   document.getElementById('t-persons-label').textContent = t.personsLbl;
   document.getElementById('t-services-section').textContent = t.servicesSection;
-  document.getElementById('t-kurtaxe').textContent = t.kurtaxe;
   if (document.getElementById('t-strom')) document.getElementById('t-strom').textContent = t.strom;
   if (document.getElementById('t-strom-na')) document.getElementById('t-strom-na').textContent = t.stromNa;
   document.getElementById('t-total').textContent = t.total;
@@ -2599,11 +2600,11 @@ function setLang(lang) {
 
   ${petBlockDe}
 
-  <div class="section">
+  <div class="section" style="page-break-before: always; margin-top: 40px;">
     <div class="section-title" id="t-rules-section">Gut zu wissen</div>
     <div class="info-grid">
       <span class="info-label"><i data-lucide="key-round"></i><span id="t-key-lbl">Schlüssel</span></span>
-      <span class="info-value" id="t-key-val">Schlüsselbox am Eingang</span>
+      <span class="info-value" id="t-key-val">Schlüssel steckt an der Innentür</span>
       <span class="info-label"><i data-lucide="car"></i><span id="t-park-lbl">Parken</span></span>
       <span class="info-value" id="t-park-val">Kostenlos am Grundstück</span>
       <span class="info-label"><i data-lucide="cigarette-off"></i><span id="t-smoke-lbl">Rauchen</span></span>
@@ -2621,7 +2622,7 @@ function setLang(lang) {
     <div class="section-title" id="t-checkout-section">Abreise / Check-out</div>
     <div class="info-grid">
       <span class="info-label"><i data-lucide="key-square"></i><span id="t-co-key-lbl">Schlüssel</span></span>
-      <span class="info-value" id="t-co-key-val">Schlüsselbox am Eingang schließen</span>
+      <span class="info-value" id="t-co-key-val">Schlüssel an der Innentür stecken lassen</span>
       <span class="info-label"><i data-lucide="wind"></i><span id="t-co-win-lbl">Fenster</span></span>
       <span class="info-value" id="t-co-win-val">Bitte alle Fenster schließen</span>
       <span class="info-label"><i data-lucide="bath"></i><span id="t-co-tow-lbl">Handtücher</span></span>
@@ -2682,14 +2683,14 @@ const T = {
     appHint: 'Öffne <strong>${appUrl}</strong> im Browser und melde dich mit den obigen Daten an. Du findest dort Wetter, WLAN, Energieverbrauch, lokale Ausflugsziele und mehr.',
     petTitle: 'Haustiere willkommen!', petText: 'Bitte halte deinen Vierbeiner von den Möbeln fern und entsorge Hinterlassenschaften im Garten. Danke!',
     rulesSection: 'Gut zu wissen',
-    keyLbl: 'Schlüssel', keyVal: 'Schlüsselbox am Eingang',
+    keyLbl: 'Schlüssel', keyVal: 'Schlüssel steckt an der Innentür',
     parkLbl: 'Parken', parkVal: 'Kostenlos am Grundstück',
     smokeLbl: 'Rauchen', smokeVal: 'Im Haus verboten, Garten ok',
     taxLbl: 'Kurtaxe', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
     washLbl: 'Waschmaschine', washVal: 'Garage, braune Türe',
     trashLbl: 'Müll', trashVal: 'Straße: Restmüll · Garage: Plastik, Papier, Glas',
     checkoutSection: 'Abreise',
-    coKeyLbl: 'Schlüssel', coKeyVal: 'Schlüsselbox am Eingang schließen',
+    coKeyLbl: 'Schlüssel', coKeyVal: 'Schlüssel an der Innentür stecken lassen',
     coWinLbl: 'Fenster', coWinVal: 'Bitte alle Fenster schließen',
     coTowLbl: 'Handtücher', coTowVal: 'Im Bad zusammenlegen',
     contactSection: 'Kontakt',
@@ -2711,14 +2712,14 @@ const T = {
     appHint: 'Open <strong>${appUrl}</strong> in your browser and log in with the credentials above. You will find weather, WiFi, energy usage, local attractions and more.',
     petTitle: 'Pets welcome!', petText: 'Please keep your furry friend off the furniture and clean up after them in the garden. Thank you!',
     rulesSection: 'Good to know',
-    keyLbl: 'Key', keyVal: 'Key box at the entrance',
+    keyLbl: 'Key', keyVal: 'Key is in the inner door',
     parkLbl: 'Parking', parkVal: 'Free on premises',
     smokeLbl: 'Smoking', smokeVal: 'Prohibited indoors, garden ok',
     taxLbl: 'Tourist Tax', taxVal: '€${fmt(kurtaxe)} (${days}×${persons}×€${fmt(kurtaxeRate)})',
     washLbl: 'Washing Machine', washVal: 'Garage, brown door',
     trashLbl: 'Waste', trashVal: 'Street: general waste · Garage: plastic, paper, glass',
     checkoutSection: 'Check-out',
-    coKeyLbl: 'Key', coKeyVal: 'Return to key box at entrance',
+    coKeyLbl: 'Key', coKeyVal: 'Leave key in the inner door',
     coWinLbl: 'Windows', coWinVal: 'Please close all windows',
     coTowLbl: 'Towels', coTowVal: 'Leave folded in bathroom',
     contactSection: 'Contact',

@@ -1,9 +1,41 @@
 # Changelog
 
+## v0.12.73 — 2026-04-12
+
+- version bump
+
+## v0.12.72 — 2026-04-12
+
+- Seitenumbruch vor "Gut zu wissen" Section im Willkommens-Handout
+- Abstand (margin-top/padding-top) über "Gut zu wissen" erhöht für saubere 2-seitige Ausgabe
+
+## v0.12.72 — 2026-04-12
+- fix: Seitenumbruch vor 'Gut zu wissen' Section — saubere 2-seitige Ausgabe
+- fix: Abstand oben in 'Gut zu wissen' Section erhöht (margin-top: 40px)
+
+## v0.12.71 — 2026-04-12
+- feat: version bump
+
+## v0.12.70 — 2026-04-12
+- fix: Kurtaxe-Zeile aus Leistungen-Tabelle im Abschlussprotokoll entfernt (steht bereits in Gut zu wissen)
+
+## v0.12.68 — 2026-04-12
+
+- feat: "Aufenthaltsbeleg" als neue Bezeichnung für das Abschluss-Dokument
+
+## v0.12.67 — 2026-04-12
+
+- fix: force CF Pages file hash change (cache-bust c) to ensure fresh deploy
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.12.66] - 2026-04-12
+
+### Fixed
+- **Deploy**: Cloudflare Pages Cache-Bust erzwungen — Build-Tag in config.js aktualisiert um CDN-Caching zu umgehen
 
 ## [0.12.65] - 2026-04-12
 
