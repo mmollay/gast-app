@@ -2299,10 +2299,6 @@
   <div class="section">
     <div class="section-title" id="t-services-section">Leistungen</div>
     <table class="leistungen">
-      <tr>
-        <td><span id="t-kurtaxe">Kurtaxe</span><div class="sub">${days} × ${persons} × €${fmt(kurtaxeRate)}</div></td>
-        <td>€${fmt(kurtaxe)}</td>
-      </tr>
       <tr class="total-row">
         <td id="t-total">Gesamt offen</td>
         <td>€${fmt(total)}</td>
@@ -2370,7 +2366,6 @@ function setLang(lang) {
   document.getElementById('t-nights-label').textContent = t.nightsLbl;
   document.getElementById('t-persons-label').textContent = t.personsLbl;
   document.getElementById('t-services-section').textContent = t.servicesSection;
-  document.getElementById('t-kurtaxe').textContent = t.kurtaxe;
   if (document.getElementById('t-strom')) document.getElementById('t-strom').textContent = t.strom;
   if (document.getElementById('t-strom-na')) document.getElementById('t-strom-na').textContent = t.stromNa;
   document.getElementById('t-total').textContent = t.total;
