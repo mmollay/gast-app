@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.68 — 2026-04-12
+
+- feat: "Aufenthaltsbeleg" als neue Bezeichnung für das Abschluss-Dokument
+
 ## v0.12.67 — 2026-04-12
 
 - fix: force CF Pages file hash change (cache-bust c) to ensure fresh deploy
