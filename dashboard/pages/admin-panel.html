@@ -2297,14 +2297,6 @@
         <td><span id="t-kurtaxe">Kurtaxe</span><div class="sub">${days} × ${persons} × €${fmt(kurtaxeRate)}</div></td>
         <td>€${fmt(kurtaxe)}</td>
       </tr>
-      ${energyKwh !== null ? `
-      <tr>
-        <td><span id="t-strom">Stromverbrauch</span><div class="sub">${fmt(energyKwh)} kWh × €${fmt(pricePerKwh)}/kWh</div></td>
-        <td>€${fmt(energyCost)}</td>
-      </tr>` : `
-      <tr>
-        <td colspan="2" style="color:#aaa;font-size:11px;font-family:Arial,sans-serif;" id="t-strom-na">Stromverbrauch: keine Daten für diesen Zeitraum</td>
-      </tr>`}
       <tr class="total-row">
         <td id="t-total">Gesamt offen</td>
         <td>€${fmt(total)}</td>

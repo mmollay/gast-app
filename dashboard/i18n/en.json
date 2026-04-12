@@ -230,8 +230,8 @@
       "sie": "For your records"
     },
     "text": {
-      "du": "During your stay, tourist tax and energy costs may apply. For your records and complete transparency, here are the bank details:",
-      "sie": "During your stay, tourist tax and energy costs may apply. For your records and complete transparency, here are the bank details:"
+      "du": "A tourist tax (Ortstaxe) applies during your stay. Here are the bank details for your records:",
+      "sie": "A tourist tax (Ortstaxe) applies during your stay. Here are the bank details for your records:"
     },
     "bankDetails": "Bank Details",
     "iban": "IBAN",
@@ -242,8 +242,8 @@
     "copy": "Copy",
     "copied": "Copied!",
     "info": {
-      "du": "The exact amounts for tourist tax and energy costs will be communicated separately.",
-      "sie": "The exact amounts for tourist tax and energy costs will be communicated separately."
+      "du": "The tourist tax (Ortstaxe) is paid directly to the municipality.",
+      "sie": "The tourist tax (Ortstaxe) is paid directly to the municipality."
     },
     "partialPaymentTitle": "Longer stay?",
     "partialPaymentText": " For longer stays, partial payments are possible to keep running costs manageable. Just talk to us!"
