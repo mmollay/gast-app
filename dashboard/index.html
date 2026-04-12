@@ -165,6 +165,34 @@
                 </div>
             </div>
 
+            <!-- Kurtaxe Info Card - upfront auf Startseite -->
+            <div class="card kurtaxe-card" id="kurtaxeCard">
+                <div class="kurtaxe-content">
+                    <div class="kurtaxe-header">
+                        <i data-lucide="receipt"></i>
+                        <span data-i18n="kurtaxe.title">Ortstaxe</span>
+                    </div>
+                    <p class="kurtaxe-description" data-i18n="kurtaxe.description">
+                        Die Ortstaxe (Kurtaxe) ist eine gesetzliche Abgabe und wird direkt an die Gemeinde abgeführt.
+                    </p>
+                    <div class="kurtaxe-price">
+                        <span class="kurtaxe-amount" id="kurtaxeAmount">€2,70</span>
+                        <span class="kurtaxe-unit" data-i18n="kurtaxe.perPersonNight">pro Person / Nacht</span>
+                    </div>
+                    <!-- Gast-spezifische Berechnung (nur wenn eingeloggt) -->
+                    <div class="kurtaxe-calculation" id="kurtaxeCalculation" style="display: none;">
+                        <div class="kurtaxe-calc-label" data-i18n="kurtaxe.yourStay">Für Ihren Aufenthalt:</div>
+                        <div class="kurtaxe-calc-row">
+                            <span class="kurtaxe-calc-details" id="kurtaxeDetails">-- Nächte × -- Personen</span>
+                        </div>
+                        <div class="kurtaxe-calc-total-row">
+                            <span class="kurtaxe-calc-total-label" data-i18n="kurtaxe.total">Gesamt:</span>
+                            <span class="kurtaxe-calc-total" id="kurtaxeTotal">€--,--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Über diesen Ort -->
             <div class="card card--nature">
                 <div class="card-header">
@@ -687,34 +715,6 @@
                 </div>
             </div>
 
-            <!-- Kurtaxe Info Card - immer sichtbar, dezent -->
-            <div class="card kurtaxe-card" id="kurtaxeCard">
-                <div class="kurtaxe-content">
-                    <div class="kurtaxe-header">
-                        <i data-lucide="receipt"></i>
-                        <span data-i18n="kurtaxe.title">Ortstaxe</span>
-                    </div>
-                    <p class="kurtaxe-description" data-i18n="kurtaxe.description">
-                        Die Ortstaxe (Kurtaxe) ist eine gesetzliche Abgabe und wird direkt an die Gemeinde abgeführt.
-                    </p>
-                    <div class="kurtaxe-price">
-                        <span class="kurtaxe-amount" id="kurtaxeAmount">€2,70</span>
-                        <span class="kurtaxe-unit" data-i18n="kurtaxe.perPersonNight">pro Person / Nacht</span>
-                    </div>
-                    <!-- Gast-spezifische Berechnung (nur wenn eingeloggt) -->
-                    <div class="kurtaxe-calculation" id="kurtaxeCalculation" style="display: none;">
-                        <div class="kurtaxe-calc-label" data-i18n="kurtaxe.yourStay">Für Ihren Aufenthalt:</div>
-                        <div class="kurtaxe-calc-row">
-                            <span class="kurtaxe-calc-details" id="kurtaxeDetails">-- Nächte × -- Personen</span>
-                        </div>
-                        <div class="kurtaxe-calc-total-row">
-                            <span class="kurtaxe-calc-total-label" data-i18n="kurtaxe.total">Gesamt:</span>
-                            <span class="kurtaxe-calc-total" id="kurtaxeTotal">€--,--</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Payment Info Card -->
             <div class="card" id="paymentInfoCard" style="display: none;">
                 <div class="card-header">
@@ -761,7 +761,7 @@
 
                     <div class="info-notice">
                         <i data-lucide="info"></i>
-                        <span data-i18n="transparency.info">Die genauen Beträge für Kurtaxe und Energiekosten werden separat kommuniziert.</span>
+                        <span data-i18n="transparency.info">Die Kurtaxe (Ortstaxe) ist direkt an die Gemeinde zu entrichten.</span>
                     </div>
 
                     <div class="partial-payment-notice">

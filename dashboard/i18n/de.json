@@ -230,8 +230,8 @@
       "sie": "Für Ihre Unterlagen"
     },
     "text": {
-      "du": "Im Rahmen deines Aufenthalts können Kurtaxe und Energiekosten anfallen. Für deine Unterlagen und vollständige Transparenz findest du hier die Kontodaten:",
-      "sie": "Im Rahmen Ihres Aufenthalts können Kurtaxe und Energiekosten anfallen. Für Ihre Unterlagen und vollständige Transparenz finden Sie hier die Kontodaten:"
+      "du": "Im Rahmen deines Aufenthalts fällt eine Kurtaxe (Ortstaxe) an. Für deine Unterlagen findest du hier die Kontodaten:",
+      "sie": "Im Rahmen Ihres Aufenthalts fällt eine Kurtaxe (Ortstaxe) an. Für Ihre Unterlagen finden Sie hier die Kontodaten:"
     },
     "bankDetails": "Bankverbindung",
     "iban": "IBAN",
@@ -242,8 +242,8 @@
     "copy": "Kopieren",
     "copied": "Kopiert!",
     "info": {
-      "du": "Die genauen Beträge für Kurtaxe und Energiekosten werden separat kommuniziert.",
-      "sie": "Die genauen Beträge für Kurtaxe und Energiekosten werden separat kommuniziert."
+      "du": "Die Kurtaxe (Ortstaxe) ist direkt an die Gemeinde zu entrichten.",
+      "sie": "Die Kurtaxe (Ortstaxe) ist direkt an die Gemeinde zu entrichten."
     },
     "partialPaymentTitle": "Längerer Aufenthalt?",
     "partialPaymentText": {

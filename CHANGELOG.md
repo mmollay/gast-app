@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.65] - 2026-04-12
+
+### Changed
+- **Kurtaxe**: Kurtaxe-Karte auf screen-home verschoben — für Gäste sofort beim ersten Tab sichtbar
+- **Transparenz-Text**: Energiekosten-Referenz aus i18n-Schlüssel `transparency.info` entfernt (DE + EN)
+- **Admin**: Strom-Paper aus Protokoll entfernt
+
 ## [0.12.64] - 2026-04-06
 
 ### Added
