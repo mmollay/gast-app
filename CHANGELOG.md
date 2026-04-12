@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.72 — 2026-04-12
+- fix: Seitenumbruch vor 'Gut zu wissen' Section — saubere 2-seitige Ausgabe
+- fix: Abstand oben in 'Gut zu wissen' Section erhöht (margin-top: 40px)
+
 ## v0.12.71 — 2026-04-12
 - feat: version bump
 
