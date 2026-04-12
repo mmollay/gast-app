@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.12.70 — 2026-04-12
+- fix: Kurtaxe-Zeile aus Leistungen-Tabelle im Abschlussprotokoll entfernt (steht bereits in Gut zu wissen)
+
 ## v0.12.68 — 2026-04-12
 
 - feat: "Aufenthaltsbeleg" als neue Bezeichnung für das Abschluss-Dokument
