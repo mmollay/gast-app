@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.12.71 — 2026-04-12
+- feat: version bump
+
 ## v0.12.70 — 2026-04-12
 - fix: Kurtaxe-Zeile aus Leistungen-Tabelle im Abschlussprotokoll entfernt (steht bereits in Gut zu wissen)
 
