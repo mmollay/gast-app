@@ -8,7 +8,8 @@
     "preview": "npx serve dashboard -p 3000",
     "ios:sync": "npx cap sync ios",
     "ios:open": "npx cap open ios",
-    "ios:build": "npx cap sync ios && npx cap open ios"
+    "ios:build": "npx cap sync ios && npx cap open ios",
+    "postinstall": ""
   },
   "keywords": [
     "hostel",
