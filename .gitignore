@@ -25,3 +25,4 @@ worker/.dev.vars
 
 # Local development secrets (falls jemand eine lokale config mit echten Keys hat)
 # config.local.js
+.cf-deploy.conf

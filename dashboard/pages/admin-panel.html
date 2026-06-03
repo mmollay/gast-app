@@ -1628,6 +1628,40 @@
             </div>
         </div>
 
+        <!-- Airbnb CSV-Import -->
+        <div class="card" style="margin-top: 16px;">
+            <div class="card-header" style="cursor:pointer;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                <div class="card-icon"><i data-lucide="upload"></i></div>
+                <div>
+                    <h3 class="card-title">Airbnb-Import (CSV)</h3>
+                    <p class="card-subtitle">Reservierungs-Export von Airbnb hochladen — mit Vorschau vor dem Import</p>
+                </div>
+                <span style="margin-left:auto; opacity:0.5; font-size:0.85rem;">▼ einblenden</span>
+            </div>
+            <div style="display:none; padding: 16px 20px;">
+                <p style="margin: 0 0 12px; font-size: 0.85rem; opacity: 0.7;">
+                    In Airbnb: <em>Reservierungen → exportieren (CSV)</em>. Datei hier wählen, Vorschau prüfen, dann importieren.
+                    Nur bestätigte Buchungen werden übernommen. Duplikate (gleicher Code oder Name+Zeitraum) werden erkannt und übersprungen.
+                </p>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                    <input type="file" id="airbnbCsvFile" accept=".csv,text/csv" onchange="previewAirbnbCsv()"
+                           style="display:none;">
+                    <button class="btn btn-secondary" onclick="document.getElementById('airbnbCsvFile').click()"
+                            style="white-space:nowrap;">
+                        <i data-lucide="folder-open" style="width:14px;height:14px;"></i>
+                        Datei wählen
+                    </button>
+                    <span id="airbnbFileName" style="font-size:0.85rem; opacity:0.6;">Keine Datei ausgewählt</span>
+                    <button class="btn btn-primary" id="airbnbImportBtn" onclick="runAirbnbImport()"
+                            style="white-space:nowrap;">
+                        <i data-lucide="download" style="width:14px;height:14px;"></i>
+                        Import starten
+                    </button>
+                </div>
+                <div id="airbnbPreview" style="margin-top:16px;"></div>
+            </div>
+        </div>
+
         <!-- API-Info Box -->
         <div class="card" style="margin-top: 16px;">
             <div class="card-header" style="cursor:pointer;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
@@ -1993,6 +2027,255 @@
         }
 
         // Load Guests
+        // ===== Airbnb CSV-Import =====
+        let airbnbParsedRows = [];
+
+        // RFC4180-konformer CSV-Parser (Quotes, Kommas + Zeilenumbrüche in Feldern)
+        function parseCsv(text) {
+            text = text.replace(/^﻿/, ''); // BOM entfernen
+            const rows = [];
+            let row = [], field = '', inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (inQuotes) {
+                    if (c === '"') {
+                        if (text[i + 1] === '"') { field += '"'; i++; }
+                        else inQuotes = false;
+                    } else field += c;
+                } else {
+                    if (c === '"') inQuotes = true;
+                    else if (c === ',') { row.push(field); field = ''; }
+                    else if (c === '\r') { /* skip */ }
+                    else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+                    else field += c;
+                }
+            }
+            if (field.length > 0 || row.length > 0) { row.push(field); rows.push(row); }
+            return rows.filter(r => r.length > 1 || (r.length === 1 && r[0].trim() !== ''));
+        }
+
+        // "29.12.2026" oder "5.1.2027" -> "2026-12-29". ISO bleibt ISO.
+        function normalizeDate(s) {
+            if (!s) return '';
+            s = s.trim();
+            if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+            const m = s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+            if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+            return s;
+        }
+
+        // "€ 463,85" / "€ 1.234,56" -> 463.85 / 1234.56
+        function parseEarnings(s) {
+            if (!s) return null;
+            let v = String(s).replace(/[^\d.,]/g, '');
+            if (v.includes('.') && v.includes(',')) v = v.replace(/\./g, '').replace(',', '.');
+            else if (v.includes(',')) v = v.replace(',', '.');
+            const n = parseFloat(v);
+            return isNaN(n) ? null : n;
+        }
+
+        // Inserat-Text gegen geladene Apartments matchen -> slug oder null
+        function matchApartmentSlug(listing) {
+            if (!listing || !Array.isArray(apartments)) return null;
+            const hay = listing.toLowerCase();
+            for (const apt of apartments) {
+                const name = (apt.name || '').toLowerCase();
+                const slug = (apt.slug || '').toLowerCase();
+                if (slug && hay.includes(slug)) return apt.slug;
+                if (name && name.length > 3 && hay.includes(name)) return apt.slug;
+                // Einzelwort-Treffer (z.B. "waldrand")
+                for (const w of name.split(/[\s&]+/)) {
+                    if (w.length > 4 && hay.includes(w)) return apt.slug;
+                }
+            }
+            return null;
+        }
+
+        // Spalten nach Header-Namen mappen (DE + EN), nicht nach Position
+        function colIndex(header, names) {
+            for (const n of names) {
+                const i = header.findIndex(h => h.trim().toLowerCase() === n.toLowerCase());
+                if (i !== -1) return i;
+            }
+            return -1;
+        }
+
+        function isDuplicate(payload) {
+            return allGuests.some(g =>
+                (payload.airbnbConfirmationCode && g.airbnbConfirmationCode === payload.airbnbConfirmationCode) ||
+                (g.name === payload.name && g.checkIn === payload.checkIn && g.checkOut === payload.checkOut)
+            );
+        }
+
+        async function previewAirbnbCsv() {
+            const fileEl = document.getElementById('airbnbCsvFile');
+            const out = document.getElementById('airbnbPreview');
+            const nameEl = document.getElementById('airbnbFileName');
+            airbnbParsedRows = [];
+            if (!fileEl.files || !fileEl.files[0]) { out.innerHTML = ''; if (nameEl) nameEl.textContent = 'Keine Datei ausgewählt'; return; }
+            if (nameEl) nameEl.textContent = fileEl.files[0].name;
+
+            // Apartments für Inserat-Matching sicherstellen
+            if (!Array.isArray(apartments) || apartments.length === 0) {
+                try { await loadApartments(); } catch (e) { /* Default-Apartment ist ok */ }
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const rows = parseCsv(reader.result);
+                    if (rows.length < 2) { out.innerHTML = '<p style="color:var(--text-muted);">Keine Datenzeilen gefunden.</p>'; return; }
+                    const header = rows[0];
+                    const ix = {
+                        code:     colIndex(header, ['Bestätigungs-Code', 'Bestätigungscode', 'Confirmation code']),
+                        status:   colIndex(header, ['Status']),
+                        name:     colIndex(header, ['Name des Gastes', 'Guest name', 'Name']),
+                        contact:  colIndex(header, ['Kontakt', 'Contact']),
+                        adults:   colIndex(header, ['Anzahl der Erwachsenen', '# of adults', 'Adults']),
+                        children: colIndex(header, ['Anzahl der Kinder', '# of children', 'Children']),
+                        infants:  colIndex(header, ['Anzahl der Kleinkinder', '# of infants', 'Infants']),
+                        start:    colIndex(header, ['Startdatum', 'Start date']),
+                        end:      colIndex(header, ['Enddatum', 'End date']),
+                        booked:   colIndex(header, ['Gebucht', 'Booked']),
+                        listing:  colIndex(header, ['Inserat', 'Listing']),
+                        earnings: colIndex(header, ['Einkünfte', 'Earnings'])
+                    };
+                    if (ix.name === -1 || ix.start === -1 || ix.end === -1) {
+                        out.innerHTML = '<p style="color:#f87171;">Pflichtspalten (Name / Startdatum / Enddatum) nicht gefunden. Ist das ein Airbnb-Reservierungs-Export?</p>';
+                        return;
+                    }
+
+                    let skippedStatus = 0;
+                    const parsed = [];
+                    for (let r = 1; r < rows.length; r++) {
+                        const row = rows[r];
+                        const get = i => (i >= 0 && i < row.length ? (row[i] || '').trim() : '');
+                        const status = get(ix.status);
+                        const name = get(ix.name);
+                        if (!name) continue;
+                        // Nur bestätigte Buchungen
+                        if (status && !/best|confirm/i.test(status)) { skippedStatus++; continue; }
+                        const adults = parseInt(get(ix.adults)) || 0;
+                        const children = parseInt(get(ix.children)) || 0;
+                        const infants = parseInt(get(ix.infants)) || 0;
+                        const listing = get(ix.listing).replace(/\s+/g, ' ').trim();
+                        const payload = {
+                            name,
+                            checkIn: normalizeDate(get(ix.start)),
+                            checkOut: normalizeDate(get(ix.end)),
+                            numberOfAdults: adults || 1,
+                            numberOfChildren: children,
+                            numberOfInfants: infants,
+                            numberOfPersons: (adults || 1) + children + infants,
+                            contact: get(ix.contact),
+                            airbnbConfirmationCode: get(ix.code) || null,
+                            bookingDate: normalizeDate(get(ix.booked)) || null,
+                            earnings: parseEarnings(get(ix.earnings)),
+                            apartmentSlug: matchApartmentSlug(listing),
+                            _listing: listing
+                        };
+                        payload._dup = isDuplicate(payload);
+                        parsed.push(payload);
+                    }
+
+                    airbnbParsedRows = parsed;
+                    const newCount = parsed.filter(p => !p._dup).length;
+                    const dupCount = parsed.filter(p => p._dup).length;
+
+                    let html = `<div style="margin-bottom:10px; font-size:0.85rem;">
+                        <strong>${newCount}</strong> neu · <strong>${dupCount}</strong> bereits vorhanden`;
+                    if (skippedStatus) html += ` · ${skippedStatus} nicht bestätigt (übersprungen)`;
+                    html += `</div>`;
+                    html += `<div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+                        <thead><tr style="border-bottom:1px solid var(--border); text-align:left;">
+                        <th style="padding:5px 8px;">Status</th><th style="padding:5px 8px;">Name</th>
+                        <th style="padding:5px 8px;">Anreise</th><th style="padding:5px 8px;">Abreise</th>
+                        <th style="padding:5px 8px;">P</th><th style="padding:5px 8px;">Code</th>
+                        <th style="padding:5px 8px;">Apartment</th></tr></thead><tbody>`;
+                    for (const p of parsed) {
+                        const tag = p._dup
+                            ? '<span style="color:#fbbf24;">vorhanden</span>'
+                            : '<span style="color:#4ade80;">neu</span>';
+                        const apt = p.apartmentSlug || '<span style="opacity:0.4;">Standard</span>';
+                        html += `<tr style="border-bottom:1px solid var(--border); opacity:${p._dup ? 0.5 : 1};">
+                            <td style="padding:5px 8px;">${tag}</td>
+                            <td style="padding:5px 8px;">${p.name}</td>
+                            <td style="padding:5px 8px;">${p.checkIn}</td>
+                            <td style="padding:5px 8px;">${p.checkOut}</td>
+                            <td style="padding:5px 8px;">${p.numberOfPersons}</td>
+                            <td style="padding:5px 8px;"><code>${p.airbnbConfirmationCode || '—'}</code></td>
+                            <td style="padding:5px 8px;">${apt}</td></tr>`;
+                    }
+                    html += `</tbody></table></div>`;
+                    if (newCount === 0 && parsed.length > 0) {
+                        html += `<p style="margin-top:10px; color:#fbbf24; font-size:0.85rem;">Alle Buchungen sind bereits importiert — „Import starten" hat nichts zu tun.</p>`;
+                    }
+                    out.innerHTML = html;
+                } catch (e) {
+                    out.innerHTML = `<p style="color:#f87171;">Fehler beim Lesen der CSV: ${e.message}</p>`;
+                }
+            };
+            reader.readAsText(fileEl.files[0]);
+        }
+
+        async function runAirbnbImport() {
+            const btn = document.getElementById('airbnbImportBtn');
+            const out = document.getElementById('airbnbPreview');
+            const fileEl = document.getElementById('airbnbCsvFile');
+            if (!fileEl.files || !fileEl.files[0]) {
+                out.innerHTML = '<p style="color:#fbbf24; font-size:0.9rem;">Bitte zuerst oben über „Datei auswählen" deine CSV wählen — danach erscheint hier die Vorschau.</p>';
+                return;
+            }
+            if (airbnbParsedRows.length === 0) {
+                out.innerHTML = '<p style="color:#fbbf24; font-size:0.9rem;">Keine auswertbaren Buchungen in der Datei gefunden. Ist das ein Airbnb-Reservierungs-Export?</p>';
+                return;
+            }
+            const toImport = airbnbParsedRows.filter(p => !p._dup);
+            if (toImport.length === 0) {
+                out.innerHTML = `<p style="color:#fbbf24; font-size:0.9rem;">Alle ${airbnbParsedRows.length} bestätigten Buchungen sind bereits importiert — nichts zu tun.</p>`;
+                return;
+            }
+            btn.disabled = true;
+            const orig = btn.innerHTML;
+
+            let added = 0, dup = 0, err = 0;
+            const errors = [];
+            for (let i = 0; i < toImport.length; i++) {
+                const p = toImport[i];
+                btn.innerHTML = `Importiere ${i + 1}/${toImport.length} …`;
+                const body = {
+                    name: p.name, checkIn: p.checkIn, checkOut: p.checkOut,
+                    numberOfAdults: p.numberOfAdults, numberOfChildren: p.numberOfChildren,
+                    numberOfInfants: p.numberOfInfants, numberOfPersons: p.numberOfPersons,
+                    contact: p.contact, airbnbConfirmationCode: p.airbnbConfirmationCode,
+                    bookingDate: p.bookingDate, earnings: p.earnings
+                };
+                if (p.apartmentSlug) body.apartmentSlug = p.apartmentSlug;
+                try {
+                    const resp = await fetch(`${API_URL}/bot-guest`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                        body: JSON.stringify(body)
+                    });
+                    const data = await resp.json();
+                    if (!resp.ok) { err++; errors.push(`${p.name}: HTTP ${resp.status}`); }
+                    else if (data.duplicate) dup++;
+                    else added++;
+                } catch (e) { err++; errors.push(`${p.name}: ${e.message}`); }
+            }
+
+            btn.innerHTML = orig;
+            let summary = `<div style="margin-bottom:10px; font-size:0.9rem;">
+                ✅ <strong>${added}</strong> importiert · ${dup} Duplikat(e) übersprungen · ${err} Fehler</div>`;
+            if (errors.length) summary += `<div style="font-size:0.8rem; color:#f87171;">${errors.join('<br>')}</div>`;
+            out.innerHTML = summary;
+            document.getElementById('airbnbCsvFile').value = '';
+            const fnEl = document.getElementById('airbnbFileName');
+            if (fnEl) fnEl.textContent = 'Keine Datei ausgewählt';
+            airbnbParsedRows = [];
+            await loadGuests();
+        }
+
         async function loadGuests() {
             try {
                 const response = await fetch(`${API_URL}/guests`, {
