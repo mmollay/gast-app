@@ -1645,7 +1645,13 @@
                 </p>
                 <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                     <input type="file" id="airbnbCsvFile" accept=".csv,text/csv" onchange="previewAirbnbCsv()"
-                           style="font-size:0.85rem;">
+                           style="display:none;">
+                    <button class="btn btn-secondary" onclick="document.getElementById('airbnbCsvFile').click()"
+                            style="white-space:nowrap;">
+                        <i data-lucide="folder-open" style="width:14px;height:14px;"></i>
+                        Datei wählen
+                    </button>
+                    <span id="airbnbFileName" style="font-size:0.85rem; opacity:0.6;">Keine Datei ausgewählt</span>
                     <button class="btn btn-primary" id="airbnbImportBtn" onclick="runAirbnbImport()"
                             style="white-space:nowrap;">
                         <i data-lucide="download" style="width:14px;height:14px;"></i>
@@ -2104,8 +2110,10 @@
         async function previewAirbnbCsv() {
             const fileEl = document.getElementById('airbnbCsvFile');
             const out = document.getElementById('airbnbPreview');
+            const nameEl = document.getElementById('airbnbFileName');
             airbnbParsedRows = [];
-            if (!fileEl.files || !fileEl.files[0]) { out.innerHTML = ''; return; }
+            if (!fileEl.files || !fileEl.files[0]) { out.innerHTML = ''; if (nameEl) nameEl.textContent = 'Keine Datei ausgewählt'; return; }
+            if (nameEl) nameEl.textContent = fileEl.files[0].name;
 
             // Apartments für Inserat-Matching sicherstellen
             if (!Array.isArray(apartments) || apartments.length === 0) {
@@ -2262,6 +2270,8 @@
             if (errors.length) summary += `<div style="font-size:0.8rem; color:#f87171;">${errors.join('<br>')}</div>`;
             out.innerHTML = summary;
             document.getElementById('airbnbCsvFile').value = '';
+            const fnEl = document.getElementById('airbnbFileName');
+            if (fnEl) fnEl.textContent = 'Keine Datei ausgewählt';
             airbnbParsedRows = [];
             await loadGuests();
         }
