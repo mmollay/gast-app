@@ -1646,7 +1646,7 @@
                 <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                     <input type="file" id="airbnbCsvFile" accept=".csv,text/csv" onchange="previewAirbnbCsv()"
                            style="font-size:0.85rem;">
-                    <button class="btn btn-primary" id="airbnbImportBtn" onclick="runAirbnbImport()" disabled
+                    <button class="btn btn-primary" id="airbnbImportBtn" onclick="runAirbnbImport()"
                             style="white-space:nowrap;">
                         <i data-lucide="download" style="width:14px;height:14px;"></i>
                         Import starten
@@ -2104,9 +2104,7 @@
         async function previewAirbnbCsv() {
             const fileEl = document.getElementById('airbnbCsvFile');
             const out = document.getElementById('airbnbPreview');
-            const btn = document.getElementById('airbnbImportBtn');
             airbnbParsedRows = [];
-            btn.disabled = true;
             if (!fileEl.files || !fileEl.files[0]) { out.innerHTML = ''; return; }
 
             // Apartments für Inserat-Matching sicherstellen
@@ -2201,8 +2199,10 @@
                             <td style="padding:5px 8px;">${apt}</td></tr>`;
                     }
                     html += `</tbody></table></div>`;
+                    if (newCount === 0 && parsed.length > 0) {
+                        html += `<p style="margin-top:10px; color:#fbbf24; font-size:0.85rem;">Alle Buchungen sind bereits importiert — „Import starten" hat nichts zu tun.</p>`;
+                    }
                     out.innerHTML = html;
-                    btn.disabled = newCount === 0;
                 } catch (e) {
                     out.innerHTML = `<p style="color:#f87171;">Fehler beim Lesen der CSV: ${e.message}</p>`;
                 }
@@ -2213,8 +2213,20 @@
         async function runAirbnbImport() {
             const btn = document.getElementById('airbnbImportBtn');
             const out = document.getElementById('airbnbPreview');
+            const fileEl = document.getElementById('airbnbCsvFile');
+            if (!fileEl.files || !fileEl.files[0]) {
+                out.innerHTML = '<p style="color:#fbbf24; font-size:0.9rem;">Bitte zuerst oben über „Datei auswählen" deine CSV wählen — danach erscheint hier die Vorschau.</p>';
+                return;
+            }
+            if (airbnbParsedRows.length === 0) {
+                out.innerHTML = '<p style="color:#fbbf24; font-size:0.9rem;">Keine auswertbaren Buchungen in der Datei gefunden. Ist das ein Airbnb-Reservierungs-Export?</p>';
+                return;
+            }
             const toImport = airbnbParsedRows.filter(p => !p._dup);
-            if (toImport.length === 0) return;
+            if (toImport.length === 0) {
+                out.innerHTML = `<p style="color:#fbbf24; font-size:0.9rem;">Alle ${airbnbParsedRows.length} bestätigten Buchungen sind bereits importiert — nichts zu tun.</p>`;
+                return;
+            }
             btn.disabled = true;
             const orig = btn.innerHTML;
 

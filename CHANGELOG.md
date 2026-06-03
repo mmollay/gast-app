@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.12.76 — 2026-06-03
+
+- **Fix Airbnb-Import:** „Import starten"-Button war deaktiviert ohne Rückmeldung — wirkte wie „nichts passiert"
+- Button ist jetzt immer klickbar und gibt in jedem Fall eine klare Meldung:
+  - keine Datei gewählt → Hinweis zum CSV-Auswählen
+  - keine auswertbaren Buchungen → Hinweis
+  - alle Buchungen bereits importiert → Hinweis statt stillem Nichts
+- Live im Browser verifiziert (Playwright)
+
 ## v0.12.75 — 2026-06-03
 
 - **Airbnb CSV-Import** im Admin-Panel (Gäste-Tab): Reservierungs-Export von Airbnb direkt hochladen
