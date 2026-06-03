@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.12.75 — 2026-06-03
+
+- **Airbnb CSV-Import** im Admin-Panel (Gäste-Tab): Reservierungs-Export von Airbnb direkt hochladen
+- Vorschau vor dem Import zeigt je Buchung `neu`/`vorhanden`, Anreise/Abreise, Personen, Code, Apartment
+- Nur bestätigte Buchungen werden übernommen, Duplikate (Code oder Name+Zeitraum) werden übersprungen
+- RFC4180-CSV-Parser (Zeilenumbrüche in Feldern), deutsches Datumsformat `D.M.YYYY → YYYY-MM-DD`, Betrag `€ x,xx`
+- Spalten-Erkennung per Name (DE+EN), robust gegen Format-Änderungen
+- Automatisches Apartment-Matching aus dem Inserat-Feld
+- Läuft über bestehenden `/bot-guest`-Endpoint (Admin-Token, kein Import-Secret im Frontend)
+
 ## v0.12.73 — 2026-04-12
 
 - version bump
