@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.85 — 2026-07-05 (+ Zone-Fix)
+
+- **Zone-Setting als eigentliche Ursache des Cache-Bugs gefunden:** Die `_headers`-Regel (`Cache-Control: no-cache` für CSS/JS) griff auf `gastauferden.at` trotz korrektem Deploy nicht — Grund war das Cloudflare-Zonen-Setting **„Browser Cache TTL" fix auf 4h (14400s)**, das JEDEN Origin-Cache-Control-Header auf der Custom-Domain überschreibt (bestätigt per Vergleich: auf der reinen `*.pages.dev`-Domain griff `no-cache` sofort korrekt, nur auf der Zone nicht). Setting per API auf „Respect Existing Headers" (`value: 0`) umgestellt + Cache purged. Damit wirkt `_headers` jetzt tatsächlich wie vorgesehen — das war der wahre Grund, warum Deploy-Fixes bei Martin oft erst Stunden später ankamen.
+- Zusätzlich: `_headers`-Datei korrigiert — Cloudflare Pages unterstützt keine Suffix-Wildcards (`/*.css` matcht nichts), Dateien jetzt explizit einzeln gelistet.
+
 ## v0.12.85 — 2026-07-05
 
 - **Gast-Header hängt nicht mehr in Notch/Safe-Area:** Die fixierte Buttonleiste hatte `align-items: center` über die volle Höhe `safe-area-inset-top + 56px` — dadurch wurden die Buttons über den Notch-Bereich mitzentriert und rutschten optisch in die Notch. Notch wird jetzt als `padding-top: env(safe-area-inset-top)` reserviert (`box-sizing: border-box`), sodass die Zentrierung nur auf die 56px unterhalb der Notch wirkt.
