@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.12.80 — 2026-07-05
+
+- **Admin-Bereich (Mobile) – seitliches Scrollen behoben:** `overflow-x: hidden` auf html/body + tote, kollidierende `.logout-btn`-Positionsregel entfernt
+- **Admin-Header fixiert:** Zurück-/Abmelden-Buttons bleiben jetzt beim Scrollen sichtbar und bedienbar (vorher nur oben in der Hero-Grafik erreichbar); Buttons haben jetzt eigenen dunklen Kontrast-Hintergrund, damit sie über hellem und dunklem Content lesbar bleiben
+- **Admin Bottom-Nav kompakter:** weniger Padding/Höhe, spart Platz nach unten (analog zur Hauptseite)
+
 ## v0.12.79 — 2026-07-05
 
 - **Header-Abstand (Mobile):** Mehr Luft zwischen Logo und Titelzeile — der Titel klebte zu nah am Logo. Logo-Abstand nach unten von 16px auf 24px erhöht.
