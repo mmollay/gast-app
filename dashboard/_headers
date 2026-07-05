@@ -38,3 +38,28 @@
 
 /inline-editor.js
   Cache-Control: no-cache
+
+# HTML-Dokumente: kommen ohne Cache-Control von CF Pages (cf-cache-status:
+# DYNAMIC) → Browser cachen sie heuristisch und liefern nach einem Deploy
+# stundenlang alte Inline-Styles aus (z.B. Admin-Header-Layout steckt im
+# Inline-CSS von admin-panel.html). no-cache erzwingt ETag-Revalidierung.
+/
+  Cache-Control: no-cache
+
+/index.html
+  Cache-Control: no-cache
+
+/pages/admin-panel.html
+  Cache-Control: no-cache
+
+/pages/admin-panel
+  Cache-Control: no-cache
+
+/impressum.html
+  Cache-Control: no-cache
+
+/datenschutz.html
+  Cache-Control: no-cache
+
+/kontakt.html
+  Cache-Control: no-cache
