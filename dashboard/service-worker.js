@@ -3,7 +3,7 @@
  * Ermöglicht Offline-Funktionalität
  */
 
-const CACHE_NAME = "hostel-hollenthon-v16";
+const CACHE_NAME = "hostel-hollenthon-v17";
 const urlsToCache = [
   "/",
   "/index.html",
@@ -26,6 +26,7 @@ const urlsToCache = [
 
 // Installation
 self.addEventListener("install", (event) => {
+  self.skipWaiting();   // neue Version sofort aktiv, nicht auf Tab-Close warten
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log("Cache opened");
@@ -46,7 +47,7 @@ self.addEventListener("activate", (event) => {
           }
         }),
       );
-    }),
+    }).then(() => self.clients.claim()),   // sofort Kontrolle uebernehmen
   );
 });
 
