@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.89 — 2026-07-05
+
+- **Sichtbare Versionsnummer auf Mobile (Gast-Frontend):** Die Version stand bisher nur im Footer (`#appVersion`), der auf Mobile per `display:none` ausgeblendet ist → am Handy war kein Versionsstand sichtbar. Neues dezentes Versions-Badge links in der fixierten Header-Leiste (halbtransparent, Monospace, nur <640px sichtbar, gespeist aus `CONFIG.VERSION`) — erleichtert das Erkennen des geladenen Stands, v.a. beim Prüfen ob nach einem Deploy die frische Version geladen ist (Cache-Kontrolle). Desktop unverändert (Footer zeigt die Version dort weiterhin).
+
 ## v0.12.88 — 2026-07-05
 
 - **Kurtaxe- & Zahlungsinfos-Karte (Admin, Mobile) entstaucht:** Label + lange IBAN + Kopieren-Button standen auf Mobile in *einer* Flex-Zeile → der Wert (v.a. „AT53 3293 7000 0060 8745") wurde gegen den Button gequetscht. Wert bekommt jetzt eine eigene, volle Zeile in Monospace, Label + Kopieren-Button teilen sich die Zeile darüber. Karten-Padding auf Mobile 32px→20px, Titel/Werte kompakter. Verifiziert per Mobile-Rendering (390px): IBAN-Wert volle Breite 276px, Monospace.

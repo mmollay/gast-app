@@ -2358,6 +2358,30 @@ body {
     color: var(--forest);
 }
 
+/* Versions-Badge in der fixierten Header-Leiste. margin-right:auto schiebt
+   die Buttons nach rechts, das Badge bleibt links. Dezent (halbtransparent,
+   monospace), auf dem dunklen Mobile-Header-Hintergrund lesbar. Auf Desktop
+   zeigt bereits der Footer die Version — dort dezent ausgeblendet, damit es
+   nur dort auftaucht wo es fehlt (Mobile). */
+.app-version-badge {
+    font-family: ui-monospace, 'SF Mono', 'Menlo', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.3px;
+    color: rgba(255, 255, 255, 0.55);
+    margin-right: auto;
+    padding-left: 4px;
+    white-space: nowrap;
+    user-select: all;
+    display: none;
+}
+
+/* Nur auf Mobile einblenden (wo der Footer mit der Version verborgen ist). */
+@media (max-width: 640px) {
+    .app-version-badge {
+        display: inline-block;
+    }
+}
+
 /* ============================================
    MODALS
    ============================================ */

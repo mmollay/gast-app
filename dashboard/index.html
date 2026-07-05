@@ -62,6 +62,11 @@
          relativ zum Header statt zum Viewport "fixiert" und würden beim
          Scrollen mitwandern). Als Sibling bleibt die Leiste echt fixiert. -->
     <div class="header-actions">
+        <!-- Versions-Badge (links, dezent) — auf Mobile ist der Footer mit
+             der Version ausgeblendet, hier bleibt der geladene Stand sichtbar
+             (hilft beim Cache-/Deploy-Check). Gespeist aus CONFIG.VERSION. -->
+        <span class="app-version-badge" id="appVersionBadge" title="Geladene Version"></span>
+
         <!-- Language Switcher (für Gäste sofort sichtbar) -->
         <div class="language-switcher" id="language-switcher">
             <button class="lang-btn active" data-lang="de">DE</button>
@@ -898,10 +903,12 @@
     <script src="/inline-editor.js"></script>
     <script src="/admin-ui.js?v=1769516715"></script>
     <script>
-        // Display version from config
+        // Display version from config (Footer + mobiles Header-Badge)
         if (CONFIG.VERSION) {
             const versionEl = document.getElementById('appVersion');
             if (versionEl) versionEl.textContent = CONFIG.VERSION;
+            const badgeEl = document.getElementById('appVersionBadge');
+            if (badgeEl) badgeEl.textContent = CONFIG.VERSION;
         }
 
         // Update time display
