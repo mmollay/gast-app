@@ -80,7 +80,8 @@ body {
    HEADER
    ============================================ */
 .header {
-    background: linear-gradient(135deg, rgba(45, 74, 62, 0.55) 0%, rgba(74, 124, 89, 0.4) 100%),
+    background: radial-gradient(120% 65% at 50% 0%, rgba(184, 201, 169, 0.28) 0%, rgba(184, 201, 169, 0) 60%),
+                linear-gradient(160deg, rgba(20, 36, 30, 0.5) 0%, rgba(45, 74, 62, 0.52) 45%, rgba(74, 124, 89, 0.38) 100%),
                 url('header-bg.jpg');
     background-size: cover;
     background-position: center;
@@ -2795,8 +2796,8 @@ body {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-top: 1px solid var(--sand);
-    padding: 6px var(--space-2);
-    padding-bottom: calc(6px + env(safe-area-inset-bottom));
+    padding: 3px var(--space-2);
+    padding-bottom: calc(3px + env(safe-area-inset-bottom));
     z-index: 9999;
     box-shadow: 0 -2px 16px rgba(0,0,0,0.06);
     transform: translate3d(0, 0, 0);
@@ -2824,7 +2825,7 @@ body {
     gap: 2px;
     flex: 1;
     padding: var(--space-2) var(--space-1);
-    min-height: 52px;
+    min-height: 46px;
     color: var(--text-muted);
     text-decoration: none;
     border: none;
@@ -3021,6 +3022,37 @@ body {
         right: var(--space-3) !important;
         left: auto !important;
         z-index: 200;
+        display: flex !important;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 6px !important;
+        max-width: calc(100vw - 24px);
+    }
+
+    /* Admin/Bearbeiten: auf Mobile als runde Icon-Buttons statt Text-Pills —
+       verhindert das Zusammendraengen mit Sprachumschalter & Profil-Button */
+    .guest-login-btn {
+        padding: 0 !important;
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        min-height: 40px;
+        justify-content: center;
+        border-radius: 50% !important;
+    }
+
+    .guest-login-btn span {
+        display: none;
+    }
+
+    .language-switcher {
+        padding: 2px;
+    }
+
+    .lang-btn {
+        padding: 5px 9px;
+        min-height: 30px;
+        font-size: 0.75rem;
     }
 
     .header-user-btn {
@@ -3115,7 +3147,7 @@ body {
     }
 
     .footer {
-        padding-bottom: calc(80px + env(safe-area-inset-bottom));
+        padding-bottom: calc(70px + env(safe-area-inset-bottom));
     }
 
     /* Mobile bottom nav */
@@ -3150,7 +3182,7 @@ body {
     }
 
     .main {
-        padding-bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+        padding-bottom: calc(78px + env(safe-area-inset-bottom)) !important;
     }
 
     .stay-energy-stats {
