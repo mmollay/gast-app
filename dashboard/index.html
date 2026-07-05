@@ -46,7 +46,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Main Stylesheet (extracted from inline) -->
-    <link rel="stylesheet" href="/styles.css?v=0.12.92">
+    <link rel="stylesheet" href="/styles.css?v=0.12.93">
 
     <!-- NOTE: All styles moved to styles.css — inline <style> block removed -->
     <style>
@@ -233,6 +233,18 @@
                 </div>
             </div>
             
+            <!-- Foto-Galerie Card -->
+            <div class="card card--gallery">
+                <div class="card-header">
+                    <div class="card-icon card-icon--forest"><i data-lucide="image"></i></div>
+                    <div>
+                        <h3 class="card-title" data-i18n="gallery.title">Bildergalerie</h3>
+                        <p class="card-subtitle" data-i18n="gallery.subtitle">Eindrücke von deinem Rückzugsort</p>
+                    </div>
+                </div>
+                <div class="gallery-grid" id="galleryGrid"></div>
+            </div>
+
             </div><!-- END screen-home -->
 
             <!-- ===== SCREEN: INFO ===== -->
@@ -899,7 +911,8 @@
 
     <script src="/i18n.js"></script>
     <script src="/config.js"></script>
-    <script src="/app.js?v=0.12.92">
+    <script src="/app.js?v=0.12.93"></script>
+    <script src="/gallery.js?v=0.12.93"></script>
     <script src="/inline-editor.js"></script>
     <script src="/admin-ui.js?v=1769516715"></script>
     <script>
@@ -1060,6 +1073,15 @@
             }
         });
     </script>
+    <!-- Galerie-Lightbox (nutzt eigenes Overlay) -->
+    <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true">
+        <button class="gallery-lightbox__close" id="galleryClose" aria-label="Schließen">&times;</button>
+        <button class="gallery-lightbox__nav gallery-lightbox__prev" id="galleryPrev" aria-label="Zurück">&#8249;</button>
+        <img class="gallery-lightbox__img" id="galleryLightboxImg" src="" alt="">
+        <button class="gallery-lightbox__nav gallery-lightbox__next" id="galleryNext" aria-label="Weiter">&#8250;</button>
+        <div class="gallery-lightbox__counter" id="galleryCounter"></div>
+    </div>
+
 </body>
 </html>
 <!-- Deployed: Mon 26 Jan 2026 09:45:31 AM CET -->

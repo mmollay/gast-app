@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.12.93 — 2026-07-05
+
+- **Foto-Galerie (Airbnb-Import):** Neue Bildergalerie auf der Startseite mit 14 Objektfotos direkt vom Airbnb-Inserat, als responsives 3-/4-Spalten-Raster. Klick öffnet eine Vollbild-Lightbox mit Vor/Zurück, Zähler, Tastatur-Navigation (←/→/Esc) und Tap-außerhalb-zum-Schließen. Neues Modul `gallery.js` (DOM-ready-gekapselt), eigene Styles, DE/EN-Beschriftung.
+- **Schönerer Header:** Header-Hintergrund ist jetzt das Airbnb-Hauptfoto des Objekts (statt generisch), mit unveraendertem Verlaufs-Overlay. Neuer Dateiname `header-bg-2.jpg` fuer sauberen Cache-Wechsel.
+- **Bugfix (HTML):** `<script src="app.js">` hatte kein schließendes `</script>` — der Browser verschluckte dadurch stumm das nachfolgende Script-Tag. Behoben; nachfolgende Scripts laden jetzt zuverlässig.
+
+
 ## v0.12.92 — 2026-07-05
 
 - **„Erkunden" nicht mehr leer für Besucher ohne Gast-Login:** Wetter und Empfehlungen (Umgebung) sind jetzt öffentlich sichtbar — vorher waren alle drei Explore-Karten an eine Gast-Session gebunden (`showFeatures = guestToken || isAdmin`), sodass der Screen ohne Login komplett leer war. `weatherCard` + `recommendationsCard` immer sichtbar, `fetchWeather()` und `fetchNearbyPlaces()` laufen auch ohne Token (OpenWeather-/Google-Maps-Key liegen ohnehin im öffentlichen `config.js`). **WLAN-Karte bleibt gast-only** (Passwort ist sensibel). Cache-Buster `app.js?v=` + `styles.css?v=` auf 0.12.92 gezogen.

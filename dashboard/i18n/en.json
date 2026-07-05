@@ -299,5 +299,9 @@
   "booking": {
     "notBooked": "Not booked yet?",
     "bookNow": "Book now on Airbnb"
+  },
+  "gallery": {
+    "title": "Photo Gallery",
+    "subtitle": "Impressions of your retreat"
   }
 }
