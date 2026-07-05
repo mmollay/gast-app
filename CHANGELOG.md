@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.88 — 2026-07-05
+
+- **Kurtaxe- & Zahlungsinfos-Karte (Admin, Mobile) entstaucht:** Label + lange IBAN + Kopieren-Button standen auf Mobile in *einer* Flex-Zeile → der Wert (v.a. „AT53 3293 7000 0060 8745") wurde gegen den Button gequetscht. Wert bekommt jetzt eine eigene, volle Zeile in Monospace, Label + Kopieren-Button teilen sich die Zeile darüber. Karten-Padding auf Mobile 32px→20px, Titel/Werte kompakter. Verifiziert per Mobile-Rendering (390px): IBAN-Wert volle Breite 276px, Monospace.
+
 ## v0.12.86 — 2026-07-05
 
 - **Admin-Bereich (Mobile) – Darstellung überarbeitet ("passt überhaupt nicht"):** Der Admin-Header nutzte die gleiche romantische Hügel-Foto-Hero mit 140px-Rundlogo wie die Gäste-Startseite — stilistisch unpassend für ein internes Arbeits-Tool mit nüchternen Kennzahlen-Karten darunter. Auf Mobile jetzt flache Marken-Farbfläche (Forest→Sage-Verlauf) statt Foto, kompakteres Logo (44px statt 140px), kleinere Titelschrift.

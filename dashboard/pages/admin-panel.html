@@ -952,6 +952,61 @@
                 grid-template-columns: 1fr;
             }
 
+            /* Kurtaxe & Zahlungsinfos auf Mobile entstauchen: 32px-Padding
+               ist zu üppig, und Label + lange IBAN + Kopieren-Button in
+               EINER Flex-Zeile quetscht den Wert zusammen. Lösung: Wert
+               (v.a. IBAN) bekommt eine eigene Zeile in Monospace, Label und
+               Button teilen sich die Zeile darüber. */
+            .kurtaxe-card {
+                padding: 20px;
+                border-radius: 18px;
+            }
+
+            .kurtaxe-header {
+                margin-bottom: 18px;
+            }
+
+            .kurtaxe-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .kurtaxe-item {
+                padding: 14px;
+            }
+
+            .kurtaxe-value {
+                font-size: 1.35rem;
+            }
+
+            .bank-info {
+                padding: 6px 16px;
+            }
+
+            .bank-info-item {
+                flex-wrap: wrap;
+                row-gap: 6px;
+                padding: 14px 0;
+            }
+
+            .bank-info-item > span:first-child {   /* Label */
+                order: 1;
+            }
+
+            .bank-info-item .copy-btn {            /* Button rechts oben */
+                order: 2;
+                margin-left: auto;
+            }
+
+            .bank-info-item > span:nth-child(2) {  /* Wert: eigene, volle Zeile */
+                order: 3;
+                flex: 1 1 100%;
+                font-family: 'SF Mono', ui-monospace, 'Menlo', monospace;
+                font-size: 0.95rem;
+                letter-spacing: 0.4px;
+                color: var(--text);
+                word-break: break-all;
+            }
+
             .guest-table thead th.col-strom,
             .guest-table td.col-strom {
                 display: none;
