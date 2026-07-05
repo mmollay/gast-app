@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.82 — 2026-07-05
+
+- **Gast-Header (Mobile) neu ausgerichtet** — gleicher App-Bar-Fix wie im Admin-Bereich: Button-Leiste (Dashboard/Bearbeiten/DE-EN/Profil) ist jetzt fixiert (bleibt beim Scrollen bedienbar), hat definierte App-Bar-Höhe (safe-area + 56px) und dunklen Hintergrund für Lesbarkeit über hellem Content
+- Header-Top-Padding auf App-Bar-Höhe + 24px Luft abgestimmt, damit der Header nicht mehr am Logo klebt
+
 ## v0.12.81 — 2026-07-05
 
 - **Admin-Header (Mobile) neu ausgerichtet:** Zurück-/Abmelden-Leiste hat jetzt eine definierte App-Bar-Höhe (safe-area + 56px) mit vertikal zentrierten Buttons — behebt zu großen Abstand oben, zu knappen Abstand zum Logo und Asymmetrie zwischen Zurück- und Abmelden-Button
