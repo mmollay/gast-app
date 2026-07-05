@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.81 — 2026-07-05
+
+- **Admin-Header (Mobile) neu ausgerichtet:** Zurück-/Abmelden-Leiste hat jetzt eine definierte App-Bar-Höhe (safe-area + 56px) mit vertikal zentrierten Buttons — behebt zu großen Abstand oben, zu knappen Abstand zum Logo und Asymmetrie zwischen Zurück- und Abmelden-Button
+- Header-Top-Padding auf die neue App-Bar-Höhe + 24px Luft abgestimmt, damit das Logo nicht mehr an der Button-Leiste klebt
+
 ## v0.12.80 — 2026-07-05
 
 - **Admin-Bereich (Mobile) – seitliches Scrollen behoben:** `overflow-x: hidden` auf html/body + tote, kollidierende `.logout-btn`-Positionsregel entfernt
