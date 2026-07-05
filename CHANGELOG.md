@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.12.78 — 2026-07-05
+
+- **Header aufgeräumt (Mobile):** Admin-/Bearbeiten-Buttons sind jetzt runde Icon-Buttons statt Text-Pills — keine überfüllte, schwer tippbare Button-Reihe mehr neben Sprachumschalter und Profil-Menü
+- **Hintergrund verschönert:** Hero-Header hat jetzt einen weicheren, hochwertigeren Verlauf (Radial-Glow + mehrstufiger Farbverlauf) statt des flachen zweifarbigen Overlays
+- **Bottom-Nav kompakter:** Untere Navigationsleiste ist schlanker (weniger Padding/Höhe), spart vertikalen Platz für den Content
+
 ## v0.12.76 — 2026-06-03
 
 - **Fix Airbnb-Import:** „Import starten"-Button war deaktiviert ohne Rückmeldung — wirkte wie „nichts passiert"
