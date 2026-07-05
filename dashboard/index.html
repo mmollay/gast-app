@@ -56,46 +56,51 @@
     <link rel="stylesheet" href="admin-ui.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <!-- MINIMALISTISCHER HEADER: Nur User-Icon sichtbar -->
-        <div class="header-actions">
-            <!-- Language Switcher (für Gäste sofort sichtbar) -->
-            <div class="language-switcher" id="language-switcher">
-                <button class="lang-btn active" data-lang="de">DE</button>
-                <button class="lang-btn" data-lang="en">EN</button>
+    <!-- Header Actions: bewusst AUSSERHALB von <header>, da .header ein
+         transform/will-change hat und dadurch einen eigenen containing block
+         für position:fixed-Kinder erzeugen würde (Buttons wären dann nur
+         relativ zum Header statt zum Viewport "fixiert" und würden beim
+         Scrollen mitwandern). Als Sibling bleibt die Leiste echt fixiert. -->
+    <div class="header-actions">
+        <!-- Language Switcher (für Gäste sofort sichtbar) -->
+        <div class="language-switcher" id="language-switcher">
+            <button class="lang-btn active" data-lang="de">DE</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+
+        <!-- User Menu Button (immer sichtbar) -->
+        <button class="header-user-btn" id="headerUserBtn" title="Menü öffnen">
+            <i data-lucide="user"></i>
+            <span class="user-name" id="headerUserName" data-i18n="header.login">Anmelden</span>
+            <i data-lucide="chevron-down" class="dropdown-icon"></i>
+        </button>
+
+        <!-- User Dropdown Menu (versteckt, öffnet bei Klick) -->
+        <div class="header-user-dropdown" id="headerUserDropdown" style="display: none;">
+            <!-- Admin-Section (nur wenn eingeloggt als Admin) -->
+            <div class="dropdown-section admin-section" id="dropdownAdminSection" style="display: none;">
+                <a href="/admin" class="dropdown-item">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Admin</span>
+                </a>
+                <button class="dropdown-item" id="dropdownEditToggle">
+                    <i data-lucide="pencil"></i>
+                    <span>Bearbeiten</span>
+                </button>
             </div>
 
-            <!-- User Menu Button (immer sichtbar) -->
-            <button class="header-user-btn" id="headerUserBtn" title="Menü öffnen">
-                <i data-lucide="user"></i>
-                <span class="user-name" id="headerUserName" data-i18n="header.login">Anmelden</span>
-                <i data-lucide="chevron-down" class="dropdown-icon"></i>
-            </button>
-            
-            <!-- User Dropdown Menu (versteckt, öffnet bei Klick) -->
-            <div class="header-user-dropdown" id="headerUserDropdown" style="display: none;">
-                <!-- Admin-Section (nur wenn eingeloggt als Admin) -->
-                <div class="dropdown-section admin-section" id="dropdownAdminSection" style="display: none;">
-                    <a href="/admin" class="dropdown-item">
-                        <i data-lucide="layout-dashboard"></i>
-                        <span>Admin</span>
-                    </a>
-                    <button class="dropdown-item" id="dropdownEditToggle">
-                        <i data-lucide="pencil"></i>
-                        <span>Bearbeiten</span>
-                    </button>
-                </div>
-                
-                <!-- Logout (nur wenn eingeloggt) -->
-                <div class="dropdown-section" id="dropdownLogoutSection" style="display: none;">
-                    <button class="dropdown-item logout-item" id="dropdownLogoutBtn">
-                        <i data-lucide="log-out"></i>
-                        <span>Abmelden</span>
-                    </button>
-                </div>
+            <!-- Logout (nur wenn eingeloggt) -->
+            <div class="dropdown-section" id="dropdownLogoutSection" style="display: none;">
+                <button class="dropdown-item logout-item" id="dropdownLogoutBtn">
+                    <i data-lucide="log-out"></i>
+                    <span>Abmelden</span>
+                </button>
             </div>
         </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
         <div class="header-content">
             <img src="/logo-neu.png" alt="Logo" class="header-logo" loading="lazy" decoding="async">
             <div class="header-text">
