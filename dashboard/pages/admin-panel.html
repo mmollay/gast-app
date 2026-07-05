@@ -1102,12 +1102,17 @@
            ============================================ */
         /* Fixiert: bleibt beim Scrollen der Admin-Seite sichtbar & bedienbar
            (Zurück/Abmelden waren vorher nur oben in der Hero-Grafik erreichbar) */
+        /* Definierte App-Bar-Höhe (safe-area + 56px) — Buttons sind darin
+           vertikal zentriert, dadurch garantiert symmetrisch ausgerichtet.
+           Der Header bekommt unten genau diese Höhe + 24px Luft als
+           padding-top, damit das Logo nicht direkt darunter klebt. */
         .admin-header-actions {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            padding: calc(env(safe-area-inset-top) + 10px) 12px 10px;
+            height: calc(env(safe-area-inset-top) + 56px);
+            padding: env(safe-area-inset-top) 12px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -1121,7 +1126,16 @@
         .admin-header-right {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            flex: 0 0 auto;
+        }
+
+        .admin-header-btn i,
+        .admin-header-btn svg {
+            flex-shrink: 0;
+            display: block;
+            margin: 0 auto;
         }
 
         .admin-header-btn {
@@ -1158,7 +1172,7 @@
         /* Mobile: Kompaktere Header-Buttons */
         @media (max-width: 768px) {
             .admin-header {
-                padding-top: calc(env(safe-area-inset-top) + 52px) !important;
+                padding-top: calc(env(safe-area-inset-top) + 56px + 24px) !important;
                 padding-bottom: 24px !important;
             }
 
