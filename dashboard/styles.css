@@ -3053,9 +3053,6 @@ body {
         left: 0 !important;
         right: 0 !important;
         height: calc(env(safe-area-inset-top) + var(--appbar-h));
-        /* Notch als Padding reservieren, damit die Buttons NICHT in die
-           Safe-Area/Notch rutschen — Zentrierung wirkt nur auf die 56px darunter. */
-        padding-top: env(safe-area-inset-top);
         box-sizing: border-box;
         z-index: 500;
         display: flex !important;
@@ -3063,7 +3060,9 @@ body {
         align-items: center;
         justify-content: flex-end;
         gap: 6px !important;
-        padding: 0 var(--space-3);
+        /* Top MUSS die Safe-Area behalten — Shorthand darf padding-top oben
+           nicht auf 0 zuruecksetzen, sonst rutschen die Buttons in die Notch. */
+        padding: env(safe-area-inset-top) var(--space-3) 0;
         background: linear-gradient(180deg, rgba(20, 36, 30, 0.55) 0%, rgba(20, 36, 30, 0.45) 100%);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);

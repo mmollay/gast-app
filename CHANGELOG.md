@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.90 — 2026-07-05
+
+- **Header-Buttons klebten in der Notch (Mobile) — echte Ursache gefunden:** In `.header-actions` (<640px) setzte zuerst `padding-top: env(safe-area-inset-top)`, direkt danach überschrieb die Shorthand `padding: 0 var(--space-3)` das wieder auf 0 → die Versions-/Menü-/Sprach-Buttons rutschten in die Safe-Area/Notch. Shorthand enthält jetzt die Safe-Area (`padding: env(safe-area-inset-top) var(--space-3) 0`), redundante Einzel-Zeile entfernt. Footer/Bottom-Nav waren bereits korrekt (`safe-area-inset-bottom` überall gesetzt).
+- **Cache-Root-Cause: `styles.css?v=` hing auf 0.12.87 fest:** Der Cache-Buster für das Stylesheet wurde bei v0.12.88 und v0.12.89 nicht mitgezogen → identische URL → Browser/CDN lieferten *immer* das alte CSS, egal wie oft hard-reloaded wurde. Genau das war der Grund, warum sichtbare CSS-Änderungen bei Martin nie ankamen. `?v=` jetzt auf 0.12.90 synchron zur App-Version gezogen.
+
 ## v0.12.89 — 2026-07-05
 
 - **Sichtbare Versionsnummer auf Mobile (Gast-Frontend):** Die Version stand bisher nur im Footer (`#appVersion`), der auf Mobile per `display:none` ausgeblendet ist → am Handy war kein Versionsstand sichtbar. Neues dezentes Versions-Badge links in der fixierten Header-Leiste (halbtransparent, Monospace, nur <640px sichtbar, gespeist aus `CONFIG.VERSION`) — erleichtert das Erkennen des geladenen Stands, v.a. beim Prüfen ob nach einem Deploy die frische Version geladen ist (Cache-Kontrolle). Desktop unverändert (Footer zeigt die Version dort weiterhin).
