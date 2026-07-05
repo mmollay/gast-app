@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.79 — 2026-07-05
+
+- **Header-Abstand (Mobile):** Mehr Luft zwischen Logo und Titelzeile — der Titel klebte zu nah am Logo. Logo-Abstand nach unten von 16px auf 24px erhöht.
+
 ## v0.12.78 — 2026-07-05
 
 - **Header aufgeräumt (Mobile):** Admin-/Bearbeiten-Buttons sind jetzt runde Icon-Buttons statt Text-Pills — keine überfüllte, schwer tippbare Button-Reihe mehr neben Sprachumschalter und Profil-Menü
