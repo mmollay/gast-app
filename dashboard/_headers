@@ -11,8 +11,30 @@
 # Fix: no-cache erzwingt ETag-Revalidierung bei jedem Laden (schnelle
 # 304-Antwort wenn unverändert, sofort frisch wenn geändert) statt
 # blindem Cache-Fenster.
-/*.css
+#
+# WICHTIG: Cloudflare Pages _headers unterstützt keine Suffix-Wildcards
+# wie "/*.css" (nur ganze Pfad-Segmente wie "/foo/*") — deshalb hier
+# jede Datei explizit auflisten, sonst greift die Regel gar nicht.
+/styles.css
   Cache-Control: no-cache
 
-/*.js
+/admin-ui.css
+  Cache-Control: no-cache
+
+/inline-editor.css
+  Cache-Control: no-cache
+
+/config.js
+  Cache-Control: no-cache
+
+/i18n.js
+  Cache-Control: no-cache
+
+/app.js
+  Cache-Control: no-cache
+
+/admin-ui.js
+  Cache-Control: no-cache
+
+/inline-editor.js
   Cache-Control: no-cache
