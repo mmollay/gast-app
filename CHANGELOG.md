@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.84 — 2026-07-05
+
+- **Browser-Cache-Bug behoben (Ursache für "Fix kommt nicht an" nach Deploys):** `styles.css` wurde mit einem fest einprogrammierten Cache-Bust-Parameter (`?v=1774640082`) geladen, der nie hochgezählt wurde. Cloudflare Pages cached CSS/JS standardmäßig 4h (`max-age=14400`) — Browser haben in diesem Fenster nie nachgefragt, ein CF-Cache-Purge half nichts gegen den lokalen Browser-Cache. Neue `_headers`-Datei setzt `Cache-Control: no-cache` für alle `*.css`/`*.js` → Browser revalidieren ab sofort bei jedem Laden per ETag (schnell, aber immer aktuell). `?v=` in `index.html` zusätzlich einmalig hochgezählt, damit der Fix sofort greift statt erst beim nächsten Cache-Ablauf.
+
 ## v0.12.83 — 2026-07-05
 
 - **Gast-Header-Buttonleiste tatsächlich fixiert (Root-Cause-Fix):** Die Leiste (Dashboard/Bearbeiten/DE-EN/Profil) lag im HTML innerhalb von `<header>`, welches ein `transform`/`will-change: transform` hat — das erzeugt laut CSS-Spec einen eigenen "containing block" für `position: fixed`-Kinder, wodurch die Leiste trotz `position: fixed !important` nur relativ zum Header (nicht zum Viewport) fixiert war und beim Scrollen mitwanderte. Leiste liegt jetzt als Sibling außerhalb von `<header>` im DOM und ist auf allen Bildschirmgrößen (nicht mehr nur <640px) wirklich fixiert.
