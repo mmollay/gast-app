@@ -1,0 +1,18 @@
+# Cloudflare Pages Custom Headers
+# https://developers.cloudflare.com/pages/configuration/headers/
+#
+# Ohne diese Datei cached Cloudflare Pages CSS/JS standardmäßig mit
+# `max-age=14400` (4h). Browser fragen dann bis zu 4h gar nicht erst beim
+# Server nach — ein `cf-deploy`-Cache-Purge auf CF-Seite bringt in dieser
+# Zeit nichts gegen den LOKALEN Browser-Cache. Ergebnis: User sehen nach
+# einem Deploy noch stundenlang die alte Version (wiederkehrender Bug,
+# siehe styles.css?v=... das nie hochgezählt wurde).
+#
+# Fix: no-cache erzwingt ETag-Revalidierung bei jedem Laden (schnelle
+# 304-Antwort wenn unverändert, sofort frisch wenn geändert) statt
+# blindem Cache-Fenster.
+/*.css
+  Cache-Control: no-cache
+
+/*.js
+  Cache-Control: no-cache
