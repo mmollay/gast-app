@@ -940,6 +940,14 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
+            /* Bei ungerader Karten-Anzahl (aktuell 5) bleibt die letzte
+               Karte sonst allein in der letzten Zeile links hängen, mit
+               hässlicher leerer Lücke rechts — wirkt kaputt/unfertig.
+               Volle Breite schließt die Lücke sauber. */
+            .stat-card:last-child {
+                grid-column: 1 / -1;
+            }
+
             .kurtaxe-grid {
                 grid-template-columns: 1fr;
             }
@@ -1171,9 +1179,16 @@
 
         /* Mobile: Kompaktere Header-Buttons */
         @media (max-width: 768px) {
+            /* Admin ist ein Arbeits-Tool, kein Gäste-Marketing — die große
+               romantische Hügel-Hero mit 140px-Rundlogo passte stilistisch
+               nicht zu den nüchternen Kennzahlen-Karten darunter ("passt
+               überhaupt nicht"). Auf Mobile daher flache Marken-Farbfläche
+               statt Foto, deutlich kompakter. */
             .admin-header {
-                padding-top: calc(env(safe-area-inset-top) + 56px + 24px) !important;
-                padding-bottom: 24px !important;
+                background-image: none;
+                background: linear-gradient(135deg, var(--forest) 0%, var(--sage-dark) 100%);
+                padding-top: calc(env(safe-area-inset-top) + 56px + 12px) !important;
+                padding-bottom: 20px !important;
             }
 
             .admin-header-btn {
@@ -1193,20 +1208,22 @@
                 height: 20px;
             }
 
-            .header-logo {
-                width: 80px;
-                height: 80px;
-                padding: 14px;
-                margin-bottom: 12px;
+            .admin-header .header-logo {
+                width: 44px;
+                height: 44px;
+                padding: 8px;
+                margin: 0 auto 10px;
+                box-shadow: none;
             }
 
-            .header h1 {
-                font-size: 1.6rem;
-                margin-bottom: 4px;
+            .admin-header h1 {
+                font-size: 1.3rem;
+                margin-bottom: 2px;
+                letter-spacing: 0.5px;
             }
 
-            .header .subtitle {
-                font-size: 0.9rem;
+            .admin-header .subtitle {
+                font-size: 0.8rem;
             }
         }
 

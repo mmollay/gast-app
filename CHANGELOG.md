@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.86 — 2026-07-05
+
+- **Admin-Bereich (Mobile) – Darstellung überarbeitet ("passt überhaupt nicht"):** Der Admin-Header nutzte die gleiche romantische Hügel-Foto-Hero mit 140px-Rundlogo wie die Gäste-Startseite — stilistisch unpassend für ein internes Arbeits-Tool mit nüchternen Kennzahlen-Karten darunter. Auf Mobile jetzt flache Marken-Farbfläche (Forest→Sage-Verlauf) statt Foto, kompakteres Logo (44px statt 140px), kleinere Titelschrift.
+- **Kaputt wirkendes Kennzahlen-Grid behoben:** 5 Stat-Karten in 2-spaltigem Mobile-Grid ließen die letzte Karte ("Gesamt Kurtaxe") allein und linksbündig mit leerer Lücke rechts stehen — wirkte unfertig. Letzte Karte spannt jetzt bei ungerader Anzahl die volle Breite.
+
 ## v0.12.85 — 2026-07-05 (+ Zone-Fix)
 
 - **Zone-Setting als eigentliche Ursache des Cache-Bugs gefunden:** Die `_headers`-Regel (`Cache-Control: no-cache` für CSS/JS) griff auf `gastauferden.at` trotz korrektem Deploy nicht — Grund war das Cloudflare-Zonen-Setting **„Browser Cache TTL" fix auf 4h (14400s)**, das JEDEN Origin-Cache-Control-Header auf der Custom-Domain überschreibt (bestätigt per Vergleich: auf der reinen `*.pages.dev`-Domain griff `no-cache` sofort korrekt, nur auf der Zone nicht). Setting per API auf „Respect Existing Headers" (`value: 0`) umgestellt + Cache purged. Damit wirkt `_headers` jetzt tatsächlich wie vorgesehen — das war der wahre Grund, warum Deploy-Fixes bei Martin oft erst Stunden später ankamen.
