@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.12.92 — 2026-07-05
+
+- **„Erkunden" nicht mehr leer für Besucher ohne Gast-Login:** Wetter und Empfehlungen (Umgebung) sind jetzt öffentlich sichtbar — vorher waren alle drei Explore-Karten an eine Gast-Session gebunden (`showFeatures = guestToken || isAdmin`), sodass der Screen ohne Login komplett leer war. `weatherCard` + `recommendationsCard` immer sichtbar, `fetchWeather()` und `fetchNearbyPlaces()` laufen auch ohne Token (OpenWeather-/Google-Maps-Key liegen ohnehin im öffentlichen `config.js`). **WLAN-Karte bleibt gast-only** (Passwort ist sensibel). Cache-Buster `app.js?v=` + `styles.css?v=` auf 0.12.92 gezogen.
+
 ## v0.12.91 — 2026-07-05
 
 - **PWA-Cache-Kreislauf durchbrochen — Service-Worker-Update-Mechanik gefixt:** Der SW (`service-worker.js`) hatte kein `skipWaiting()`/`clients.claim()` und einen statischen `CACHE_NAME "v16"`, der nie mitgebumpt wurde. Folge: ein einmal installierter Service Worker blieb auf iOS-Home-Screen-PWAs haengen und lieferte stur eine eingefrorene Version (bei Martin 0.12.77) — App-Schliessen und Hard-Reload halfen nicht, weil sie den SW-Cache nicht anfassen. Fix: `self.skipWaiting()` (install) + `self.clients.claim()` (activate) -> neue Version uebernimmt sofort; `CACHE_NAME` -> v17 -> `activate` loescht den alten Cache. Ab jetzt heilt sich auch ein festhaengendes Geraet beim naechsten Oeffnen selbst. Der Server lieferte ohnehin schon frisch (network-first + no-cache) — der Haken war rein die SW-Aktivierung.

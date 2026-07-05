@@ -130,10 +130,8 @@ async function init() {
     loadAmenities(),         // Annehmlichkeiten
   ];
   
-  // Wetter nur für eingeloggte Gäste
-  if (guestToken) {
-    apiPromises.push(fetchWeather());
-  }
+  // Wetter ist öffentlich — für alle Besucher laden.
+  apiPromises.push(fetchWeather());
   
   // Alle API-Calls parallel ausführen
   await Promise.allSettled(apiPromises);
@@ -150,9 +148,7 @@ async function init() {
   // Intervals nach dem initialen Load starten
   setInterval(fetchData, CONFIG.UPDATE_INTERVAL);
   setInterval(updateGreeting, 60000);
-  if (guestToken) {
-    setInterval(fetchWeather, 600000); // Alle 10 Minuten
-  }
+  setInterval(fetchWeather, 600000); // Alle 10 Minuten (öffentlich)
   
   scheduleDailyReset();
   startAutoRefresh();
@@ -1435,9 +1431,10 @@ function updateGuestUI() {
   const wifiInfoPassword = document.getElementById("wifiInfoPassword");
 
   if (energyCard) energyCard.style.display = showFeatures ? "block" : "none";
-  if (weatherCard) weatherCard.style.display = showFeatures ? "block" : "none";
-  if (recommendationsCard)
-    recommendationsCard.style.display = showFeatures ? "block" : "none";
+  // Wetter & Empfehlungen sind öffentlich — auch ohne Gast-Login sichtbar.
+  if (weatherCard) weatherCard.style.display = "block";
+  if (recommendationsCard) recommendationsCard.style.display = "block";
+  // WLAN bleibt gast-only (Passwort ist sensibel).
   if (wifiCard) wifiCard.style.display = showFeatures ? "block" : "none";
 
   // Energie-Info-Bar unter Header
@@ -1806,8 +1803,8 @@ function updateRecommendationsByWeather(currentWeather) {
     }
   }
 
-  // Empfehlungen neu laden (mit der vom User gewählten Kategorie)
-  if (guestToken && CONFIG.GOOGLE_MAPS_API_KEY) {
+  // Empfehlungen neu laden (mit der vom User gewählten Kategorie) — öffentlich
+  if (CONFIG.GOOGLE_MAPS_API_KEY) {
     fetchNearbyPlaces();
   }
 }
@@ -2004,8 +2001,8 @@ function initRecommendations() {
     });
   });
 
-  // Initial laden
-  if (guestToken && GOOGLE_MAPS_API_KEY) {
+  // Initial laden — öffentlich, kein Gast-Login nötig
+  if (GOOGLE_MAPS_API_KEY) {
     fetchNearbyPlaces();
   }
 }
