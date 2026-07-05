@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.83 — 2026-07-05
+
+- **Gast-Header-Buttonleiste tatsächlich fixiert (Root-Cause-Fix):** Die Leiste (Dashboard/Bearbeiten/DE-EN/Profil) lag im HTML innerhalb von `<header>`, welches ein `transform`/`will-change: transform` hat — das erzeugt laut CSS-Spec einen eigenen "containing block" für `position: fixed`-Kinder, wodurch die Leiste trotz `position: fixed !important` nur relativ zum Header (nicht zum Viewport) fixiert war und beim Scrollen mitwanderte. Leiste liegt jetzt als Sibling außerhalb von `<header>` im DOM und ist auf allen Bildschirmgrößen (nicht mehr nur <640px) wirklich fixiert.
+- **Zu viel Leerraum unter der Buttonleiste reduziert:** Header-Top-Padding auf Mobile von App-Bar-Höhe + 24px auf + 12px Luft verkleinert, doppelte/widersprüchliche `.header`-Padding-Regeln zusammengeführt.
+
 ## v0.12.82 — 2026-07-05
 
 - **Gast-Header (Mobile) neu ausgerichtet** — gleicher App-Bar-Fix wie im Admin-Bereich: Button-Leiste (Dashboard/Bearbeiten/DE-EN/Profil) ist jetzt fixiert (bleibt beim Scrollen bedienbar), hat definierte App-Bar-Höhe (safe-area + 56px) und dunklen Hintergrund für Lesbarkeit über hellem Content
